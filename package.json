@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Eric Hacke",
   "bugs": {
-    "url": "https://github.com/roleup/asserted-models/issues"
+    "url": "https://github.com/assertedio/models/issues"
   },
   "config": {
     "commitizen": {
@@ -67,7 +67,7 @@
     "dist/**/*.{js,ts,tsbuildinfo}",
     "docs/**/*.*"
   ],
-  "homepage": "https://github.com/roleup/asserted-models#readme",
+  "homepage": "https://github.com/assertedio/models#readme",
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
@@ -96,7 +96,7 @@
       ".ts"
     ],
     "include": [
-      "firestore.ts"
+      "src/**/*.ts"
     ],
     "exclude": [
       "src/scratch.*"
@@ -110,10 +110,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/roleup/asserted-models.git"
+    "url": "git+https://github.com/assertedio/models.git"
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc -p tsconfig.build.json && sed -i 's/\"files\":/\"_files\":/' dist/package.json",
+    "build": "rm -rf ./dist && tsc -p tsconfig.build.json",
     "commit": "git-cz",
     "docs": "typedoc --plugin typedoc-plugin-markdown --readme none --exclude \"tests/**/*.+(unit|it).+(ts|js)\"",
     "integration": "nyc mocha --recursive -r source-map-support/register -r ts-node/register -r tsconfig-paths/register --use_strict --exit \"tests/**/*.it.+(ts|js)\"",
