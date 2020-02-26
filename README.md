@@ -1,2 +1,2 @@
-# asserted-models
+# models
 Shared asserted models
