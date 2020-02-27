@@ -22,7 +22,7 @@ const CONSTANTS = {
 /**
  * @class
  */
-class Frequency extends ValidatedBase implements FrequencyInterface {
+export class Frequency extends ValidatedBase implements FrequencyInterface {
   /**
    * @param {FrequencyInterface} params
    * @param {boolean} [validate=true]
