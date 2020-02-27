@@ -9,7 +9,7 @@ export enum FREQUENCY_UNITS {
   DAY = 'day',
 }
 
-interface FrequencyInterface {
+export interface FrequencyInterface {
   value: number;
   unit: FREQUENCY_UNITS;
 }
@@ -54,7 +54,7 @@ export enum MOCHA_UI {
   REQUIRE = 'require',
 }
 
-interface MochaInterface {
+export interface MochaInterface {
   files: string[];
   ignore: string[];
   bail: boolean;
@@ -64,7 +64,7 @@ interface MochaInterface {
 /**
  * @class
  */
-class Mocha extends ValidatedBase implements MochaInterface {
+export class Mocha extends ValidatedBase implements MochaInterface {
   /**
    * @param {Partial<MochaInterface>} params
    * @param {boolean} [validate]
@@ -95,7 +95,7 @@ class Mocha extends ValidatedBase implements MochaInterface {
   ui: MOCHA_UI;
 }
 
-interface RoutineConfigInterface {
+export interface RoutineConfigInterface {
   id: string;
   name: string;
   description: string;
