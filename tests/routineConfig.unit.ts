@@ -8,7 +8,7 @@ describe('routine config unit tests', () => {
       id: 'something',
     };
 
-    const routineConfig = new RoutineConfig.RoutineConfig(params);
+    const routineConfig = new RoutineConfig(params);
 
     const expected = {
       id: 'something',
@@ -54,7 +54,7 @@ describe('routine config unit tests', () => {
       },
     } as any;
 
-    const routineConfig = new RoutineConfig.RoutineConfig(params);
+    const routineConfig = new RoutineConfig(params);
 
     const expected = {
       id: 'something',
@@ -84,7 +84,7 @@ describe('routine config unit tests', () => {
       name: 'something',
     } as any;
 
-    const throws = () => new RoutineConfig.RoutineConfig(params);
+    const throws = () => new RoutineConfig(params);
 
     expect(throws).to.throw('id must be a string');
   });
@@ -98,7 +98,7 @@ describe('routine config unit tests', () => {
       },
     } as any;
 
-    const throws = () => new RoutineConfig.RoutineConfig(params);
+    const throws = () => new RoutineConfig(params);
 
     expect(throws).to.throw('frequency.value must be an integer number');
   });
@@ -112,7 +112,7 @@ describe('routine config unit tests', () => {
       },
     } as any;
 
-    const throws = () => new RoutineConfig.RoutineConfig(params);
+    const throws = () => new RoutineConfig(params);
 
     expect(throws).to.throw('frequency.value must not be less than 1');
   });

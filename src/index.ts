@@ -1,4 +1,4 @@
-import * as RoutineConfig from './routineConfig';
-import * as ValidatedBase from './validatedBase';
+import { FREQUENCY_UNITS, MOCHA_UI, RoutineConfig } from './routineConfig';
+import { ValidatedBase } from './validatedBase';
 
-export { RoutineConfig, ValidatedBase };
+export { RoutineConfig, FREQUENCY_UNITS, MOCHA_UI, ValidatedBase };
