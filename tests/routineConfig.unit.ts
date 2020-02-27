@@ -14,7 +14,7 @@ describe('routine config unit tests', () => {
       id: 'something',
       name: '',
       description: '',
-      frequency: {
+      interval: {
         unit: 'min',
         value: 5,
       },
@@ -38,7 +38,7 @@ describe('routine config unit tests', () => {
       id: 'something',
       name: '',
       description: '',
-      frequency: {
+      interval: {
         unit: 'hr',
         value: 10,
       },
@@ -60,7 +60,7 @@ describe('routine config unit tests', () => {
       id: 'something',
       name: '',
       description: '',
-      frequency: {
+      interval: {
         unit: 'hr',
         value: 10,
       },
@@ -89,10 +89,10 @@ describe('routine config unit tests', () => {
     expect(throws).to.throw('id must be a string');
   });
 
-  it('throw if frequency is not integer', () => {
+  it('throw if interval is not integer', () => {
     const params = {
       id: 'something',
-      frequency: {
+      interval: {
         unit: 'hr',
         value: 1.23,
       },
@@ -100,13 +100,13 @@ describe('routine config unit tests', () => {
 
     const throws = () => new RoutineConfig(params);
 
-    expect(throws).to.throw('frequency.value must be an integer number');
+    expect(throws).to.throw('interval.value must be an integer number');
   });
 
-  it('throw if frequency is less than 1', () => {
+  it('throw if interval is less than 1', () => {
     const params = {
       id: 'something',
-      frequency: {
+      interval: {
         unit: 'hr',
         value: 0,
       },
@@ -114,6 +114,6 @@ describe('routine config unit tests', () => {
 
     const throws = () => new RoutineConfig(params);
 
-    expect(throws).to.throw('frequency.value must not be less than 1');
+    expect(throws).to.throw('interval.value must not be less than 1');
   });
 });
