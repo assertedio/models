@@ -3,43 +3,43 @@ import { isNil } from 'lodash';
 
 import { ValidatedBase } from './validatedBase';
 
-export enum FREQUENCY_UNITS {
+export enum INTERVAL_UNITS {
   MIN = 'min',
   HR = 'hr',
   DAY = 'day',
 }
 
-export interface FrequencyInterface {
+export interface IntervalInterface {
   value: number;
-  unit: FREQUENCY_UNITS;
+  unit: INTERVAL_UNITS;
 }
 
 const CONSTANTS = {
-  DEFAULT_FREQUENCY_VALUE: 5,
-  DEFAULT_FREQUENCY_UNIT: FREQUENCY_UNITS.MIN,
+  DEFAULT_INTERVAL_VALUE: 5,
+  DEFAULT_INTERVAL_UNIT: INTERVAL_UNITS.MIN,
 };
 
 /**
  * @class
  */
-export class Frequency extends ValidatedBase implements FrequencyInterface {
+export class Interval extends ValidatedBase implements IntervalInterface {
   /**
-   * @param {FrequencyInterface} params
+   * @param {IntervalInterface} params
    * @param {boolean} [validate=true]
    */
-  constructor(params?: Partial<FrequencyInterface>, validate = true) {
+  constructor(params?: Partial<IntervalInterface>, validate = true) {
     super();
 
-    this.unit = params?.unit || CONSTANTS.DEFAULT_FREQUENCY_UNIT;
-    this.value = isNil(params?.value) ? CONSTANTS.DEFAULT_FREQUENCY_VALUE : (params?.value as number);
+    this.unit = params?.unit || CONSTANTS.DEFAULT_INTERVAL_UNIT;
+    this.value = isNil(params?.value) ? CONSTANTS.DEFAULT_INTERVAL_VALUE : (params?.value as number);
 
     if (validate) {
       this.validate();
     }
   }
 
-  @IsEnum(FREQUENCY_UNITS)
-  unit: FREQUENCY_UNITS;
+  @IsEnum(INTERVAL_UNITS)
+  unit: INTERVAL_UNITS;
 
   @IsInt()
   @Min(1)
@@ -99,7 +99,7 @@ export interface RoutineConfigInterface {
   id: string;
   name: string;
   description: string;
-  frequency: FrequencyInterface;
+  interval: IntervalInterface;
   files: string[];
   ignore: string[];
   prepushLocal: boolean;
@@ -111,7 +111,7 @@ interface CreateRoutineConfigInterface {
   id: string;
   name?: string;
   description?: string;
-  frequency?: FrequencyInterface;
+  interval?: IntervalInterface;
   files?: string[];
   ignore?: string[];
   prepushLocal?: boolean;
@@ -133,7 +133,7 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
     this.id = params?.id;
     this.name = params?.name || '';
     this.description = params?.description || '';
-    this.frequency = new Frequency(params?.frequency, false);
+    this.interval = new Interval(params?.interval, false);
     this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || ['**/*.astd.js'];
     this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
     this.prepushLocal = params?.prepushLocal || true;
@@ -158,8 +158,8 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
   ignore: string[];
 
   @ValidateNested()
-  @IsInstance(Frequency)
-  frequency: FrequencyInterface;
+  @IsInstance(Interval)
+  interval: IntervalInterface;
 
   @ValidateNested()
   @IsInstance(Mocha)
