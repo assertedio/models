@@ -5,7 +5,7 @@ import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } 
 
 import { ValidatedBase } from '../validatedBase';
 
-type CreateRouteInterface = Omit<DeepPartial<RoutineInterface>, 'id' | 'prepushLocal' | 'prepushOnce'>;
+export type CreateRouteInterface = Omit<DeepPartial<RoutineInterface>, 'id' | 'prepushLocal' | 'prepushOnce'>;
 
 /**
  * @class
