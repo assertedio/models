@@ -1,7 +1,7 @@
 import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Min, ValidateNested } from 'class-validator';
-import { isNil } from 'lodash';
+import { isBoolean, isNil } from 'lodash';
 
-import { ValidatedBase } from './validatedBase';
+import { ValidatedBase } from '../validatedBase';
 
 export enum INTERVAL_UNITS {
   MIN = 'min',
@@ -95,19 +95,17 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   ui: MOCHA_UI;
 }
 
-export interface RoutineConfigInterface {
+export interface RoutineInterface {
   id: string;
   name: string;
   description: string;
   interval: IntervalInterface;
-  files: string[];
-  ignore: string[];
   prepushLocal: boolean;
   prepushOnce: boolean;
   mocha: MochaInterface;
 }
 
-interface CreateRoutineConfigInterface {
+interface CreateRoutineInterface {
   id: string;
   name?: string;
   description?: string;
@@ -122,23 +120,21 @@ interface CreateRoutineConfigInterface {
 /**
  * @class
  */
-export class RoutineConfig extends ValidatedBase implements RoutineConfigInterface {
+export class Routine extends ValidatedBase implements RoutineInterface {
   /**
-   * @param {RoutineConfigInterface} params
+   * @param {RoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: CreateRoutineConfigInterface, validate = true) {
+  constructor(params: CreateRoutineInterface, validate = true) {
     super();
 
     this.id = params?.id;
     this.name = params?.name || '';
     this.description = params?.description || '';
     this.interval = new Interval(params?.interval, false);
-    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || ['**/*.astd.js'];
-    this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
-    this.prepushLocal = params?.prepushLocal || true;
-    this.prepushOnce = params?.prepushOnce || true;
-    this.mocha = new Mocha({ ...params?.mocha, files: params?.mocha?.files || this.files }, false);
+    this.prepushLocal = isBoolean(params?.prepushLocal) ? params.prepushLocal : true;
+    this.prepushOnce = isBoolean(params?.prepushOnce) ? params.prepushOnce : true;
+    this.mocha = new Mocha({ ...params?.mocha }, false);
 
     if (validate) {
       this.validate();
@@ -150,12 +146,6 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
 
   @IsString()
   description: string;
-
-  @IsString({ each: true })
-  files: string[];
-
-  @IsString({ each: true })
-  ignore: string[];
 
   @ValidateNested()
   @IsInstance(Interval)

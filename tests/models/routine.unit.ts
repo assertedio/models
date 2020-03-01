@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { RoutineConfig } from '../src';
+import { Routine } from '@/models';
 
 describe('routine config unit tests', () => {
   it('minimal create', () => {
@@ -8,7 +8,7 @@ describe('routine config unit tests', () => {
       id: 'something',
     };
 
-    const routineConfig = new RoutineConfig(params);
+    const routineConfig = new Routine(params);
 
     const expected = {
       id: 'something',
@@ -18,12 +18,40 @@ describe('routine config unit tests', () => {
         unit: 'min',
         value: 5,
       },
-      files: ['**/*.astd.js'],
-      ignore: [],
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
-        files: ['**/*.astd.js'],
+        files: [],
+        ignore: [],
+        bail: false,
+        ui: 'bbd',
+      },
+    };
+
+    expect(routineConfig).to.eql(expected);
+  });
+
+  it('minimal create with false', () => {
+    const params = {
+      id: 'something',
+      prepushLocal: false,
+      prepushOnce: false,
+    };
+
+    const routineConfig = new Routine(params);
+
+    const expected = {
+      id: 'something',
+      name: '',
+      description: '',
+      interval: {
+        unit: 'min',
+        value: 5,
+      },
+      prepushLocal: false,
+      prepushOnce: false,
+      mocha: {
+        files: [],
         ignore: [],
         bail: false,
         ui: 'bbd',
@@ -42,8 +70,6 @@ describe('routine config unit tests', () => {
         unit: 'hr',
         value: 10,
       },
-      files: ['**/*.astd.js'],
-      ignore: ['!bin.js'],
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
@@ -54,7 +80,7 @@ describe('routine config unit tests', () => {
       },
     } as any;
 
-    const routineConfig = new RoutineConfig(params);
+    const routineConfig = new Routine(params);
 
     const expected = {
       id: 'something',
@@ -64,8 +90,6 @@ describe('routine config unit tests', () => {
         unit: 'hr',
         value: 10,
       },
-      files: ['**/*.astd.js'],
-      ignore: ['!bin.js'],
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
@@ -84,7 +108,7 @@ describe('routine config unit tests', () => {
       name: 'something',
     } as any;
 
-    const throws = () => new RoutineConfig(params);
+    const throws = () => new Routine(params);
 
     expect(throws).to.throw('id must be a string');
   });
@@ -98,7 +122,7 @@ describe('routine config unit tests', () => {
       },
     } as any;
 
-    const throws = () => new RoutineConfig(params);
+    const throws = () => new Routine(params);
 
     expect(throws).to.throw('interval.value must be an integer number');
   });
@@ -112,7 +136,7 @@ describe('routine config unit tests', () => {
       },
     } as any;
 
-    const throws = () => new RoutineConfig(params);
+    const throws = () => new Routine(params);
 
     expect(throws).to.throw('interval.value must not be less than 1');
   });

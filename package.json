@@ -15,16 +15,17 @@
     "@types/bluebird": "^3.5.28",
     "@types/lodash": "^4.14.144",
     "@types/luxon": "^1.15.2",
-    "@types/node": "^13.7.4",
+    "@types/node": "^13.7.7",
     "bluebird": "^3.7.2",
     "class-validator": "^0.11.0",
     "clean-deep": "^3.3.0",
+    "cuid": "^2.1.8",
     "debug": "^4.1.1",
     "err": "^2.1.11",
     "http-status": "^1.4.2",
     "lodash": "^4.17.15",
     "luxon": "^1.22.0",
-    "ts-essentials": "^6.0.1"
+    "ts-essentials": "^6.0.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -58,9 +59,9 @@
     "ts-node": "^8.6.2",
     "ts-sinon": "^1.0.24",
     "tsconfig-paths": "^3.9.0",
-    "typedoc": "^0.16.9",
+    "typedoc": "^0.16.11",
     "typedoc-plugin-markdown": "^2.2.16",
-    "typescript": "^3.8.2",
+    "typescript": "^3.8.3",
     "typings": "^2.1.1"
   },
   "files": [
@@ -113,6 +114,7 @@
     "url": "git+https://github.com/assertedio/models.git"
   },
   "scripts": {
+    "beta": "npm version prepatch && npm publish",
     "build": "rm -rf ./dist && tsc -p tsconfig.build.json",
     "commit": "git-cz",
     "docs": "typedoc --plugin typedoc-plugin-markdown --readme none --exclude \"tests/**/*.+(unit|it).+(ts|js)\"",
@@ -121,6 +123,7 @@
     "postpublish": "git push",
     "prepare": "fixpack",
     "prepublishOnly": "npm run build",
+    "preversion": "npm run lint && npm run test",
     "test": "nyc mocha --recursive -r source-map-support/register -r ts-node/register -r tsconfig-paths/register --use_strict --exit \"tests/**/*.+(unit|it).+(ts|js)\"",
     "unit": "nyc mocha --recursive -r source-map-support/register -r ts-node/register -r tsconfig-paths/register --use_strict --exit \"tests/**/*.unit.+(ts|js)\""
   },

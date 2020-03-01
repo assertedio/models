@@ -52,7 +52,10 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "paths": {
-      "@/firestore": ["firestore"],
+      "@/models": ["./src/models"],
+      "@/models/*": ["./src/models/*"],
+      "@/requests": ["./src/requests"],
+      "@/requests/*": ["./src/requests/*"],
       "@/tests/*": ["tests/*"]
     }
   }
