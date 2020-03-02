@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { CreateRun } from '@/requests/createRun';
+import { CreateRun } from '../../src/requests';
 
 describe('createRun unit tests', () => {
   it('minimal create', () => {

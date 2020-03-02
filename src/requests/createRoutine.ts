@@ -1,8 +1,7 @@
 import { IsInstance, IsOptional, IsString } from 'class-validator';
 import { DeepPartial } from 'ts-essentials';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '@/models/routine';
-
+import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
 export type CreateRouteInterface = Omit<DeepPartial<RoutineInterface>, 'id' | 'prepushLocal' | 'prepushOnce'>;

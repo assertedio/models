@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { INTERVAL_UNITS } from '@/models';
-import { CreateRoutine } from '@/requests/createRoutine';
+import { INTERVAL_UNITS } from '../../src/models';
+import { CreateRoutine } from '../../src/requests';
 
 describe('createRoutine unit tests', () => {
   it('minimal create', () => {

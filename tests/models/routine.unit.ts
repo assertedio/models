@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Routine } from '@/models';
+import { Routine } from '../../src/models';
 
 describe('routine config unit tests', () => {
   it('minimal create', () => {

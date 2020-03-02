@@ -50,13 +50,6 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declaration": true,
-    "paths": {
-      "@/models": ["./src/models"],
-      "@/models/*": ["./src/models/*"],
-      "@/requests": ["./src/requests"],
-      "@/requests/*": ["./src/requests/*"],
-      "@/tests/*": ["tests/*"]
-    }
+    "declaration": true
   }
 }
