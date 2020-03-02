@@ -1,7 +1,7 @@
 import { IsInstance, IsOptional, IsString } from 'class-validator';
 import { DeepPartial } from 'ts-essentials';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '@/models';
+import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '@/models/routine';
 
 import { ValidatedBase } from '../validatedBase';
 
