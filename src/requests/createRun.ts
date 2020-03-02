@@ -3,7 +3,7 @@ import { IsInstance, IsString, ValidateNested } from 'class-validator';
 import { Mocha, MochaInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
-interface CreateRunInterface {
+export interface CreateRunInterface {
   package: string;
   mocha?: MochaInterface;
 }

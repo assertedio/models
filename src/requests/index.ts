@@ -1,4 +1,4 @@
 import { CreateRouteInterface, CreateRoutine } from './createRoutine';
-import { CreateRun } from './createRun';
+import { CreateRun, CreateRunInterface } from './createRun';
 
-export { CreateRun, CreateRoutine, CreateRouteInterface };
+export { CreateRun, CreateRoutine, CreateRouteInterface, CreateRunInterface };
