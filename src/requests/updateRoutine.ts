@@ -3,7 +3,7 @@ import { IsBoolean, IsInstance, IsString } from 'class-validator';
 import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
-export interface UpdateRoutineInterface extends RoutineInterface {
+export interface UpdateRoutineInterface extends Omit<RoutineInterface, 'id'> {
   package: string;
 }
 
@@ -18,7 +18,6 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
   constructor(params: UpdateRoutineInterface, validate = true) {
     super();
 
-    this.id = params.id;
     this.name = params?.name || '';
     this.description = params?.description || '';
     this.interval = new Interval(params.interval, false);
@@ -31,9 +30,6 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
       this.validate();
     }
   }
-
-  @IsString()
-  id: string;
 
   @IsBoolean()
   prepushLocal: boolean;
