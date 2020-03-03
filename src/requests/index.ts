@@ -3,6 +3,7 @@ import { CreateRun, CreateRunInterface } from './createRun';
 import { Run, RunInterface } from './run';
 import { Failure, RUNNERS, Stats, Summary, SummaryInterface } from './summary';
 import { CreateTestResultInterface, TestResult, TestResultInterface } from './testResult';
+import { UpdateRoutine, UpdateRoutineInterface } from './updateRoutine';
 
 export {
   Run,
@@ -19,4 +20,6 @@ export {
   RUNNERS,
   Stats,
   Failure,
+  UpdateRoutine,
+  UpdateRoutineInterface,
 };
