@@ -1,4 +1,4 @@
-import { CreateRouteInterface, CreateRoutine } from './createRoutine';
+import { CreateRoutine, CreateRoutineInterface } from './createRoutine';
 import { CreateRun, CreateRunInterface } from './createRun';
 import { Run, RunInterface } from './run';
 import { Failure, RUNNERS, Stats, Summary, SummaryInterface } from './summary';
@@ -12,7 +12,7 @@ export {
   CreateTestResultInterface,
   CreateRun,
   CreateRoutine,
-  CreateRouteInterface,
+  CreateRoutineInterface,
   CreateRunInterface,
   SummaryInterface,
   Summary,

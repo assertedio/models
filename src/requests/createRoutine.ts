@@ -1,20 +1,25 @@
 import { IsInstance, IsOptional, IsString } from 'class-validator';
 import { DeepPartial } from 'ts-essentials';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '../models';
+import { Interval, IntervalInterface, Mocha, MochaInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
-export type CreateRouteInterface = Omit<DeepPartial<RoutineInterface>, 'id' | 'prepushLocal' | 'prepushOnce'>;
+export interface CreateRoutineInterface {
+  name: string;
+  description: string;
+  interval?: IntervalInterface;
+  mocha?: MochaInterface;
+}
 
 /**
  * @class
  */
-export class CreateRoutine extends ValidatedBase implements CreateRouteInterface {
+export class CreateRoutine extends ValidatedBase implements CreateRoutineInterface {
   /**
-   * @param {CreateRouteInterface} params
+   * @param {CreateRoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: CreateRouteInterface, validate = true) {
+  constructor(params: DeepPartial<CreateRoutineInterface>, validate = true) {
     super();
 
     this.name = params?.name || '';
