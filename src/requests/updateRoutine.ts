@@ -3,19 +3,19 @@ import { IsBoolean, IsInstance, IsString } from 'class-validator';
 import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
-export interface UpdateRouteInterface extends RoutineInterface {
+export interface UpdateRoutineInterface extends RoutineInterface {
   package: string;
 }
 
 /**
  * @class
  */
-export class UpdateRoutine extends ValidatedBase implements UpdateRouteInterface {
+export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterface {
   /**
-   * @param {CreateRouteInterface} params
+   * @param {UpdateRoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: UpdateRouteInterface, validate = true) {
+  constructor(params: UpdateRoutineInterface, validate = true) {
     super();
 
     this.id = params.id;
