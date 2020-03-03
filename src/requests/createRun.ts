@@ -1,11 +1,12 @@
 import { IsInstance, IsString, ValidateNested } from 'class-validator';
 
-import { Mocha, MochaInterface } from '../models';
+import { Mocha, MochaInterface } from '../models/routine';
 import { ValidatedBase } from '../validatedBase';
 
 export interface CreateRunInterface {
   package: string;
   mocha?: MochaInterface;
+  routineId: string;
 }
 
 /**
@@ -20,6 +21,7 @@ export class CreateRun extends ValidatedBase implements CreateRunInterface {
     super();
 
     this.package = params.package;
+    this.routineId = params.routineId;
     this.mocha = new Mocha({ ...params?.mocha }, false);
 
     if (validate) {
@@ -33,4 +35,7 @@ export class CreateRun extends ValidatedBase implements CreateRunInterface {
 
   @IsString()
   package: string;
+
+  @IsString()
+  routineId: string;
 }
