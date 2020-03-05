@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
 import { isBoolean, isNil } from 'lodash';
 
 import { ValidatedBase } from '../validatedBase';
@@ -14,7 +14,7 @@ export interface IntervalInterface {
   unit: INTERVAL_UNITS;
 }
 
-const CONSTANTS = {
+const INTERVAL_CONSTANTS = {
   DEFAULT_INTERVAL_VALUE: 5,
   DEFAULT_INTERVAL_UNIT: INTERVAL_UNITS.MIN,
 };
@@ -23,6 +23,8 @@ const CONSTANTS = {
  * @class
  */
 export class Interval extends ValidatedBase implements IntervalInterface {
+  static CONSTANTS = INTERVAL_CONSTANTS;
+
   /**
    * @param {IntervalInterface} params
    * @param {boolean} [validate=true]
@@ -30,8 +32,8 @@ export class Interval extends ValidatedBase implements IntervalInterface {
   constructor(params?: Partial<IntervalInterface>, validate = true) {
     super();
 
-    this.unit = params?.unit || CONSTANTS.DEFAULT_INTERVAL_UNIT;
-    this.value = isNil(params?.value) ? CONSTANTS.DEFAULT_INTERVAL_VALUE : (params?.value as number);
+    this.unit = params?.unit || INTERVAL_CONSTANTS.DEFAULT_INTERVAL_UNIT;
+    this.value = isNil(params?.value) ? INTERVAL_CONSTANTS.DEFAULT_INTERVAL_VALUE : (params?.value as number);
 
     if (validate) {
       this.validate();
@@ -117,10 +119,17 @@ interface CreateRoutineInterface {
   mocha?: MochaInterface;
 }
 
+const ROUTINE_CONSTANTS = {
+  NAME_MAX_LENGTH: 30,
+  DESCRIPTION_MAX_LENGTH: 100,
+};
+
 /**
  * @class
  */
 export class Routine extends ValidatedBase implements RoutineInterface {
+  static CONSTANTS = ROUTINE_CONSTANTS;
+
   /**
    * @param {RoutineInterface} params
    * @param {boolean} validate
@@ -129,8 +138,8 @@ export class Routine extends ValidatedBase implements RoutineInterface {
     super();
 
     this.id = params?.id;
-    this.name = params?.name || '';
-    this.description = params?.description || '';
+    this.name = Routine.cleanString(params?.name || '');
+    this.description = Routine.cleanString(params?.description || '');
     this.interval = new Interval(params?.interval, false);
     this.prepushLocal = isBoolean(params?.prepushLocal) ? params.prepushLocal : true;
     this.prepushOnce = isBoolean(params?.prepushOnce) ? params.prepushOnce : true;
@@ -141,9 +150,11 @@ export class Routine extends ValidatedBase implements RoutineInterface {
     }
   }
 
+  @MaxLength(Routine.CONSTANTS.NAME_MAX_LENGTH)
   @IsString()
   name: string;
 
+  @MaxLength(Routine.CONSTANTS.DESCRIPTION_MAX_LENGTH)
   @IsString()
   description: string;
 
@@ -163,4 +174,8 @@ export class Routine extends ValidatedBase implements RoutineInterface {
 
   @IsString()
   id: string;
+
+  static cleanString(name: string) {
+    return name.replace(/\s+/g, ' ').trim();
+  }
 }

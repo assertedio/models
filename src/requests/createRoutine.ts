@@ -1,7 +1,7 @@
-import { IsInstance, IsOptional, IsString } from 'class-validator';
+import { IsInstance, IsOptional, IsString, MaxLength } from 'class-validator';
 import { DeepPartial } from 'ts-essentials';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface } from '../models';
+import { Interval, IntervalInterface, Mocha, MochaInterface, Routine } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
 export interface CreateRoutineInterface {
@@ -22,8 +22,8 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
   constructor(params: DeepPartial<CreateRoutineInterface>, validate = true) {
     super();
 
-    this.name = params?.name || '';
-    this.description = params?.description || '';
+    this.name = Routine.cleanString(params?.name || '');
+    this.description = Routine.cleanString(params?.description || '');
     this.interval = params?.interval ? new Interval(params.interval, false) : undefined;
     this.mocha = params?.mocha ? new Mocha(params.mocha, false) : undefined;
 
@@ -32,9 +32,11 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
     }
   }
 
+  @MaxLength(Routine.CONSTANTS.NAME_MAX_LENGTH)
   @IsString()
   name: string;
 
+  @MaxLength(Routine.CONSTANTS.DESCRIPTION_MAX_LENGTH)
   @IsString()
   description: string;
 
