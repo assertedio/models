@@ -175,7 +175,12 @@ export class Routine extends ValidatedBase implements RoutineInterface {
   @IsString()
   id: string;
 
-  static cleanString(name: string) {
-    return name.replace(/\s+/g, ' ').trim();
+  /**
+   * Strip unsupported characters
+   * @param {string} input
+   * @returns {string}
+   */
+  static cleanString(input: string): string {
+    return input.replace(/\s+/g, ' ').trim();
   }
 }
