@@ -3,7 +3,7 @@ import { IsBoolean, IsInstance, IsString } from 'class-validator';
 import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
 
-export interface UpdateRoutineInterface extends Omit<RoutineInterface, 'id'> {
+export interface UpdateRoutineInterface extends Omit<RoutineInterface, 'id' | 'projectId'> {
   package: string;
 }
 

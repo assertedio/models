@@ -8,6 +8,7 @@ import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
 
 interface CreateRunInterface extends CreateRunRequestInterface {
   projectId: string;
+  routineId: string;
   mocha: MochaInterface;
   timeoutMs: number;
 }

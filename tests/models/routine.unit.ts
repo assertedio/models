@@ -6,12 +6,14 @@ describe('routine config unit tests', () => {
   it('minimal create', () => {
     const params = {
       id: 'something',
+      projectId: 'project-id',
     };
 
     const routineConfig = new Routine(params);
 
     const expected = {
       id: 'something',
+      projectId: 'project-id',
       name: '',
       description: '',
       interval: {
@@ -36,12 +38,14 @@ describe('routine config unit tests', () => {
       id: 'something',
       prepushLocal: false,
       prepushOnce: false,
+      projectId: 'project-id',
     };
 
     const routineConfig = new Routine(params);
 
     const expected = {
       id: 'something',
+      projectId: 'project-id',
       name: '',
       description: '',
       interval: {
@@ -64,6 +68,7 @@ describe('routine config unit tests', () => {
   it('full create', () => {
     const params = {
       id: 'something',
+      projectId: 'project-id',
       name: '',
       description: '',
       interval: {
@@ -84,6 +89,7 @@ describe('routine config unit tests', () => {
 
     const expected = {
       id: 'something',
+      projectId: 'project-id',
       name: '',
       description: '',
       interval: {
@@ -106,6 +112,7 @@ describe('routine config unit tests', () => {
   it('throw if missing id', () => {
     const params = {
       name: 'something',
+      projectId: 'project-id',
     } as any;
 
     const throws = () => new Routine(params);
@@ -116,6 +123,7 @@ describe('routine config unit tests', () => {
   it('throw if interval is not integer', () => {
     const params = {
       id: 'something',
+      projectId: 'project-id',
       interval: {
         unit: 'hr',
         value: 1.23,
@@ -130,6 +138,7 @@ describe('routine config unit tests', () => {
   it('throw if interval is less than 1', () => {
     const params = {
       id: 'something',
+      projectId: 'project-id',
       interval: {
         unit: 'hr',
         value: 0,

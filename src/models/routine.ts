@@ -99,6 +99,7 @@ export class Mocha extends ValidatedBase implements MochaInterface {
 
 export interface RoutineInterface {
   id: string;
+  projectId: string;
   name: string;
   description: string;
   interval: IntervalInterface;
@@ -109,6 +110,7 @@ export interface RoutineInterface {
 
 interface CreateRoutineInterface {
   id: string;
+  projectId: string;
   name?: string;
   description?: string;
   interval?: IntervalInterface;
@@ -138,6 +140,7 @@ export class Routine extends ValidatedBase implements RoutineInterface {
     super();
 
     this.id = params?.id;
+    this.projectId = params?.projectId;
     this.name = Routine.cleanString(params?.name || '');
     this.description = Routine.cleanString(params?.description || '');
     this.interval = new Interval(params?.interval, false);
@@ -174,6 +177,9 @@ export class Routine extends ValidatedBase implements RoutineInterface {
 
   @IsString()
   id: string;
+
+  @IsString()
+  projectId: string;
 
   /**
    * Strip unsupported characters
