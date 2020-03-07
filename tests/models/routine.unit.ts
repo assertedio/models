@@ -23,10 +23,43 @@ describe('routine config unit tests', () => {
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
-        files: [],
+        files: ['**/*.astd.js'],
         ignore: [],
         bail: false,
-        ui: 'bbd',
+        ui: 'bdd',
+      },
+    };
+
+    expect(routineConfig).to.eql(expected);
+  });
+
+  it('minimal create with empty mocha array', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      mocha: {
+        files: [],
+      },
+    };
+
+    const routineConfig = new Routine(params as any);
+
+    const expected = {
+      id: 'something',
+      projectId: 'project-id',
+      name: '',
+      description: '',
+      interval: {
+        unit: 'min',
+        value: 5,
+      },
+      prepushLocal: true,
+      prepushOnce: true,
+      mocha: {
+        files: ['**/*.astd.js'],
+        ignore: [],
+        bail: false,
+        ui: 'bdd',
       },
     };
 
@@ -55,10 +88,10 @@ describe('routine config unit tests', () => {
       prepushLocal: false,
       prepushOnce: false,
       mocha: {
-        files: [],
+        files: ['**/*.astd.js'],
         ignore: [],
         bail: false,
-        ui: 'bbd',
+        ui: 'bdd',
       },
     };
 

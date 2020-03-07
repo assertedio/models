@@ -15,10 +15,10 @@ describe('createRun unit tests', () => {
       package: 'compressed-content',
       routineId: 'routine-id',
       mocha: {
-        files: [],
+        files: ['**/*.astd.js'],
         ignore: [],
         bail: false,
-        ui: 'bbd',
+        ui: 'bdd',
       },
     };
 

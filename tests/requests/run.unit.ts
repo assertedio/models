@@ -28,7 +28,7 @@ describe('run unit tests', () => {
         files: ['foo.js'],
         ignore: [],
         bail: false,
-        ui: 'bbd',
+        ui: 'bdd',
       },
       createdAt: curDate,
     };

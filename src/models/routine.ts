@@ -49,7 +49,7 @@ export class Interval extends ValidatedBase implements IntervalInterface {
 }
 
 export enum MOCHA_UI {
-  BBD = 'bbd',
+  BDD = 'bdd',
   TDD = 'tdd',
   EXPORTS = 'exports',
   QUNIT = 'qunit',
@@ -63,10 +63,16 @@ export interface MochaInterface {
   ui: MOCHA_UI;
 }
 
+const MOCHA_CONSTANTS = {
+  DEFAULT_FILES_GLOB: '**/*.astd.js',
+};
+
 /**
  * @class
  */
 export class Mocha extends ValidatedBase implements MochaInterface {
+  static CONSTANTS = MOCHA_CONSTANTS;
+
   /**
    * @param {Partial<MochaInterface>} params
    * @param {boolean} [validate]
@@ -74,10 +80,11 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   constructor(params?: Partial<MochaInterface>, validate = true) {
     super();
 
-    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || [];
+    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB];
+    this.files = this.files.length === 0 ? [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB] : this.files;
     this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
     this.bail = params?.bail || false;
-    this.ui = params?.ui || MOCHA_UI.BBD;
+    this.ui = params?.ui || MOCHA_UI.BDD;
 
     if (validate) {
       this.validate();
