@@ -7,8 +7,13 @@ import { ValidatedBase } from '../validatedBase';
 export interface CreateRoutineInterface {
   name: string;
   description: string;
+  projectId: string;
   interval?: IntervalInterface;
   mocha?: MochaInterface;
+}
+
+interface CreateRoutineConstructorInterface extends DeepPartial<CreateRoutineInterface> {
+  projectId: string;
 }
 
 /**
@@ -19,9 +24,10 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
    * @param {CreateRoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: DeepPartial<CreateRoutineInterface>, validate = true) {
+  constructor(params: CreateRoutineConstructorInterface, validate = true) {
     super();
 
+    this.projectId = params?.projectId;
     this.name = Routine.cleanString(params?.name || '');
     this.description = Routine.cleanString(params?.description || '');
     this.interval = params?.interval ? new Interval(params.interval, false) : undefined;
@@ -39,6 +45,9 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
   @MaxLength(Routine.CONSTANTS.DESCRIPTION_MAX_LENGTH)
   @IsString()
   description: string;
+
+  @IsString()
+  projectId: string;
 
   @IsOptional()
   @IsInstance(Interval)

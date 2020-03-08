@@ -5,12 +5,13 @@ import { CreateRoutine } from '../../src/requests';
 
 describe('createRoutine unit tests', () => {
   it('minimal create', () => {
-    const params = {};
+    const params = { projectId: 'foo-id' };
 
     const createRoutine = new CreateRoutine(params);
 
     const expected = {
       name: '',
+      projectId: 'foo-id',
       description: '',
       interval: undefined,
       mocha: undefined,
@@ -22,6 +23,7 @@ describe('createRoutine unit tests', () => {
   it('full create', () => {
     const params = {
       name: 'foo',
+      projectId: 'foo-id',
       description: 'bar',
       mocha: {
         files: ['bar.js'],
@@ -39,6 +41,7 @@ describe('createRoutine unit tests', () => {
 
     const expected = {
       name: 'foo',
+      projectId: 'foo-id',
       description: 'bar',
       interval: {
         unit: 'day',
