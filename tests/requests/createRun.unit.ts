@@ -6,14 +6,12 @@ describe('createRun unit tests', () => {
   it('minimal create', () => {
     const params = {
       package: 'compressed-content',
-      routineId: 'routine-id',
     };
 
     const createRun = new CreateRun(params);
 
     const expected = {
       package: 'compressed-content',
-      routineId: 'routine-id',
       mocha: {
         files: ['**/*.astd.js'],
         ignore: [],
@@ -28,7 +26,6 @@ describe('createRun unit tests', () => {
   it('full create', () => {
     const params = {
       package: 'compressed-content',
-      routineId: 'routine-id',
       mocha: {
         files: ['something.js', 'something-else.js'],
         ignore: ['athing.js'],
@@ -41,7 +38,6 @@ describe('createRun unit tests', () => {
 
     const expected = {
       package: 'compressed-content',
-      routineId: 'routine-id',
       mocha: {
         files: ['something.js', 'something-else.js'],
         ignore: ['athing.js'],
