@@ -12,9 +12,18 @@ describe('summary unit tests', () => {
           message: 'it broke yo',
           stack: 'big stacks',
           title: 'some-title',
+          duration: 0,
         },
       ],
+      passes: [
+        {
+          title: 'something',
+          duration: 12,
+        },
+      ],
+      errorType: null,
       runner: RUNNERS.MOCHA,
+      console: null,
       stats: {
         duration: 100,
         failures: 1,

@@ -1,4 +1,4 @@
-import { Allow, IsEnum, IsInstance, IsInt, IsString, ValidateNested } from 'class-validator';
+import { Allow, IsEnum, IsInstance, IsInt, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { ValidatedBase } from '../validatedBase';
 
@@ -63,6 +63,7 @@ interface FailureInterface {
   actual: any;
   expected: any;
   stack: string;
+  duration: number;
 }
 
 /**
@@ -81,6 +82,7 @@ export class Failure extends ValidatedBase implements FailureInterface {
     this.message = params.message;
     this.stack = params.stack;
     this.title = params.title;
+    this.duration = params.duration;
 
     if (validate) {
       this.validate();
@@ -101,12 +103,23 @@ export class Failure extends ValidatedBase implements FailureInterface {
 
   @IsString()
   title: string;
+
+  @IsNumber()
+  duration: number;
+}
+
+export enum ERROR_TYPE {
+  TEST = 'test',
+  INTERNAL_ERROR = 'internalError',
+  TIMEOUT = 'timeout',
 }
 
 export interface SummaryInterface {
   runner: RUNNERS;
   stats: StatsInterface;
   failures: FailureInterface[];
+  errorType: ERROR_TYPE | null;
+  console: string | null;
 }
 
 /**
@@ -123,6 +136,8 @@ export class Summary extends ValidatedBase implements SummaryInterface {
     this.failures = (params.failures || []).map((failure) => new Failure(failure, false));
     this.runner = params.runner;
     this.stats = new Stats(params.stats, false);
+    this.errorType = params.errorType || null;
+    this.console = params.console;
 
     if (validate) {
       this.validate();
@@ -138,4 +153,12 @@ export class Summary extends ValidatedBase implements SummaryInterface {
 
   @IsInstance(Stats)
   stats: StatsInterface;
+
+  @IsOptional()
+  @IsEnum(ERROR_TYPE)
+  errorType: ERROR_TYPE | null;
+
+  @IsOptional()
+  @IsString()
+  console: string | null;
 }
