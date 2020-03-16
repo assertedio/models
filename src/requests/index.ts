@@ -1,7 +1,7 @@
 import { CreateRoutine, CreateRoutineInterface } from './createRoutine';
 import { CreateRun, CreateRunInterface } from './createRun';
 import { Run, RunInterface } from './run';
-import { Failure, RUNNERS, Stats, Summary, SummaryInterface } from './summary';
+import { TestData, TestDataConstructorInterface, TestDataInterface, TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
 import { CreateTestResultInterface, TestResult, TestResultInterface } from './testResult';
 import { UpdateRoutine, UpdateRoutineInterface } from './updateRoutine';
 
@@ -15,11 +15,12 @@ export {
   CreateRoutine,
   CreateRoutineInterface,
   CreateRunInterface,
-  SummaryInterface,
-  Summary,
-  RUNNERS,
-  Stats,
-  Failure,
+  TestDataConstructorInterface,
+  TestEvent,
+  TestData,
+  TestDataInterface,
+  TestEventInterface,
+  TestEventConstructorInterface,
   UpdateRoutine,
   UpdateRoutineInterface,
 };

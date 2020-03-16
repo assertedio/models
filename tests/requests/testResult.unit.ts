@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { RUNNERS, TestResult } from '../../src/requests';
+import { TestResult } from '../../src/requests';
 
 describe('testResult unit tests', () => {
   it('create', () => {
@@ -11,31 +11,57 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
-      summary: {
-        failures: [
-          {
-            actual: 'something',
-            expected: 'not-something',
-            message: 'it broke yo',
-            stack: 'big stacks',
-            title: 'some-title',
+      events: [
+        {
+          type: 'suite',
+          data: {
+            title: 'nested describe 2',
+            fullTitle: 'suite 1 nested describe 2',
+            root: false,
+            stats: { suites: 3, tests: 5, passes: 3, pending: 0, failures: 2, start: '2020-03-16T01:33:23.753Z' },
           },
-        ],
-        runner: RUNNERS.MOCHA,
-        stats: {
-          duration: 100,
-          failures: 1,
-          passes: 1,
-          pending: 0,
-          suites: 2,
-          tests: 2,
+          timestamp: '2020-03-16T01:33:23.826Z',
+          timeMs: 73,
         },
-      },
+      ],
       createdAt: curDate,
     };
 
     const testResult = new TestResult(params);
 
-    expect(testResult).to.eql(params);
+    const expected = {
+      projectId: 'project-id',
+      routineId: 'routine-id',
+      runId: 'run-id',
+      events: [
+        {
+          type: 'suite',
+          data: {
+            fullTitle: 'suite 1 nested describe 2',
+            root: false,
+            duration: undefined,
+            err: undefined,
+            result: undefined,
+            stats: {
+              duration: undefined,
+              end: undefined,
+              suites: 3,
+              tests: 5,
+              passes: 3,
+              pending: 0,
+              failures: 2,
+              start: new Date('2020-03-16T01:33:23.753Z'),
+            },
+            title: 'nested describe 2',
+            total: undefined,
+          },
+          timestamp: new Date('2020-03-16T01:33:23.826Z'),
+          timeMs: 73,
+        },
+      ],
+      createdAt: curDate,
+    };
+
+    expect(testResult).to.eql(expected);
   });
 });

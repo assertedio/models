@@ -2,17 +2,21 @@ import { IsDate, IsInstance, IsString, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import { ValidatedBase } from '../validatedBase';
-import { Summary, SummaryInterface } from './summary';
+import { TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
 
 export interface CreateTestResultInterface {
   projectId: string;
   routineId: string;
   runId: string;
-  summary: SummaryInterface;
+  events: TestEventInterface[];
 }
 
 export interface TestResultInterface extends CreateTestResultInterface {
   createdAt: Date;
+}
+
+interface TestResultConstructorInterface extends Omit<TestResultInterface, 'events'> {
+  events: TestEventConstructorInterface[];
 }
 
 /**
@@ -23,13 +27,13 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
    * @param {TestResultInterface} params
    * @param {boolean} validate
    */
-  constructor(params: TestResultInterface, validate = true) {
+  constructor(params: TestResultConstructorInterface, validate = true) {
     super();
 
     this.projectId = params.projectId;
     this.routineId = params.routineId;
     this.runId = params.runId;
-    this.summary = new Summary(params.summary, false);
+    this.events = (params.events || []).map((event) => new TestEvent(event, false));
     this.createdAt = params.createdAt;
 
     if (validate) {
@@ -46,9 +50,9 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   @IsString()
   runId: string;
 
-  @ValidateNested()
-  @IsInstance(Summary)
-  summary: SummaryInterface;
+  @ValidateNested({ each: true })
+  @IsInstance(TestEvent, { each: true })
+  events: TestEventInterface[];
 
   @IsDate()
   createdAt: Date;
