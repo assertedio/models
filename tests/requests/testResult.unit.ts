@@ -11,6 +11,7 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
+      console: null,
       events: [
         {
           type: 'suite',
@@ -33,6 +34,7 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
+      console: null,
       events: [
         {
           type: 'suite',

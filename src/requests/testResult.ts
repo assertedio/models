@@ -1,4 +1,4 @@
-import { IsDate, IsInstance, IsString, ValidateNested } from 'class-validator';
+import { IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import { ValidatedBase } from '../validatedBase';
@@ -8,6 +8,7 @@ export interface CreateTestResultInterface {
   projectId: string;
   routineId: string;
   runId: string;
+  console: string | null;
   events: TestEventInterface[];
 }
 
@@ -33,6 +34,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
     this.projectId = params.projectId;
     this.routineId = params.routineId;
     this.runId = params.runId;
+    this.console = params.console;
     this.events = (params.events || []).map((event) => new TestEvent(event, false));
     this.createdAt = params.createdAt;
 
@@ -49,6 +51,10 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
 
   @IsString()
   runId: string;
+
+  @IsOptional()
+  @IsString()
+  console: string | null;
 
   @ValidateNested({ each: true })
   @IsInstance(TestEvent, { each: true })
