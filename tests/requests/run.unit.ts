@@ -34,4 +34,37 @@ describe('run unit tests', () => {
     };
     expect(omit(run, 'id')).to.eql(expected);
   });
+
+  it('create with string date', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const params = {
+      id: 'foo-id',
+      projectId: 'project-id',
+      routineId: 'routine-id',
+      package: 'pack-age',
+      timeoutMs: 100,
+      mocha: {
+        files: ['foo.js'],
+      } as any,
+      createdAt: curDate.toISOString(),
+    };
+
+    const run = new Run(params as any);
+
+    const expected = {
+      projectId: 'project-id',
+      routineId: 'routine-id',
+      package: 'pack-age',
+      timeoutMs: 100,
+      mocha: {
+        files: ['foo.js'],
+        ignore: [],
+        bail: false,
+        ui: 'bdd',
+      },
+      createdAt: curDate,
+    };
+    expect(omit(run, 'id')).to.eql(expected);
+  });
 });

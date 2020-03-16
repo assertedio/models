@@ -9,11 +9,12 @@ export interface CreateTestResultInterface {
   routineId: string;
   runId: string;
   console: string | null;
-  events: TestEventInterface[];
+  events: TestEventConstructorInterface[];
 }
 
-export interface TestResultInterface extends CreateTestResultInterface {
+export interface TestResultInterface extends Omit<CreateTestResultInterface, 'events'> {
   createdAt: Date;
+  events: TestEventInterface[];
 }
 
 interface TestResultConstructorInterface extends Omit<TestResultInterface, 'events'> {

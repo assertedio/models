@@ -1,7 +1,6 @@
 import { Allow, IsBoolean, IsDate, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { isString } from 'lodash';
-import { DateTime } from 'luxon';
 
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export interface StatsInterface {
@@ -14,18 +13,6 @@ export interface StatsInterface {
   end?: Date;
   duration?: number;
 }
-
-const stringNotDate = (input: Date | string): input is string => {
-  return isString(input);
-};
-
-const toDate = (input: Date | string): Date => {
-  return stringNotDate(input)
-    ? DateTime.fromISO(input)
-        .toUTC()
-        .toJSDate()
-    : input;
-};
 
 interface StatsConstructorInterface extends Omit<StatsInterface, 'start' | 'end'> {
   start?: Date | string;

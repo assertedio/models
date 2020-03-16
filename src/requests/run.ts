@@ -3,6 +3,7 @@ import cuid from 'cuid';
 import { DateTime } from 'luxon';
 
 import { Mocha, MochaInterface } from '../models/routine';
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
 
@@ -44,7 +45,10 @@ export class Run extends ValidatedBase implements RunInterface {
     this.package = params?.package;
     this.mocha = new Mocha(params?.mocha, false);
     this.timeoutMs = params?.timeoutMs;
-    this.createdAt = params?.createdAt;
+
+    // This is necessary to convert the string-version as it comes in as JSON
+    // The alternative is to create a dedicated fromJSON method, that I don't care to do right now
+    this.createdAt = toDate(params?.createdAt);
 
     if (validate) {
       this.validate();
