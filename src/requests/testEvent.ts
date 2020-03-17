@@ -73,7 +73,7 @@ export class Stats extends ValidatedBase implements StatsInterface {
 }
 
 export interface TestDataInterface {
-  total?: number;
+  total: number;
   title?: string;
   fullTitle?: string;
   duration?: number;
@@ -149,7 +149,7 @@ export class TestData extends ValidatedBase implements TestDataInterface {
 
   @IsOptional()
   @IsNumber()
-  total?: number;
+  total: number;
 }
 
 // Should be the same as mocha-ldjson-> TestDataInterface, but don't want to import that whole thing

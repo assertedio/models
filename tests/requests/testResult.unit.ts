@@ -17,6 +17,7 @@ describe('testResult unit tests', () => {
         {
           type: 'suite',
           data: {
+            total: 1,
             title: 'nested describe 2',
             fullTitle: 'suite 1 nested describe 2',
             root: false,
@@ -57,7 +58,7 @@ describe('testResult unit tests', () => {
               start: new Date('2020-03-16T01:33:23.753Z'),
             },
             title: 'nested describe 2',
-            total: undefined,
+            total: 1,
           },
           timestamp: new Date('2020-03-16T01:33:23.826Z'),
           timeMs: 73,
@@ -82,6 +83,7 @@ describe('testResult unit tests', () => {
         {
           type: 'suite',
           data: {
+            total: 1,
             title: 'nested describe 2',
             fullTitle: 'suite 1 nested describe 2',
             root: false,
