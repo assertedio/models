@@ -11,6 +11,7 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
+      runDurationMs: 0,
       console: null,
       events: [
         {
@@ -34,6 +35,7 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
+      runDurationMs: 0,
       console: null,
       events: [
         {
@@ -74,6 +76,7 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
+      runDurationMs: 0,
       console: null,
       events: [
         {
@@ -97,6 +100,7 @@ describe('testResult unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       runId: 'run-id',
+      runDurationMs: 0,
       console: null,
       events: [
         {
