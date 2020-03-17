@@ -14,7 +14,7 @@ export interface StatsInterface {
   duration?: number;
 }
 
-interface StatsConstructorInterface extends Omit<StatsInterface, 'start' | 'end'> {
+export interface StatsConstructorInterface extends Omit<StatsInterface, 'start' | 'end'> {
   start?: Date | string;
   end?: Date | string;
 }
