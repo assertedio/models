@@ -1,7 +1,7 @@
-import { CreateRoutine, CreateRoutineInterface } from './createRoutine';
-import { CreateRun, CreateRunInterface } from './createRun';
-import { Run, RunInterface } from './run';
-import {
+export { CreateRoutine, CreateRoutineInterface } from './createRoutine';
+export { CreateRun, CreateRunInterface } from './createRun';
+export { Run, RunInterface } from './run';
+export {
   Stats,
   StatsConstructorInterface,
   StatsInterface,
@@ -12,28 +12,5 @@ import {
   TestEventConstructorInterface,
   TestEventInterface,
 } from './testEvent';
-import { CreateTestResultInterface, TestResult, TestResultInterface } from './testResult';
-import { UpdateRoutine, UpdateRoutineInterface } from './updateRoutine';
-
-export {
-  Stats,
-  StatsConstructorInterface,
-  StatsInterface,
-  Run,
-  RunInterface,
-  TestResult,
-  TestResultInterface,
-  CreateTestResultInterface,
-  CreateRun,
-  CreateRoutine,
-  CreateRoutineInterface,
-  CreateRunInterface,
-  TestDataConstructorInterface,
-  TestEvent,
-  TestData,
-  TestDataInterface,
-  TestEventInterface,
-  TestEventConstructorInterface,
-  UpdateRoutine,
-  UpdateRoutineInterface,
-};
+export { CreateTestResultInterface, TestResult, TestResultInterface } from './testResult';
+export { UpdateRoutine, UpdateRoutineInterface } from './updateRoutine';

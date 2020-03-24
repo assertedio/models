@@ -6,9 +6,5 @@ export const stringNotDate = (input: Date | string): input is string => {
 };
 
 export const toDate = (input: Date | string): Date => {
-  return stringNotDate(input)
-    ? DateTime.fromISO(input)
-        .toUTC()
-        .toJSDate()
-    : input;
+  return stringNotDate(input) ? DateTime.fromISO(input).toUTC().toJSDate() : input;
 };
