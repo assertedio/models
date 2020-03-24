@@ -1,7 +1,7 @@
-import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Min, ValidateNested } from 'class-validator';
-import { isNil } from 'lodash';
+import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
+import { isBoolean, isNil } from 'lodash';
 
-import { ValidatedBase } from './validatedBase';
+import { ValidatedBase } from '../validatedBase';
 
 export enum INTERVAL_UNITS {
   MIN = 'min',
@@ -14,7 +14,7 @@ export interface IntervalInterface {
   unit: INTERVAL_UNITS;
 }
 
-const CONSTANTS = {
+const INTERVAL_CONSTANTS = {
   DEFAULT_INTERVAL_VALUE: 5,
   DEFAULT_INTERVAL_UNIT: INTERVAL_UNITS.MIN,
 };
@@ -23,6 +23,8 @@ const CONSTANTS = {
  * @class
  */
 export class Interval extends ValidatedBase implements IntervalInterface {
+  static CONSTANTS = INTERVAL_CONSTANTS;
+
   /**
    * @param {IntervalInterface} params
    * @param {boolean} [validate=true]
@@ -30,8 +32,8 @@ export class Interval extends ValidatedBase implements IntervalInterface {
   constructor(params?: Partial<IntervalInterface>, validate = true) {
     super();
 
-    this.unit = params?.unit || CONSTANTS.DEFAULT_INTERVAL_UNIT;
-    this.value = isNil(params?.value) ? CONSTANTS.DEFAULT_INTERVAL_VALUE : (params?.value as number);
+    this.unit = params?.unit || INTERVAL_CONSTANTS.DEFAULT_INTERVAL_UNIT;
+    this.value = isNil(params?.value) ? INTERVAL_CONSTANTS.DEFAULT_INTERVAL_VALUE : (params?.value as number);
 
     if (validate) {
       this.validate();
@@ -47,7 +49,7 @@ export class Interval extends ValidatedBase implements IntervalInterface {
 }
 
 export enum MOCHA_UI {
-  BBD = 'bbd',
+  BDD = 'bdd',
   TDD = 'tdd',
   EXPORTS = 'exports',
   QUNIT = 'qunit',
@@ -61,10 +63,16 @@ export interface MochaInterface {
   ui: MOCHA_UI;
 }
 
+const MOCHA_CONSTANTS = {
+  DEFAULT_FILES_GLOB: '**/*.astd.js',
+};
+
 /**
  * @class
  */
 export class Mocha extends ValidatedBase implements MochaInterface {
+  static CONSTANTS = MOCHA_CONSTANTS;
+
   /**
    * @param {Partial<MochaInterface>} params
    * @param {boolean} [validate]
@@ -72,10 +80,11 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   constructor(params?: Partial<MochaInterface>, validate = true) {
     super();
 
-    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || [];
+    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB];
+    this.files = this.files.length === 0 ? [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB] : this.files;
     this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
     this.bail = params?.bail || false;
-    this.ui = params?.ui || MOCHA_UI.BBD;
+    this.ui = params?.ui || MOCHA_UI.BDD;
 
     if (validate) {
       this.validate();
@@ -95,20 +104,20 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   ui: MOCHA_UI;
 }
 
-export interface RoutineConfigInterface {
+export interface RoutineInterface {
   id: string;
+  projectId: string;
   name: string;
   description: string;
   interval: IntervalInterface;
-  files: string[];
-  ignore: string[];
   prepushLocal: boolean;
   prepushOnce: boolean;
   mocha: MochaInterface;
 }
 
-interface CreateRoutineConfigInterface {
+interface CreateRoutineInterface {
   id: string;
+  projectId: string;
   name?: string;
   description?: string;
   interval?: IntervalInterface;
@@ -119,43 +128,45 @@ interface CreateRoutineConfigInterface {
   mocha?: MochaInterface;
 }
 
+const ROUTINE_CONSTANTS = {
+  NAME_MAX_LENGTH: 30,
+  DESCRIPTION_MAX_LENGTH: 100,
+};
+
 /**
  * @class
  */
-export class RoutineConfig extends ValidatedBase implements RoutineConfigInterface {
+export class Routine extends ValidatedBase implements RoutineInterface {
+  static CONSTANTS = ROUTINE_CONSTANTS;
+
   /**
-   * @param {RoutineConfigInterface} params
+   * @param {RoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: CreateRoutineConfigInterface, validate = true) {
+  constructor(params: CreateRoutineInterface, validate = true) {
     super();
 
     this.id = params?.id;
-    this.name = params?.name || '';
-    this.description = params?.description || '';
+    this.projectId = params?.projectId;
+    this.name = Routine.cleanString(params?.name || '');
+    this.description = Routine.cleanString(params?.description || '');
     this.interval = new Interval(params?.interval, false);
-    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || ['**/*.astd.js'];
-    this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
-    this.prepushLocal = params?.prepushLocal || true;
-    this.prepushOnce = params?.prepushOnce || true;
-    this.mocha = new Mocha({ ...params?.mocha, files: params?.mocha?.files || this.files }, false);
+    this.prepushLocal = isBoolean(params?.prepushLocal) ? params.prepushLocal : true;
+    this.prepushOnce = isBoolean(params?.prepushOnce) ? params.prepushOnce : true;
+    this.mocha = new Mocha({ ...params?.mocha }, false);
 
     if (validate) {
       this.validate();
     }
   }
 
+  @MaxLength(Routine.CONSTANTS.NAME_MAX_LENGTH)
   @IsString()
   name: string;
 
+  @MaxLength(Routine.CONSTANTS.DESCRIPTION_MAX_LENGTH)
   @IsString()
   description: string;
-
-  @IsString({ each: true })
-  files: string[];
-
-  @IsString({ each: true })
-  ignore: string[];
 
   @ValidateNested()
   @IsInstance(Interval)
@@ -173,4 +184,16 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
 
   @IsString()
   id: string;
+
+  @IsString()
+  projectId: string;
+
+  /**
+   * Strip unsupported characters
+   * @param {string} input
+   * @returns {string}
+   */
+  static cleanString(input: string): string {
+    return input.replace(/\s+/g, ' ').trim();
+  }
 }
