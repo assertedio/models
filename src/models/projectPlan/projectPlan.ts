@@ -34,7 +34,7 @@ interface CreatePlanInterface {
   limitsOverrides: PlanLimitsOverridesInterface | null;
 }
 
-interface PlanInterface extends CreatePlanInterface {
+export interface PlanInterface extends CreatePlanInterface {
   id: string;
   name: string;
   planId: PLAN_IDS;

@@ -12,7 +12,7 @@ export interface CreateRoutineInterface {
   mocha?: MochaInterface;
 }
 
-interface CreateRoutineConstructorInterface extends DeepPartial<CreateRoutineInterface> {
+export interface CreateRoutineConstructorInterface extends DeepPartial<CreateRoutineInterface> {
   projectId: string;
 }
 

@@ -29,7 +29,7 @@ interface CreateResultInterface {
   routineId: string;
 }
 
-interface ResultInterface extends CreateResultInterface {
+export interface ResultInterface extends CreateResultInterface {
   id: string;
   events: TestEventInterface[] | null;
   stats: StatsInterface | null;

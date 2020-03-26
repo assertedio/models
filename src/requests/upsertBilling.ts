@@ -3,7 +3,7 @@ import { IsEmail, IsEnum, IsString } from 'class-validator';
 import { PLAN_IDS } from '../models/projectPlan';
 import { ValidatedBase } from '../validatedBase';
 
-interface UpsertBillingInterface {
+export interface UpsertBillingInterface {
   email: string;
   source: string;
   planId: PLAN_IDS;
