@@ -66,6 +66,8 @@ export interface InvoiceInterface {
  * @class
  */
 export class ProjectPlan extends ValidatedBase implements PlanInterface {
+  static CONSTANTS = CONSTANTS;
+
   /**
    * @param {PlanInterface} params
    * @param {boolean} validate=true
