@@ -29,7 +29,7 @@ export enum PLAN_STATUS {
   CANCELLED = 'cancelled',
 }
 
-interface CreatePlanInterface {
+export interface CreatePlanInterface {
   projectId: string;
   limitsOverrides: PlanLimitsOverridesInterface | null;
 }
