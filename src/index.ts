@@ -1,6 +1,4 @@
-import * as Models from './models';
-import * as Requests from './requests';
-import { toDate } from './utils';
-import { ValidatedBase } from './validatedBase';
-
-export { Models, Requests, ValidatedBase, toDate };
+export * from './models';
+export * from './requests';
+export * from './utils';
+export * from './validatedBase';
