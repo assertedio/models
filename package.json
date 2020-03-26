@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@types/luxon": "^1.22.0",
+    "@types/nanoid": "^2.1.0",
     "clean-deep": "^3.3.0",
     "cuid": "^2.1.8",
     "err": "^2.1.11",

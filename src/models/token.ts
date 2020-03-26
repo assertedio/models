@@ -1,7 +1,7 @@
 import { IsDate, IsOptional, IsString } from 'class-validator';
 import crypto from 'crypto';
 import { DateTime } from 'luxon';
-import { nanoid } from 'nanoid';
+import nanoid from 'nanoid';
 import { DeepPartial } from 'ts-essentials';
 
 import { ValidatedBase } from '../validatedBase';
