@@ -64,7 +64,7 @@ export interface MochaInterface {
 }
 
 const MOCHA_CONSTANTS = {
-  DEFAULT_FILES_GLOB: '**/*.astd.js',
+  DEFAULT_FILES_GLOB: '**/*.asrtd.js',
 };
 
 /**

@@ -23,7 +23,7 @@ describe('routine config unit tests', () => {
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
-        files: ['**/*.astd.js'],
+        files: ['**/*.asrtd.js'],
         ignore: [],
         bail: false,
         ui: 'bdd',
@@ -56,7 +56,7 @@ describe('routine config unit tests', () => {
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
-        files: ['**/*.astd.js'],
+        files: ['**/*.asrtd.js'],
         ignore: [],
         bail: false,
         ui: 'bdd',
@@ -88,7 +88,7 @@ describe('routine config unit tests', () => {
       prepushLocal: false,
       prepushOnce: false,
       mocha: {
-        files: ['**/*.astd.js'],
+        files: ['**/*.asrtd.js'],
         ignore: [],
         bail: false,
         ui: 'bdd',
@@ -111,7 +111,7 @@ describe('routine config unit tests', () => {
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
-        files: ['**/specific.astd.js', 'other.js'],
+        files: ['**/specific.asrtd.js', 'other.js'],
         ignore: ['!foo', '!scratch.js'],
         bail: true,
         ui: 'exports',
@@ -132,7 +132,7 @@ describe('routine config unit tests', () => {
       prepushLocal: true,
       prepushOnce: true,
       mocha: {
-        files: ['**/specific.astd.js', 'other.js'],
+        files: ['**/specific.asrtd.js', 'other.js'],
         ignore: ['!foo', '!scratch.js'],
         bail: true,
         ui: 'exports',

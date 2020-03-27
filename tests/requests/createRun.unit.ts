@@ -13,7 +13,7 @@ describe('createRun unit tests', () => {
     const expected = {
       package: 'compressed-content',
       mocha: {
-        files: ['**/*.astd.js'],
+        files: ['**/*.asrtd.js'],
         ignore: [],
         bail: false,
         ui: 'bdd',
