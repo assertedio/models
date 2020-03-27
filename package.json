@@ -13,14 +13,13 @@
   },
   "dependencies": {
     "@types/luxon": "^1.22.0",
-    "@types/nanoid": "^2.1.0",
     "clean-deep": "^3.3.0",
     "cuid": "^2.1.8",
     "err": "^2.1.11",
     "http-status": "^1.4.2",
     "lodash": "^4.17.15",
     "luxon": "^1.22.2",
-    "nanoid": "^2.1.11",
+    "nanoid": "^3.0.0",
     "shorthash": "0.0.2",
     "shortid": "^2.2.15",
     "ts-essentials": "^6.0.2"

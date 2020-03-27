@@ -1,7 +1,7 @@
 import { IsDate, IsOptional, IsString } from 'class-validator';
 import crypto from 'crypto';
 import { DateTime } from 'luxon';
-import nanoid from 'nanoid';
+import { customAlphabet } from 'nanoid';
 import { DeepPartial } from 'ts-essentials';
 
 import { ValidatedBase } from '../validatedBase';
@@ -23,7 +23,11 @@ const CONSTANTS = {
   ID_PREFIX: 'tk-',
   HASH_ENCODING: 'hex',
   HASH_TYPE: 'sha256',
+  ALPHABET: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
 };
+
+// eslint-disable-next-line no-magic-numbers
+const nanoid = customAlphabet(CONSTANTS.ALPHABET, 21);
 
 /**
  * @class
