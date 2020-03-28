@@ -23,13 +23,13 @@ export enum RUN_TYPE {
   SCHEDULED = 'scheduled',
 }
 
-interface CreateResultInterface {
+interface CreateRunRecordInterface {
   projectId: string;
   runId: string;
   routineId: string;
 }
 
-export interface ResultInterface extends CreateResultInterface {
+export interface RunRecordInterface extends CreateRunRecordInterface {
   id: string;
   events: TestEventInterface[] | null;
   stats: StatsInterface | null;
@@ -51,12 +51,12 @@ const CONSTANTS = {
 /**
  * @class
  */
-export class RunRecord extends ValidatedBase implements ResultInterface {
+export class RunRecord extends ValidatedBase implements RunRecordInterface {
   /**
-   * @param {ResultInterface} params
+   * @param {RunRecordInterface} params
    * @param {boolean} validate
    */
-  constructor(params: ResultInterface, validate = true) {
+  constructor(params: RunRecordInterface, validate = true) {
     super();
 
     this.id = params.id;
