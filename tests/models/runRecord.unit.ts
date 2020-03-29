@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
 import { RUN_STATUS, RunRecord } from '../../src/models/runRecord';
+import { TestResultInterface } from '../../src/requests';
 import { Run, RUN_TYPE } from '../../src/requests/run';
 
 describe('runRecord unit tests', () => {
@@ -150,5 +151,153 @@ describe('runRecord unit tests', () => {
     };
 
     expect(result).to.eql(expected);
+  });
+
+  it('gets patch from ended and failed test result', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      runDurationMs: 0,
+      console: null,
+      type: 'manual' as any,
+      events: [
+        {
+          type: 'end',
+          data: {
+            stats: {
+              suites: 4,
+              tests: 7,
+              passes: 5,
+              pending: 0,
+              failures: 2,
+              start: curDate,
+              end: curDate,
+              duration: 75,
+            },
+            total: 10,
+          },
+          timestamp: curDate,
+          timeMs: 75,
+        },
+      ],
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: null,
+      runDurationMs: 0,
+      testDurationMs: 75,
+      stats: {
+        suites: 4,
+        tests: 7,
+        passes: 5,
+        pending: 0,
+        failures: 2,
+        start: curDate,
+        end: curDate,
+        duration: 75,
+      },
+      events: [
+        {
+          type: 'end',
+          data: {
+            stats: {
+              suites: 4,
+              tests: 7,
+              passes: 5,
+              pending: 0,
+              failures: 2,
+              start: curDate,
+              end: curDate,
+              duration: 75,
+            },
+            total: 10,
+          },
+          timestamp: curDate,
+          timeMs: 75,
+        },
+      ],
+      completedAt: curDate,
+      status: 'failed',
+      failType: 'test',
+    };
+    expect(expected).to.eql(patch);
+  });
+
+  it('gets patch from ended and passed test result', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      runDurationMs: 0,
+      console: null,
+      type: 'manual' as any,
+      events: [
+        {
+          type: 'end',
+          data: {
+            stats: {
+              suites: 4,
+              tests: 7,
+              passes: 5,
+              pending: 0,
+              failures: 0,
+              start: curDate,
+              end: curDate,
+              duration: 75,
+            },
+            total: 10,
+          },
+          timestamp: curDate,
+          timeMs: 75,
+        },
+      ],
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: null,
+      runDurationMs: 0,
+      testDurationMs: 75,
+      stats: {
+        suites: 4,
+        tests: 7,
+        passes: 5,
+        pending: 0,
+        failures: 0,
+        start: curDate,
+        end: curDate,
+        duration: 75,
+      },
+      events: [
+        {
+          type: 'end',
+          data: {
+            stats: {
+              suites: 4,
+              tests: 7,
+              passes: 5,
+              pending: 0,
+              failures: 0,
+              start: curDate,
+              end: curDate,
+              duration: 75,
+            },
+            total: 10,
+          },
+          timestamp: curDate,
+          timeMs: 75,
+        },
+      ],
+      completedAt: curDate,
+      status: 'passed',
+      failType: null,
+    };
+    expect(expected).to.eql(patch);
   });
 });

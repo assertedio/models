@@ -1,9 +1,11 @@
 import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { last } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import { Stats, StatsInterface, TestEvent, TestEventInterface } from '../requests/testEvent';
+import { TestResultInterface } from '../requests/testResult';
 import { ValidatedBase } from '../validatedBase';
 
 export enum RUN_STATUS {
@@ -166,6 +168,50 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       updatedAt: curDate,
       completedAt: null,
     });
+  }
+
+  /**
+   * Get patch from test result
+   * @param {TestResultInterface} testResult
+   * @returns {Partial<RunRecord>}
+   */
+  static getPatchFromResult(testResult: TestResultInterface): Partial<RunRecord> {
+    const patch = {} as {
+      status: RUN_STATUS;
+      failType: RUN_FAIL_TYPE | null;
+      console: string | null;
+      events: TestEventInterface[] | null;
+      stats: StatsInterface | null;
+      runDurationMs: number;
+      testDurationMs: number | null;
+      completedAt: Date;
+    };
+
+    const lastEvent = last(testResult.events || []);
+
+    patch.console = testResult.console;
+    patch.runDurationMs = testResult.runDurationMs;
+    patch.testDurationMs = lastEvent?.timeMs || null;
+    patch.stats = lastEvent?.data?.stats || null;
+    patch.events = testResult.events || null;
+    patch.completedAt = testResult.createdAt;
+
+    if (testResult.events.length === 0) {
+      patch.status = RUN_STATUS.FAILED;
+      patch.failType = RUN_FAIL_TYPE.ERROR;
+      // EVENT_RUN_END in mocha
+    } else if (lastEvent?.type !== 'end') {
+      patch.status = RUN_STATUS.FAILED;
+      patch.failType = RUN_FAIL_TYPE.TIMEOUT;
+    } else if (patch.stats?.failures && patch.stats?.failures > 0) {
+      patch.status = RUN_STATUS.FAILED;
+      patch.failType = RUN_FAIL_TYPE.TEST;
+    } else {
+      patch.status = RUN_STATUS.PASSED;
+      patch.failType = null;
+    }
+
+    return patch;
   }
 
   /**
