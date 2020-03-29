@@ -2,7 +2,7 @@ import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateN
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
-import { Run, RunInterface } from '../requests/run';
+import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import { Stats, StatsInterface, TestEvent, TestEventInterface } from '../requests/testEvent';
 import { ValidatedBase } from '../validatedBase';
 
@@ -16,11 +16,6 @@ export enum RUN_FAIL_TYPE {
   TIMEOUT = 'timeout',
   TEST = 'test',
   ERROR = 'error',
-}
-
-export enum RUN_TYPE {
-  MANUAL = 'manual',
-  SCHEDULED = 'scheduled',
 }
 
 interface CreateRunRecordInterface {
@@ -148,16 +143,17 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   /**
    * Create model instance
    * @param {Run} runRequest
-   * @param {RUN_TYPE} type
+   * @param {string} projectId
+   * @param {string} routineId
    * @param {Date} curDate
    * @returns {Result}
    */
-  static create(runRequest: RunInterface, type: RUN_TYPE, curDate = DateTime.utc().toJSDate()): RunRecord {
+  static create(runRequest: RunInterface, projectId: string, routineId: string, curDate = DateTime.utc().toJSDate()): RunRecord {
     return new RunRecord({
-      projectId: runRequest.projectId,
+      projectId,
       runId: runRequest.id,
-      routineId: runRequest.routineId,
-      type,
+      type: runRequest.type,
+      routineId,
       events: null,
       stats: null,
       console: null,

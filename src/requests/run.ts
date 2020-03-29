@@ -1,4 +1,4 @@
-import { IsDate, IsInstance, IsInt, IsString, Max, Min } from 'class-validator';
+import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min } from 'class-validator';
 import cuid from 'cuid';
 import { DateTime } from 'luxon';
 
@@ -7,10 +7,14 @@ import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
 
+export enum RUN_TYPE {
+  MANUAL = 'manual',
+  SCHEDULED = 'scheduled',
+}
+
 interface CreateRunInterface extends CreateRunRequestInterface {
-  projectId: string;
-  routineId: string;
   mocha: MochaInterface;
+  type: RUN_TYPE;
   timeoutMs: number;
 }
 
@@ -40,8 +44,7 @@ export class Run extends ValidatedBase implements RunInterface {
     super();
 
     this.id = params.id;
-    this.projectId = params?.projectId;
-    this.routineId = params?.routineId;
+    this.type = params.type;
     this.package = params?.package;
     this.mocha = new Mocha(params?.mocha, false);
     this.timeoutMs = params?.timeoutMs;
@@ -58,11 +61,8 @@ export class Run extends ValidatedBase implements RunInterface {
   @IsString()
   readonly id: string;
 
-  @IsString()
-  readonly projectId: string;
-
-  @IsString()
-  readonly routineId: string;
+  @IsEnum(RUN_TYPE)
+  readonly type: RUN_TYPE;
 
   @IsInstance(Mocha)
   mocha: MochaInterface;

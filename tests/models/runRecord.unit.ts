@@ -1,17 +1,16 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { RUN_STATUS, RUN_TYPE, RunRecord } from '../../src/models/runRecord';
-import { Run } from '../../src/requests/run';
+import { RUN_STATUS, RunRecord } from '../../src/models/runRecord';
+import { Run, RUN_TYPE } from '../../src/requests/run';
 
 describe('runRecord unit tests', () => {
   it('create from run', () => {
     const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
     const runRequest = Run.create(
       {
-        projectId: 'project-id',
-        routineId: 'routine-id',
         package: 'pack-age',
+        type: 'manual' as any,
         mocha: {
           files: ['foo.js'],
         } as any,
@@ -20,7 +19,7 @@ describe('runRecord unit tests', () => {
       curDate
     );
 
-    const result = RunRecord.create(runRequest, RUN_TYPE.MANUAL, curDate);
+    const result = RunRecord.create(runRequest, 'project-id', 'routine-id', curDate);
 
     const expected = {
       id: runRequest.id.replace('rn-', 'rs-'),
