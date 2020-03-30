@@ -1,5 +1,5 @@
 import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
-import { isBoolean, isNil } from 'lodash';
+import { isNil } from 'lodash';
 
 import { ValidatedBase } from '../validatedBase';
 
@@ -110,8 +110,6 @@ export interface RoutineInterface {
   name: string;
   description: string;
   interval: IntervalInterface;
-  prepushLocal: boolean;
-  prepushOnce: boolean;
   mocha: MochaInterface;
 }
 
@@ -123,8 +121,6 @@ interface CreateRoutineInterface {
   interval?: IntervalInterface;
   files?: string[];
   ignore?: string[];
-  prepushLocal?: boolean;
-  prepushOnce?: boolean;
   mocha?: MochaInterface;
 }
 
@@ -151,8 +147,6 @@ export class Routine extends ValidatedBase implements RoutineInterface {
     this.name = Routine.cleanString(params?.name || '');
     this.description = Routine.cleanString(params?.description || '');
     this.interval = new Interval(params?.interval, false);
-    this.prepushLocal = isBoolean(params?.prepushLocal) ? params.prepushLocal : true;
-    this.prepushOnce = isBoolean(params?.prepushOnce) ? params.prepushOnce : true;
     this.mocha = new Mocha({ ...params?.mocha }, false);
 
     if (validate) {
@@ -175,12 +169,6 @@ export class Routine extends ValidatedBase implements RoutineInterface {
   @ValidateNested()
   @IsInstance(Mocha)
   mocha: MochaInterface;
-
-  @IsBoolean()
-  prepushOnce: boolean;
-
-  @IsBoolean()
-  prepushLocal: boolean;
 
   @IsString()
   id: string;

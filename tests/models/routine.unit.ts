@@ -20,8 +20,6 @@ describe('routine config unit tests', () => {
         unit: 'min',
         value: 5,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/*.asrtd.js'],
         ignore: [],
@@ -53,8 +51,6 @@ describe('routine config unit tests', () => {
         unit: 'min',
         value: 5,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/*.asrtd.js'],
         ignore: [],
@@ -69,8 +65,6 @@ describe('routine config unit tests', () => {
   it('minimal create with false', () => {
     const params = {
       id: 'something',
-      prepushLocal: false,
-      prepushOnce: false,
       projectId: 'project-id',
     };
 
@@ -85,8 +79,6 @@ describe('routine config unit tests', () => {
         unit: 'min',
         value: 5,
       },
-      prepushLocal: false,
-      prepushOnce: false,
       mocha: {
         files: ['**/*.asrtd.js'],
         ignore: [],
@@ -108,8 +100,6 @@ describe('routine config unit tests', () => {
         unit: 'hr',
         value: 10,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/specific.asrtd.js', 'other.js'],
         ignore: ['!foo', '!scratch.js'],
@@ -129,8 +119,6 @@ describe('routine config unit tests', () => {
         unit: 'hr',
         value: 10,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/specific.asrtd.js', 'other.js'],
         ignore: ['!foo', '!scratch.js'],

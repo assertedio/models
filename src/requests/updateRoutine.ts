@@ -1,4 +1,4 @@
-import { IsBoolean, IsInstance, IsString } from 'class-validator';
+import { IsInstance, IsString } from 'class-validator';
 
 import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineInterface } from '../models';
 import { ValidatedBase } from '../validatedBase';
@@ -23,19 +23,11 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
     this.interval = new Interval(params.interval, false);
     this.mocha = new Mocha(params.mocha, false);
     this.package = params.package;
-    this.prepushLocal = params.prepushLocal;
-    this.prepushOnce = params.prepushOnce;
 
     if (validate) {
       this.validate();
     }
   }
-
-  @IsBoolean()
-  prepushLocal: boolean;
-
-  @IsBoolean()
-  prepushOnce: boolean;
 
   @IsString()
   name: string;
