@@ -62,34 +62,6 @@ describe('routine config unit tests', () => {
     expect(routineConfig).to.eql(expected);
   });
 
-  it('minimal create with false', () => {
-    const params = {
-      id: 'something',
-      projectId: 'project-id',
-    };
-
-    const routineConfig = new Routine(params);
-
-    const expected = {
-      id: 'something',
-      projectId: 'project-id',
-      name: '',
-      description: '',
-      interval: {
-        unit: 'min',
-        value: 5,
-      },
-      mocha: {
-        files: ['**/*.asrtd.js'],
-        ignore: [],
-        bail: false,
-        ui: 'bdd',
-      },
-    };
-
-    expect(routineConfig).to.eql(expected);
-  });
-
   it('full create', () => {
     const params = {
       id: 'something',
