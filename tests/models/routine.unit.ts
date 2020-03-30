@@ -26,6 +26,7 @@ describe('routine config unit tests', () => {
         bail: false,
         ui: 'bdd',
       },
+      timeoutSec: 1,
     };
 
     expect(routineConfig).to.eql(expected);
@@ -57,6 +58,7 @@ describe('routine config unit tests', () => {
         bail: false,
         ui: 'bdd',
       },
+      timeoutSec: 1,
     };
 
     expect(routineConfig).to.eql(expected);
@@ -78,6 +80,7 @@ describe('routine config unit tests', () => {
         bail: true,
         ui: 'exports',
       },
+      timeoutSec: 10,
     } as any;
 
     const routineConfig = new Routine(params);
@@ -97,6 +100,7 @@ describe('routine config unit tests', () => {
         bail: true,
         ui: 'exports',
       },
+      timeoutSec: 10,
     };
 
     expect(routineConfig).to.eql(expected);

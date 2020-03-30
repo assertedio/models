@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 import { isNil } from 'lodash';
 
 import { ValidatedBase } from '../validatedBase';
@@ -111,6 +111,7 @@ export interface RoutineInterface {
   description: string;
   interval: IntervalInterface;
   mocha: MochaInterface;
+  timeoutSec: number;
 }
 
 interface CreateRoutineInterface {
@@ -122,11 +123,19 @@ interface CreateRoutineInterface {
   files?: string[];
   ignore?: string[];
   mocha?: MochaInterface;
+  timeoutSec?: number;
 }
+
+const MAX_TIMEOUT_MIN = 8;
+// eslint-disable-next-line no-magic-numbers
+const MAX_TIMEOUT_SEC = 60 * MAX_TIMEOUT_MIN;
 
 const ROUTINE_CONSTANTS = {
   NAME_MAX_LENGTH: 30,
   DESCRIPTION_MAX_LENGTH: 100,
+  DEFAULT_TIMEOUT_SEC: 1,
+  MAX_TIMEOUT_SEC,
+  MAX_TIMEOUT_ERROR: `Max timeout is ${MAX_TIMEOUT_MIN} minutes, or ${MAX_TIMEOUT_SEC} seconds`,
 };
 
 /**
@@ -148,6 +157,7 @@ export class Routine extends ValidatedBase implements RoutineInterface {
     this.description = Routine.cleanString(params?.description || '');
     this.interval = new Interval(params?.interval, false);
     this.mocha = new Mocha({ ...params?.mocha }, false);
+    this.timeoutSec = params.timeoutSec || ROUTINE_CONSTANTS.DEFAULT_TIMEOUT_SEC;
 
     if (validate) {
       this.validate();
@@ -165,6 +175,11 @@ export class Routine extends ValidatedBase implements RoutineInterface {
   @ValidateNested()
   @IsInstance(Interval)
   interval: IntervalInterface;
+
+  @Min(1)
+  @Max(ROUTINE_CONSTANTS.MAX_TIMEOUT_SEC, { message: ROUTINE_CONSTANTS.MAX_TIMEOUT_ERROR })
+  @IsInt()
+  timeoutSec: number;
 
   @ValidateNested()
   @IsInstance(Mocha)
