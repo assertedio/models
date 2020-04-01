@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { BUCKET_SIZE, BucketStats, SummaryStats, TimelineStats } from '../../src/requests/stats';
+import { BUCKET_SIZE } from '../../src/models/statsResult';
+import { BucketStats, SummaryStats, TimelineStats } from '../../src/requests/stats';
 
 const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 

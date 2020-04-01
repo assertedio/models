@@ -1,5 +1,20 @@
-import { BUCKET_SIZE } from '../requests/stats';
 import { RunRecordInterface } from './runRecord';
+
+export enum BUCKET_SIZE {
+  HOUR = 'hour',
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+}
+
+/* eslint-disable no-magic-numbers */
+export const BUCKET_SIZE_MIN = {
+  [BUCKET_SIZE.HOUR]: 60,
+  [BUCKET_SIZE.DAY]: 60 * 24,
+  [BUCKET_SIZE.WEEK]: 60 * 24 * 7,
+  [BUCKET_SIZE.MONTH]: 60 * 24 * 7 * 4,
+};
+/* eslint-enable no-magic-numbers */
 
 export interface StatsResultInterface {
   start: Date;

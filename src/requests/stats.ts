@@ -3,24 +3,10 @@ import Err from 'err';
 import HTTP_STATUS from 'http-status';
 import { DateTime } from 'luxon';
 
+import { RunRecordInterface } from '../models';
+import { BUCKET_SIZE, BucketResultInterface, SummaryResultInterface, TimelineEvent } from '../models/statsResult';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
-
-export enum BUCKET_SIZE {
-  HOUR = 'hour',
-  DAY = 'day',
-  WEEK = 'week',
-  MONTH = 'month',
-}
-
-/* eslint-disable no-magic-numbers */
-export const BUCKET_SIZE_MIN = {
-  [BUCKET_SIZE.HOUR]: 60,
-  [BUCKET_SIZE.DAY]: 60 * 24,
-  [BUCKET_SIZE.WEEK]: 60 * 24 * 7,
-  [BUCKET_SIZE.MONTH]: 60 * 24 * 7 * 4,
-};
-/* eslint-enable no-magic-numbers */
 
 interface TimelineStatsConstructorInterface {
   start?: string | Date;
@@ -154,4 +140,23 @@ export class BucketStats extends ValidatedBase implements BucketStatsInterface {
   @IsOptional()
   @IsString()
   routineId: string | null;
+}
+
+export interface BucketsResponseInterface {
+  [k: string]: BucketResultInterface;
+}
+export interface TimelineResponseInterface {
+  [k: string]: TimelineEvent[];
+}
+export interface SummaryResponseInterface {
+  [k: string]: SummaryResultInterface;
+}
+
+export interface AllResponseInterface {
+  buckets: BucketsResponseInterface;
+  timeline: TimelineResponseInterface;
+  summary: SummaryResponseInterface;
+  records: {
+    [k: string]: RunRecordInterface[];
+  };
 }
