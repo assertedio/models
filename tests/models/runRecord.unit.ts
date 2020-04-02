@@ -27,6 +27,7 @@ describe('runRecord unit tests', () => {
       status: RUN_STATUS.CREATED,
       routineId: 'routine-id',
       projectId: 'project-id',
+      errors: null,
       runId: runRequest.id,
       type: RUN_TYPE.MANUAL,
       events: null,
@@ -55,6 +56,7 @@ describe('runRecord unit tests', () => {
       testDurationMs: 0,
       console: null,
       failType: null,
+      errors: null,
       stats: {
         duration: undefined,
         end: undefined,
@@ -103,6 +105,7 @@ describe('runRecord unit tests', () => {
       projectId: 'project-id',
       runId: 'rn-run-id',
       routineId: 'routine-id',
+      errors: null,
       events: [
         {
           type: 'suite',
@@ -163,6 +166,29 @@ describe('runRecord unit tests', () => {
       type: 'manual' as any,
       events: [
         {
+          type: 'test',
+          data: {
+            fullTitle: 'suite 1 nested describe 2',
+            stats: {
+              suites: 4,
+              tests: 7,
+              passes: 5,
+              pending: 0,
+              failures: 2,
+              start: curDate,
+              end: curDate,
+              duration: 75,
+            },
+            err: {
+              actual: 'foo',
+              expected: 'bar',
+            },
+            total: 10,
+          },
+          timestamp: curDate,
+          timeMs: 75,
+        },
+        {
           type: 'end',
           data: {
             stats: {
@@ -200,7 +226,41 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
+      errors: [
+        {
+          fullTitle: 'suite 1 nested describe 2',
+          actual: 'foo',
+          expected: 'bar',
+          code: undefined,
+          message: undefined,
+          operator: undefined,
+          stack: undefined,
+        },
+      ],
       events: [
+        {
+          type: 'test',
+          data: {
+            stats: {
+              suites: 4,
+              tests: 7,
+              passes: 5,
+              pending: 0,
+              failures: 2,
+              start: curDate,
+              end: curDate,
+              duration: 75,
+            },
+            fullTitle: 'suite 1 nested describe 2',
+            err: {
+              actual: 'foo',
+              expected: 'bar',
+            },
+            total: 10,
+          },
+          timestamp: curDate,
+          timeMs: 75,
+        },
         {
           type: 'end',
           data: {
@@ -274,6 +334,7 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
+      errors: null,
       events: [
         {
           type: 'end',

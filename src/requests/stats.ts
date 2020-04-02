@@ -4,7 +4,7 @@ import HTTP_STATUS from 'http-status';
 import { DateTime } from 'luxon';
 
 import { RunRecordInterface } from '../models';
-import { BUCKET_SIZE, BucketResultInterface, SummaryResultInterface, TimelineEvent } from '../models/statsResult';
+import { BUCKET_SIZE, BucketResultInterface, SummaryResultInterface, TimelineEventInterface } from '../models/statsResult';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
@@ -146,7 +146,7 @@ export interface BucketsResponseInterface {
   [k: string]: BucketResultInterface;
 }
 export interface TimelineResponseInterface {
-  [k: string]: TimelineEvent[];
+  [k: string]: TimelineEventInterface[];
 }
 export interface SummaryResponseInterface {
   [k: string]: SummaryResultInterface;

@@ -1,3 +1,7 @@
+import { Allow, IsDate, IsEnum, IsInstance, IsOptional, ValidateNested } from 'class-validator';
+
+import { toDate } from '../utils';
+import { ValidatedBase } from '../validatedBase';
 import { RunRecordInterface } from './runRecord';
 
 export enum BUCKET_SIZE {
@@ -33,12 +37,98 @@ export interface StatsResultInterface {
   };
 }
 
+interface StatsResultConstructorInterface extends Omit<StatsResultInterface, 'start' | 'end'> {
+  start: Date | string;
+  end: Date | string;
+}
+
+/**
+ * @class
+ */
+export class StatsResult extends ValidatedBase implements StatsResultInterface {
+  /**
+   * @param {StatsResultConstructorInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: StatsResultConstructorInterface, validate = true) {
+    super();
+
+    this.start = toDate(params.start);
+    this.end = toDate(params.end);
+    this.runs = params.runs;
+    this.tests = params.tests;
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @IsDate()
+  start: Date;
+
+  @IsDate()
+  end: Date;
+
+  @Allow()
+  runs: { availability: number; passes: number; failures: number; total: number };
+
+  @Allow()
+  tests: { availability: number; passes: number; failures: number; total: number };
+}
+
 export interface BucketResultInterface {
   start: Date;
   end: Date;
   bucketSize: BUCKET_SIZE;
   overall: StatsResultInterface;
   buckets: StatsResultInterface[];
+}
+
+interface BucketResultConstructorInterface extends Omit<BucketResultInterface, 'start' | 'end' | 'overall' | 'buckets'> {
+  start: Date | string;
+  end: Date | string;
+  overall: StatsResultConstructorInterface;
+  buckets: StatsResultConstructorInterface[];
+}
+
+/**
+ * @class
+ */
+export class BucketResult extends ValidatedBase implements BucketResultInterface {
+  /**
+   * @param {BucketResultConstructorInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: BucketResultConstructorInterface, validate = true) {
+    super();
+
+    this.start = toDate(params.start);
+    this.end = toDate(params.end);
+    this.bucketSize = params.bucketSize;
+    this.buckets = params.buckets.map((bucket) => new StatsResult(bucket, false));
+    this.overall = new StatsResult(params.overall, false);
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @IsDate()
+  start: Date;
+
+  @IsDate()
+  end: Date;
+
+  @IsEnum(BUCKET_SIZE)
+  bucketSize: BUCKET_SIZE;
+
+  @ValidateNested({ each: true })
+  @IsInstance(StatsResult, { each: true })
+  buckets: StatsResultInterface[];
+
+  @ValidateNested()
+  @IsInstance(StatsResult)
+  overall: StatsResultInterface;
 }
 
 export enum TIMELINE_EVENT_STATUS {
@@ -48,25 +138,118 @@ export enum TIMELINE_EVENT_STATUS {
   UNKNOWN = 'unknown',
 }
 
-export interface TimelineEvent {
+export interface TimelineEventInterface {
   start: Date;
   end: Date;
+  status: TIMELINE_EVENT_STATUS;
+}
+
+interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'start' | 'end'> {
+  start: Date | string;
+  end: Date | string;
+}
+
+/**
+ * @class
+ */
+export class TimelineEvent extends ValidatedBase implements TimelineEventInterface {
+  /**
+   * @param {TimelineEventConstructorInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: TimelineEventConstructorInterface, validate = true) {
+    super();
+
+    this.start = toDate(params.start);
+    this.end = toDate(params.end);
+    this.status = params.status;
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @IsDate()
+  end: Date;
+
+  @IsDate()
+  start: Date;
+
+  @IsEnum(TIMELINE_EVENT_STATUS)
   status: TIMELINE_EVENT_STATUS;
 }
 
 export interface SummaryResultInterface {
   start: Date;
   end: Date;
-  latestStatus: TimelineEvent | null;
-  latestDowntime: TimelineEvent | null;
+  latestStatus: TimelineEventInterface | null;
+  latestDowntime: TimelineEventInterface | null;
   day: StatsResultInterface;
   week: StatsResultInterface;
   month: StatsResultInterface;
 }
 
+interface SummaryResultConstructorInterface {
+  start: Date | string;
+  end: Date | string;
+  latestStatus: TimelineEventConstructorInterface | null;
+  latestDowntime: TimelineEventConstructorInterface | null;
+  day: StatsResultConstructorInterface;
+  week: StatsResultConstructorInterface;
+  month: StatsResultConstructorInterface;
+}
+
+/**
+ * @class
+ */
+export class SummaryResult extends ValidatedBase implements SummaryResultInterface {
+  /**
+   * @param {SummaryResultConstructorInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: SummaryResultConstructorInterface, validate = true) {
+    super();
+
+    this.start = toDate(params.start);
+    this.end = toDate(params.end);
+    this.latestDowntime = params.latestDowntime ? new TimelineEvent(params.latestDowntime, false) : null;
+    this.latestStatus = params.latestStatus ? new TimelineEvent(params.latestStatus, false) : null;
+    this.month = new StatsResult(params.month, false);
+    this.week = new StatsResult(params.week, false);
+    this.day = new StatsResult(params.day, false);
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @IsDate()
+  start: Date;
+
+  @IsDate()
+  end: Date;
+
+  @IsOptional()
+  @IsInstance(TimelineEvent)
+  latestDowntime: TimelineEventInterface | null;
+
+  @IsOptional()
+  @IsInstance(TimelineEvent)
+  latestStatus: TimelineEventInterface | null;
+
+  @IsInstance(StatsResult)
+  month: StatsResultInterface;
+
+  @IsInstance(StatsResult)
+  week: StatsResultInterface;
+
+  @IsInstance(StatsResult)
+  day: StatsResultInterface;
+}
+
 export interface StatusResultInterface {
   start: Date;
   end: Date;
-  latestStatus: TimelineEvent | null;
+  latestStatus: TimelineEventInterface | null;
   records: RunRecordInterface[];
 }

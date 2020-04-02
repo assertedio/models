@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
-import { Stats, StatsInterface, TestEvent, TestEventInterface } from '../requests/testEvent';
+import { Stats, StatsInterface, TestError, TestErrorInterface, TestEvent, TestEventInterface } from '../requests/testEvent';
 import { TestResultInterface } from '../requests/testResult';
 import { ValidatedBase } from '../validatedBase';
 
@@ -33,6 +33,7 @@ export interface RunRecordInterface extends CreateRunRecordInterface {
   runDurationMs: number | null;
   testDurationMs: number | null;
   type: RUN_TYPE;
+  errors: TestErrorInterface[] | null;
   status: RUN_STATUS;
   failType: RUN_FAIL_TYPE | null;
   console: string | null;
@@ -60,6 +61,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     this.projectId = params.projectId;
     this.runId = params.runId;
     this.routineId = params.routineId;
+    this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
     this.events = params.events ? params.events.map((event) => new TestEvent(event, false)) : null;
     this.stats = params.stats ? new Stats(params.stats, false) : null;
     this.runDurationMs = params.runDurationMs;
@@ -93,7 +95,12 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   readonly type: RUN_TYPE;
 
   @IsOptional()
-  @ValidateNested()
+  @ValidateNested({ each: true })
+  @IsInstance(TestError, { each: true })
+  errors: TestErrorInterface[] | null;
+
+  @IsOptional()
+  @ValidateNested({ each: true })
   @IsInstance(TestEvent, { each: true })
   events: TestEventInterface[] | null;
 
@@ -156,6 +163,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       runId: runRequest.id,
       type: runRequest.type,
       routineId,
+      errors: null,
       events: null,
       stats: null,
       console: null,
@@ -180,6 +188,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       status: RUN_STATUS;
       failType: RUN_FAIL_TYPE | null;
       console: string | null;
+      errors: TestErrorInterface[] | null;
       events: TestEventInterface[] | null;
       stats: StatsInterface | null;
       runDurationMs: number;
@@ -188,6 +197,11 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     };
 
     const lastEvent = last(testResult.events || []);
+
+    patch.errors = (testResult.events || [])
+      .filter((event) => !!event.data?.err)
+      .map((event) => new TestError({ ...event.data?.err, fullTitle: event.data?.fullTitle } as TestErrorInterface));
+    patch.errors = patch.errors.length > 0 ? patch.errors : null;
 
     patch.console = testResult.console;
     patch.runDurationMs = testResult.runDurationMs;
