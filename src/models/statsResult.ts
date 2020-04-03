@@ -1,4 +1,5 @@
-import { Allow, IsDate, IsEnum, IsInstance, IsOptional, ValidateNested } from 'class-validator';
+import { Allow, IsDate, IsEnum, IsInstance, IsInt, IsOptional, Min, ValidateNested } from 'class-validator';
+import { DateTime } from 'luxon';
 
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
@@ -141,10 +142,11 @@ export enum TIMELINE_EVENT_STATUS {
 export interface TimelineEventInterface {
   start: Date;
   end: Date;
+  durationSec: number;
   status: TIMELINE_EVENT_STATUS;
 }
 
-interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'start' | 'end'> {
+interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'start' | 'end' | 'durationSec'> {
   start: Date | string;
   end: Date | string;
 }
@@ -162,6 +164,7 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
 
     this.start = toDate(params.start);
     this.end = toDate(params.end);
+    this.durationSec = Math.abs(Math.round(DateTime.fromJSDate(this.end).diff(DateTime.fromJSDate(this.start)).as('seconds')));
     this.status = params.status;
 
     if (validate) {
@@ -174,6 +177,10 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
 
   @IsDate()
   start: Date;
+
+  @Min(0)
+  @IsInt()
+  durationSec: number;
 
   @IsEnum(TIMELINE_EVENT_STATUS)
   status: TIMELINE_EVENT_STATUS;

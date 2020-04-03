@@ -75,11 +75,13 @@ describe('stats result unit tests', () => {
       latestDowntime: {
         start: new Date('2018-01-01T00:00:00.000Z'),
         end: new Date('2018-01-01T00:00:00.000Z'),
+        durationSec: 0,
         status: TIMELINE_EVENT_STATUS.UP,
       },
       latestStatus: {
         start: new Date('2018-01-01T00:00:00.000Z'),
         end: new Date('2018-01-01T00:00:00.000Z'),
+        durationSec: 0,
         status: TIMELINE_EVENT_STATUS.UP,
       },
       month: {
@@ -147,6 +149,7 @@ describe('stats result unit tests', () => {
     const expected = {
       start: new Date('2018-01-01T00:00:00.000Z'),
       end: new Date('2018-01-01T00:00:00.000Z'),
+      durationSec: 0,
       status: TIMELINE_EVENT_STATUS.UP,
     };
 
