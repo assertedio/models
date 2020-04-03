@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { RUN_STATUS, RunRecord } from '../../src/models/runRecord';
+import { CompletedRunRecord, RUN_STATUS, RunRecord } from '../../src/models/runRecord';
 import { TestResultInterface } from '../../src/requests';
 import { Run, RUN_TYPE } from '../../src/requests/run';
 
@@ -360,5 +360,149 @@ describe('runRecord unit tests', () => {
       failType: null,
     };
     expect(expected).to.eql(patch);
+  });
+});
+
+describe('completed runRecord', () => {
+  it('create completedRunRecord with from complete runRecord', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+    const params = {
+      id: 'rs-run-id',
+      status: RUN_STATUS.PASSED,
+      projectId: 'project-id',
+      routineId: 'routine-id',
+      runId: 'rn-run-id',
+      type: RUN_TYPE.MANUAL,
+      runDurationMs: 0,
+      testDurationMs: 0,
+      console: null,
+      failType: null,
+      errors: null,
+      stats: {
+        duration: undefined,
+        end: undefined,
+        suites: 3,
+        tests: 5,
+        passes: 3,
+        pending: 0,
+        failures: 2,
+        start: curDate,
+      },
+      events: [
+        {
+          type: 'suite',
+          data: {
+            fullTitle: 'suite 1 nested describe 2',
+            root: false,
+            duration: undefined,
+            err: undefined,
+            result: undefined,
+            stats: {
+              duration: undefined,
+              end: undefined,
+              suites: 3,
+              tests: 5,
+              passes: 3,
+              pending: 0,
+              failures: 2,
+              start: new Date('2020-03-16T01:33:23.753Z'),
+            },
+            title: 'nested describe 2',
+            total: 1,
+          },
+          timestamp: new Date('2020-03-16T01:33:23.826Z'),
+          timeMs: 73,
+        },
+      ],
+      completedAt: curDate,
+      createdAt: curDate,
+      updatedAt: curDate,
+    };
+
+    const result = new CompletedRunRecord(params);
+
+    const expected = {
+      id: 'rs-run-id',
+      projectId: 'project-id',
+      runId: 'rn-run-id',
+      routineId: 'routine-id',
+      errors: null,
+      stats: {
+        end: undefined,
+        duration: undefined,
+        suites: 3,
+        tests: 5,
+        passes: 3,
+        pending: 0,
+        failures: 2,
+        start: curDate,
+      },
+      runDurationMs: 0,
+      testDurationMs: 0,
+      type: 'manual',
+      console: null,
+      status: 'passed',
+      failType: null,
+      completedAt: curDate,
+    };
+
+    expect(result).to.eql(expected);
+  });
+
+  it('create completedRunRecord with string dates', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+    const params = {
+      id: 'rs-run-id',
+      status: RUN_STATUS.PASSED,
+      projectId: 'project-id',
+      routineId: 'routine-id',
+      runId: 'rn-run-id',
+      type: RUN_TYPE.MANUAL,
+      runDurationMs: 0,
+      testDurationMs: 0,
+      console: null,
+      failType: null,
+      errors: null,
+      stats: {
+        duration: undefined,
+        end: undefined,
+        suites: 3,
+        tests: 5,
+        passes: 3,
+        pending: 0,
+        failures: 2,
+        start: '2018-01-01T00:00:00.000Z',
+      },
+      completedAt: '2018-01-01T00:00:00.000Z',
+    };
+
+    const result = new CompletedRunRecord(params);
+
+    const expected = {
+      id: 'rs-run-id',
+      projectId: 'project-id',
+      runId: 'rn-run-id',
+      routineId: 'routine-id',
+      errors: null,
+      stats: {
+        end: undefined,
+        duration: undefined,
+        suites: 3,
+        tests: 5,
+        passes: 3,
+        pending: 0,
+        failures: 2,
+        start: curDate,
+      },
+      runDurationMs: 0,
+      testDurationMs: 0,
+      type: 'manual',
+      console: null,
+      status: 'passed',
+      failType: null,
+      completedAt: curDate,
+    };
+
+    expect(result).to.eql(expected);
   });
 });

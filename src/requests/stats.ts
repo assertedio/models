@@ -3,7 +3,7 @@ import Err from 'err';
 import HTTP_STATUS from 'http-status';
 import { DateTime } from 'luxon';
 
-import { RunRecordInterface } from '../models';
+import { CompletedRunRecordInterface, RunRecordInterface, StatsResultInterface } from '../models';
 import { BUCKET_SIZE, BucketResultInterface, SummaryResultInterface, TimelineEventInterface } from '../models/statsResult';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
@@ -159,4 +159,11 @@ export interface AllResponseInterface {
   records: {
     [k: string]: RunRecordInterface[];
   };
+}
+
+export interface RoutineStatsInterface {
+  latestRecord: CompletedRunRecordInterface | null;
+  buckets: StatsResultInterface[];
+  timeline: TimelineEventInterface[];
+  records: CompletedRunRecordInterface[];
 }

@@ -1,11 +1,20 @@
 import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
-import { last } from 'lodash';
+import { isNumber, last } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
-import { Stats, StatsInterface, TestError, TestErrorInterface, TestEvent, TestEventInterface } from '../requests/testEvent';
+import {
+  Stats,
+  StatsConstructorInterface,
+  StatsInterface,
+  TestError,
+  TestErrorInterface,
+  TestEvent,
+  TestEventInterface,
+} from '../requests/testEvent';
 import { TestResultInterface } from '../requests/testResult';
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export enum RUN_STATUS {
@@ -269,4 +278,100 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   static parseFromCache(stringified: string): RunRecord {
     return RunRecord.fromJson(JSON.parse(stringified));
   }
+}
+
+export interface CompletedRunRecordInterface
+  extends Omit<RunRecordInterface, 'updatedAt' | 'createdAt' | 'completedAt' | 'events' | 'testDurationMs' | 'runDurationMs' | 'stats'> {
+  completedAt: Date;
+  stats: StatsInterface;
+  runDurationMs: number;
+  testDurationMs: number;
+}
+
+export interface CompletedRunRecordConstructorInterface extends Omit<CompletedRunRecordInterface, 'completedAt' | 'stats'> {
+  completedAt: Date | string;
+  stats: StatsInterface | StatsConstructorInterface;
+}
+
+/**
+ * @class
+ */
+export class CompletedRunRecord extends ValidatedBase implements CompletedRunRecordInterface {
+  /**
+   * @param {CompletedRunRecordInterface | RunRecordInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: CompletedRunRecordConstructorInterface | RunRecordInterface, validate = true) {
+    super();
+
+    if (!isNumber(params.runDurationMs) || !isNumber(params.testDurationMs) || !params.stats || !params.completedAt) {
+      // eslint-disable-next-line no-console
+      console.log(`Incomplete runRecord: ${JSON.stringify(params)}`);
+      throw new Error('Incomplete runRecord passed as completed');
+    }
+
+    this.id = params.id;
+    this.projectId = params.projectId;
+    this.runId = params.runId;
+    this.routineId = params.routineId;
+    this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
+    this.stats = new Stats(params.stats, false);
+    this.runDurationMs = params.runDurationMs;
+    this.testDurationMs = params.testDurationMs;
+    this.type = params.type;
+    this.console = params.console;
+    this.status = params.status;
+    this.failType = params.failType;
+    this.completedAt = toDate(params.completedAt);
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @IsString()
+  readonly id: string;
+
+  @IsString()
+  readonly projectId: string;
+
+  @IsString()
+  readonly runId: string;
+
+  @IsString()
+  readonly routineId: string;
+
+  @IsEnum(RUN_TYPE)
+  readonly type: RUN_TYPE;
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @IsInstance(TestError, { each: true })
+  readonly errors: TestErrorInterface[] | null;
+
+  @ValidateNested()
+  @IsInstance(Stats)
+  readonly stats: StatsInterface;
+
+  @IsInt()
+  @Min(0)
+  readonly runDurationMs: number;
+
+  @IsInt()
+  @Min(0)
+  readonly testDurationMs: number;
+
+  @IsOptional()
+  @IsString()
+  readonly console: string | null;
+
+  @IsEnum(RUN_STATUS)
+  readonly status: RUN_STATUS;
+
+  @IsOptional()
+  @IsEnum(RUN_FAIL_TYPE)
+  readonly failType: RUN_FAIL_TYPE | null;
+
+  @IsDate()
+  readonly completedAt: Date;
 }
