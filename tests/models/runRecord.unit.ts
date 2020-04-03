@@ -505,4 +505,47 @@ describe('completed runRecord', () => {
 
     expect(result).to.eql(expected);
   });
+
+  it('accept badly failed run as complete', () => {
+    const params = {
+      id: 'rs-ck8izosze008lrgfd2bsmhbrb',
+      projectId: 'p-WQmmjAF2P',
+      runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
+      routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
+      errors: null,
+      events: null,
+      stats: null,
+      runDurationMs: 3635,
+      testDurationMs: null,
+      type: 'scheduled',
+      console:
+        "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
+      status: 'failed',
+      failType: 'error',
+      createdAt: '2020-04-02T16:44:34.926Z',
+      updatedAt: '2020-04-02T16:44:41.116Z',
+      completedAt: '2020-04-02T16:44:36.462Z',
+    };
+
+    const result = new CompletedRunRecord(params as any);
+
+    const expected = {
+      id: 'rs-ck8izosze008lrgfd2bsmhbrb',
+      projectId: 'p-WQmmjAF2P',
+      runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
+      routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
+      errors: null,
+      stats: null,
+      runDurationMs: 3635,
+      testDurationMs: null,
+      type: 'scheduled',
+      console:
+        "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
+      status: 'failed',
+      failType: 'error',
+      completedAt: new Date('2020-04-02T16:44:36.462Z'),
+    };
+
+    expect(result).to.eql(expected);
+  });
 });

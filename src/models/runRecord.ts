@@ -281,16 +281,14 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 }
 
 export interface CompletedRunRecordInterface
-  extends Omit<RunRecordInterface, 'updatedAt' | 'createdAt' | 'completedAt' | 'events' | 'testDurationMs' | 'runDurationMs' | 'stats'> {
+  extends Omit<RunRecordInterface, 'updatedAt' | 'createdAt' | 'completedAt' | 'events' | 'runDurationMs'> {
   completedAt: Date;
-  stats: StatsInterface;
   runDurationMs: number;
-  testDurationMs: number;
 }
 
 export interface CompletedRunRecordConstructorInterface extends Omit<CompletedRunRecordInterface, 'completedAt' | 'stats'> {
   completedAt: Date | string;
-  stats: StatsInterface | StatsConstructorInterface;
+  stats: StatsInterface | StatsConstructorInterface | null;
 }
 
 /**
@@ -304,7 +302,17 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   constructor(params: CompletedRunRecordConstructorInterface | RunRecordInterface, validate = true) {
     super();
 
-    if (!isNumber(params.runDurationMs) || !isNumber(params.testDurationMs) || !params.stats || !params.completedAt) {
+    if (!isNumber(params.runDurationMs) || !params.completedAt) {
+      if (!isNumber(params.runDurationMs)) {
+        // eslint-disable-next-line no-console
+        console.error('Missing runDurationMs');
+      }
+
+      if (!params.completedAt) {
+        // eslint-disable-next-line no-console
+        console.error('Missing completedAt');
+      }
+
       // eslint-disable-next-line no-console
       console.log(`Incomplete runRecord: ${JSON.stringify(params)}`);
       throw new Error('Incomplete runRecord passed as completed');
@@ -315,7 +323,7 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
     this.runId = params.runId;
     this.routineId = params.routineId;
     this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
-    this.stats = new Stats(params.stats, false);
+    this.stats = params.stats ? new Stats(params.stats, false) : null;
     this.runDurationMs = params.runDurationMs;
     this.testDurationMs = params.testDurationMs;
     this.type = params.type;
@@ -349,17 +357,21 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   @IsInstance(TestError, { each: true })
   readonly errors: TestErrorInterface[] | null;
 
+  // Need to allow this to be optional in case user pushes no files or something
+  @IsOptional()
   @ValidateNested()
   @IsInstance(Stats)
-  readonly stats: StatsInterface;
+  readonly stats: StatsInterface | null;
 
   @IsInt()
   @Min(0)
   readonly runDurationMs: number;
 
+  // Need to allow this to be optional in case user pushes no files or something
+  @IsOptional()
   @IsInt()
   @Min(0)
-  readonly testDurationMs: number;
+  readonly testDurationMs: number | null;
 
   @IsOptional()
   @IsString()
