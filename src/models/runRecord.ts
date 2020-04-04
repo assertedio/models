@@ -79,9 +79,9 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     this.console = params.console;
     this.status = params.status;
     this.failType = params.failType;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
-    this.completedAt = params.completedAt || null;
+    this.createdAt = toDate(params.createdAt);
+    this.updatedAt = toDate(params.updatedAt);
+    this.completedAt = params.completedAt ? toDate(params.completedAt) : null;
 
     if (validate) {
       this.validate();

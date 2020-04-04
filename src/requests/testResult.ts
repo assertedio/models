@@ -1,6 +1,7 @@
 import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { RUN_TYPE } from './run';
 import { TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
@@ -38,7 +39,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
     this.console = params.console;
     this.runDurationMs = params.runDurationMs;
     this.events = (params.events || []).map((event) => new TestEvent(event, false));
-    this.createdAt = params.createdAt;
+    this.createdAt = toDate(params.createdAt);
 
     if (validate) {
       this.validate();
