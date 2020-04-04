@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
-import { RunRecordInterface } from './runRecord';
+import { CompletedRunRecord, CompletedRunRecordConstructorInterface, CompletedRunRecordInterface, RunRecordInterface } from './runRecord';
 
 export enum BUCKET_SIZE {
   HOUR = 'hour',
@@ -143,12 +143,14 @@ export interface TimelineEventInterface {
   start: Date;
   end: Date;
   durationSec: number;
+  records: CompletedRunRecordInterface[];
   status: TIMELINE_EVENT_STATUS;
 }
 
-interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'start' | 'end' | 'durationSec'> {
+interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'start' | 'end' | 'durationSec' | 'records'> {
   start: Date | string;
   end: Date | string;
+  records: CompletedRunRecordConstructorInterface[];
 }
 
 /**
@@ -166,6 +168,7 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
     this.end = toDate(params.end);
     this.durationSec = Math.abs(Math.round(DateTime.fromJSDate(this.end).diff(DateTime.fromJSDate(this.start)).as('seconds')));
     this.status = params.status;
+    this.records = params.records.map((record) => new CompletedRunRecord(record, false));
 
     if (validate) {
       this.validate();
@@ -181,6 +184,10 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
   @Min(0)
   @IsInt()
   durationSec: number;
+
+  @ValidateNested({ each: true })
+  @IsInstance(CompletedRunRecord, { each: true })
+  records: CompletedRunRecordInterface[];
 
   @IsEnum(TIMELINE_EVENT_STATUS)
   status: TIMELINE_EVENT_STATUS;

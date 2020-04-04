@@ -11,11 +11,13 @@ describe('stats result unit tests', () => {
         start: '2018-01-01T00:00:00.000Z',
         end: '2018-01-01T00:00:00.000Z',
         status: TIMELINE_EVENT_STATUS.UP,
+        records: [],
       },
       latestStatus: {
         start: '2018-01-01T00:00:00.000Z',
         end: '2018-01-01T00:00:00.000Z',
         status: TIMELINE_EVENT_STATUS.UP,
+        records: [],
       },
       month: {
         start: '2018-01-01T00:00:00.000Z',
@@ -77,12 +79,14 @@ describe('stats result unit tests', () => {
         end: new Date('2018-01-01T00:00:00.000Z'),
         durationSec: 0,
         status: TIMELINE_EVENT_STATUS.UP,
+        records: [],
       },
       latestStatus: {
         start: new Date('2018-01-01T00:00:00.000Z'),
         end: new Date('2018-01-01T00:00:00.000Z'),
         durationSec: 0,
         status: TIMELINE_EVENT_STATUS.UP,
+        records: [],
       },
       month: {
         start: new Date('2018-01-01T00:00:00.000Z'),
@@ -142,6 +146,7 @@ describe('stats result unit tests', () => {
       start: '2018-01-01T00:00:00.000Z',
       end: '2018-01-01T00:00:00.000Z',
       status: TIMELINE_EVENT_STATUS.UP,
+      records: [],
     };
 
     const timeline = new TimelineEvent(params);
@@ -151,6 +156,7 @@ describe('stats result unit tests', () => {
       end: new Date('2018-01-01T00:00:00.000Z'),
       durationSec: 0,
       status: TIMELINE_EVENT_STATUS.UP,
+      records: [],
     };
 
     expect(timeline).to.eql(expected);
