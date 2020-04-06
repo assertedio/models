@@ -158,3 +158,8 @@ export interface RoutineStatsInterface {
   timeline: TimelineEventInterface[];
   bucketSize: BUCKET_SIZE;
 }
+
+export enum SOCKET_EVENTS {
+  RUN_CREATED = 'run-created',
+  RUN_COMPLETE = 'run-complete',
+}
