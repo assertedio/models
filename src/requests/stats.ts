@@ -3,7 +3,7 @@ import Err from 'err';
 import HTTP_STATUS from 'http-status';
 import { DateTime } from 'luxon';
 
-import { CompletedRunRecordInterface, RunRecordInterface, StatsResultInterface } from '../models';
+import { CompletedRunRecordInterface, StatsResultInterface } from '../models';
 import { BUCKET_SIZE, BucketResultInterface, SummaryResultInterface, TimelineEventInterface } from '../models/statsResult';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
