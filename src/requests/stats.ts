@@ -165,5 +165,4 @@ export interface RoutineStatsInterface {
   latestRecord: CompletedRunRecordInterface | null;
   buckets: StatsResultInterface[];
   timeline: TimelineEventInterface[];
-  records: CompletedRunRecordInterface[];
 }
