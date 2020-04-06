@@ -152,17 +152,9 @@ export interface SummaryResponseInterface {
   [k: string]: SummaryResultInterface;
 }
 
-export interface AllResponseInterface {
-  buckets: BucketsResponseInterface;
-  timeline: TimelineResponseInterface;
-  summary: SummaryResponseInterface;
-  records: {
-    [k: string]: RunRecordInterface[];
-  };
-}
-
 export interface RoutineStatsInterface {
   latestRecord: CompletedRunRecordInterface | null;
   buckets: StatsResultInterface[];
   timeline: TimelineEventInterface[];
+  bucketSize: BUCKET_SIZE;
 }
