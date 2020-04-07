@@ -136,7 +136,7 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
   code?: string | number;
 }
 
-export enum TestResultEnum {
+export enum TEST_RESULT_STATUS {
   PASSED = 'passed',
   FAILED = 'failed',
   PENDING = 'pending',
@@ -148,7 +148,7 @@ export interface TestDataInterface {
   fullTitle: string | null;
   fullTitlePath: string[];
   duration: number | null;
-  result: TestResultEnum | null;
+  result: TEST_RESULT_STATUS | null;
   root: boolean;
   file: string | null;
   error: TestErrorInterface | null;
@@ -202,8 +202,8 @@ export class TestData extends ValidatedBase implements TestDataInterface {
   duration: number | null;
 
   @IsOptional()
-  @IsEnum(TestResultEnum)
-  result: TestResultEnum | null;
+  @IsEnum(TEST_RESULT_STATUS)
+  result: TEST_RESULT_STATUS | null;
 
   @IsBoolean()
   root: boolean;
