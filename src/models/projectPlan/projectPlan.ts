@@ -3,6 +3,7 @@ import { omit, startCase } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
+import { toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
 import { PlanBilling, PlanBillingInterface } from './planBilling';
 import { PlanLimits, PlanLimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './planLimits';
@@ -91,8 +92,8 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
     this.planId = params.planId;
     this.name = getPrettyName(params.planId);
     this.status = params.status;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = toDate(params.createdAt);
+    this.updatedAt = toDate(params.updatedAt);
 
     if (validate) {
       this.validate();

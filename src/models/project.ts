@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import shortid from 'shortid';
 import { DeepPartial } from 'ts-essentials';
 
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 /**
@@ -41,8 +42,8 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
     this.id = params.id;
     this.name = Project.cleanName(params.name || '');
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = toDate(params.createdAt);
+    this.updatedAt = toDate(params.updatedAt);
 
     if (validate) {
       this.validate();

@@ -1,4 +1,4 @@
-import { IsInstance, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsInstance, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 import { DeepPartial } from 'ts-essentials';
 
 import { Interval, IntervalInterface, Mocha, MochaInterface, Routine } from '../models';
@@ -10,6 +10,7 @@ export interface CreateRoutineInterface {
   projectId: string;
   interval?: IntervalInterface;
   mocha?: MochaInterface;
+  timeoutSec?: number;
 }
 
 export interface CreateRoutineConstructorInterface extends DeepPartial<CreateRoutineInterface> {
@@ -32,6 +33,7 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
     this.description = Routine.cleanString(params?.description || '');
     this.interval = params?.interval ? new Interval(params.interval, false) : undefined;
     this.mocha = params?.mocha ? new Mocha(params.mocha, false) : undefined;
+    this.timeoutSec = params.timeoutSec || Routine.CONSTANTS.DEFAULT_TIMEOUT_SEC;
 
     if (validate) {
       this.validate();
@@ -56,4 +58,9 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
   @IsOptional()
   @IsInstance(Mocha)
   mocha?: MochaInterface;
+
+  @Min(1)
+  @Max(Routine.CONSTANTS.MAX_TIMEOUT_SEC, { message: Routine.CONSTANTS.MAX_TIMEOUT_ERROR })
+  @IsInt()
+  timeoutSec: number;
 }

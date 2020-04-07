@@ -72,6 +72,69 @@ export class Stats extends ValidatedBase implements StatsInterface {
   tests: number;
 }
 
+export interface TestErrorInterface {
+  fullTitle?: string;
+  stack?: string | null;
+  message?: string;
+  code?: string;
+  actual?: any;
+  expected?: any;
+  operator?: string;
+}
+
+/**
+ * @class
+ */
+export class TestError extends ValidatedBase implements TestErrorInterface {
+  /**
+   * @param {TestErrorInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: TestErrorInterface, validate = true) {
+    super();
+
+    this.fullTitle = params.fullTitle;
+    this.stack = params.stack;
+    this.message = params.message;
+    this.code = params.code;
+    this.actual = params.actual;
+    this.expected = params.expected;
+    this.operator = params.operator;
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @IsOptional()
+  @IsString()
+  fullTitle?: string;
+
+  @IsOptional()
+  @IsString()
+  stack?: string | null;
+
+  @IsOptional()
+  @IsString()
+  message?: string;
+
+  @IsOptional()
+  @IsString()
+  code?: string;
+
+  @IsOptional()
+  @Allow()
+  actual?: any;
+
+  @IsOptional()
+  @Allow()
+  expected?: any;
+
+  @IsOptional()
+  @IsString()
+  operator?: string;
+}
+
 export interface TestDataInterface {
   total: number;
   title?: string;
@@ -79,14 +142,7 @@ export interface TestDataInterface {
   duration?: number;
   result?: string;
   root?: boolean;
-  err?: {
-    stack?: string | null;
-    message?: string;
-    code?: string;
-    actual?: any;
-    expected?: any;
-    operator?: string;
-  } | null;
+  err?: TestErrorInterface | null;
   stats: StatsInterface;
 }
 
@@ -106,7 +162,7 @@ export class TestData extends ValidatedBase implements TestDataInterface {
     super();
 
     this.duration = params.duration;
-    this.err = params.err;
+    this.err = params.err ? new TestError(params.err, false) : undefined;
     this.fullTitle = params.fullTitle;
     this.result = params.result;
     this.root = params.root;
@@ -123,9 +179,10 @@ export class TestData extends ValidatedBase implements TestDataInterface {
   @IsNumber()
   duration?: number;
 
+  @ValidateNested()
   @IsOptional()
-  @Allow()
-  err?: { stack?: string | null; message?: string; code?: string; actual?: any; expected?: any; operator?: string } | null;
+  @IsInstance(TestError)
+  err?: TestErrorInterface | null;
 
   @IsOptional()
   @IsString()

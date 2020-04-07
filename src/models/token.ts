@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { customAlphabet } from 'nanoid';
 import { DeepPartial } from 'ts-essentials';
 
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 interface CreateTokenInterface {
@@ -43,9 +44,9 @@ export class Token extends ValidatedBase implements TokenInterface {
     this.id = params.id;
     this.name = params.name;
     this.userId = params.userId;
-    this.createdAt = params.createdAt;
+    this.createdAt = toDate(params.createdAt);
     this.updatedAt = params.updatedAt;
-    this.lastUsedAt = params.lastUsedAt;
+    this.lastUsedAt = params.lastUsedAt ? toDate(params.lastUsedAt) : params.lastUsedAt;
 
     if (validate) {
       this.validate();

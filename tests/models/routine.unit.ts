@@ -20,14 +20,13 @@ describe('routine config unit tests', () => {
         unit: 'min',
         value: 5,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/*.asrtd.js'],
         ignore: [],
         bail: false,
         ui: 'bdd',
       },
+      timeoutSec: 1,
     };
 
     expect(routineConfig).to.eql(expected);
@@ -53,46 +52,13 @@ describe('routine config unit tests', () => {
         unit: 'min',
         value: 5,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/*.asrtd.js'],
         ignore: [],
         bail: false,
         ui: 'bdd',
       },
-    };
-
-    expect(routineConfig).to.eql(expected);
-  });
-
-  it('minimal create with false', () => {
-    const params = {
-      id: 'something',
-      prepushLocal: false,
-      prepushOnce: false,
-      projectId: 'project-id',
-    };
-
-    const routineConfig = new Routine(params);
-
-    const expected = {
-      id: 'something',
-      projectId: 'project-id',
-      name: '',
-      description: '',
-      interval: {
-        unit: 'min',
-        value: 5,
-      },
-      prepushLocal: false,
-      prepushOnce: false,
-      mocha: {
-        files: ['**/*.asrtd.js'],
-        ignore: [],
-        bail: false,
-        ui: 'bdd',
-      },
+      timeoutSec: 1,
     };
 
     expect(routineConfig).to.eql(expected);
@@ -108,14 +74,13 @@ describe('routine config unit tests', () => {
         unit: 'hr',
         value: 10,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/specific.asrtd.js', 'other.js'],
         ignore: ['!foo', '!scratch.js'],
         bail: true,
         ui: 'exports',
       },
+      timeoutSec: 10,
     } as any;
 
     const routineConfig = new Routine(params);
@@ -129,14 +94,13 @@ describe('routine config unit tests', () => {
         unit: 'hr',
         value: 10,
       },
-      prepushLocal: true,
-      prepushOnce: true,
       mocha: {
         files: ['**/specific.asrtd.js', 'other.js'],
         ignore: ['!foo', '!scratch.js'],
         bail: true,
         ui: 'exports',
       },
+      timeoutSec: 10,
     };
 
     expect(routineConfig).to.eql(expected);

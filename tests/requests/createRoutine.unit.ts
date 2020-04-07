@@ -15,6 +15,7 @@ describe('createRoutine unit tests', () => {
       description: '',
       interval: undefined,
       mocha: undefined,
+      timeoutSec: 1,
     };
 
     expect(createRoutine).to.eql(expected);
@@ -35,6 +36,7 @@ describe('createRoutine unit tests', () => {
         unit: INTERVAL_UNITS.DAY,
         value: 10,
       },
+      timeoutSec: 10,
     };
 
     const createRoutine = new CreateRoutine(params as any);
@@ -53,6 +55,7 @@ describe('createRoutine unit tests', () => {
         bail: true,
         ui: 'require',
       },
+      timeoutSec: 10,
     };
 
     expect(createRoutine).to.eql(expected);

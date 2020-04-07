@@ -1,14 +1,15 @@
-import { IsDate, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
+import { RUN_TYPE } from './run';
 import { TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
 
 export interface CreateTestResultInterface {
-  projectId: string;
-  routineId: string;
   runId: string;
   console: string | null;
+  type: RUN_TYPE;
   runDurationMs: number;
   events: TestEventConstructorInterface[];
 }
@@ -33,13 +34,12 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   constructor(params: TestResultConstructorInterface, validate = true) {
     super();
 
-    this.projectId = params.projectId;
-    this.routineId = params.routineId;
     this.runId = params.runId;
+    this.type = params.type;
     this.console = params.console;
     this.runDurationMs = params.runDurationMs;
     this.events = (params.events || []).map((event) => new TestEvent(event, false));
-    this.createdAt = params.createdAt;
+    this.createdAt = toDate(params.createdAt);
 
     if (validate) {
       this.validate();
@@ -47,13 +47,10 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   }
 
   @IsString()
-  projectId: string;
-
-  @IsString()
-  routineId: string;
-
-  @IsString()
   runId: string;
+
+  @IsEnum(RUN_TYPE)
+  type: RUN_TYPE;
 
   @IsOptional()
   @IsString()

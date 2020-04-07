@@ -1,6 +1,7 @@
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 import { DateTime } from 'luxon';
 
+import { toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
 
 export interface PlanDiscountInterface {
@@ -27,8 +28,8 @@ export class PlanDiscount extends ValidatedBase implements PlanDiscountInterface
     this.name = params.name || null;
     this.amountOff = params.amountOff;
     this.percentOff = params.percentOff;
-    this.start = params.start;
-    this.end = params.end;
+    this.start = toDate(params.start);
+    this.end = params.end ? toDate(params.end) : params.end;
 
     if (validate) {
       this.validate();

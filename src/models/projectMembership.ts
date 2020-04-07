@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 import { DeepPartial } from 'ts-essentials';
 
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export enum PROJECT_ROLE {
@@ -41,8 +42,8 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
     this.projectId = params.projectId;
     this.userId = params.userId;
     this.role = params.role;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = toDate(params.createdAt);
+    this.updatedAt = toDate(params.updatedAt);
 
     if (validate) {
       this.validate();

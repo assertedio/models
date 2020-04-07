@@ -7,10 +7,9 @@ import { Run } from '../../src/requests/run';
 describe('run unit tests', () => {
   it('create', () => {
     const params = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       package: 'pack-age',
       timeoutMs: 100,
+      type: 'manual' as any,
       mocha: {
         files: ['foo.js'],
       } as any,
@@ -20,10 +19,9 @@ describe('run unit tests', () => {
     const run = Run.create(params, curDate);
 
     const expected = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       package: 'pack-age',
       timeoutMs: 100,
+      type: 'manual',
       mocha: {
         files: ['foo.js'],
         ignore: [],
@@ -40,10 +38,9 @@ describe('run unit tests', () => {
 
     const params = {
       id: 'foo-id',
-      projectId: 'project-id',
-      routineId: 'routine-id',
       package: 'pack-age',
       timeoutMs: 100,
+      type: 'manual' as any,
       mocha: {
         files: ['foo.js'],
       } as any,
@@ -53,10 +50,9 @@ describe('run unit tests', () => {
     const run = new Run(params as any);
 
     const expected = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       package: 'pack-age',
       timeoutMs: 100,
+      type: 'manual',
       mocha: {
         files: ['foo.js'],
         ignore: [],

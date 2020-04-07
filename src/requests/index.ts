@@ -6,3 +6,4 @@ export * from './testEvent';
 export * from './testResult';
 export * from './updateRoutine';
 export * from './upsertBilling';
+export * from './stats';

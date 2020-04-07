@@ -8,11 +8,10 @@ describe('testResult unit tests', () => {
     const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 
     const params = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      type: 'manual' as any,
       events: [
         {
           type: 'suite',
@@ -33,11 +32,10 @@ describe('testResult unit tests', () => {
     const testResult = new TestResult(params);
 
     const expected = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      type: 'manual' as any,
       events: [
         {
           type: 'suite',
@@ -74,11 +72,10 @@ describe('testResult unit tests', () => {
     const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 
     const params = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      type: 'manual' as any,
       events: [
         {
           type: 'suite',
@@ -99,11 +96,10 @@ describe('testResult unit tests', () => {
     const testResult = TestResult.create(params, curDate);
 
     const expected = {
-      projectId: 'project-id',
-      routineId: 'routine-id',
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      type: 'manual' as any,
       events: [
         {
           type: 'suite',

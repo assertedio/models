@@ -1,6 +1,7 @@
 import { IsBoolean, IsDate, IsInstance, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { DateTime } from 'luxon';
 
+import { toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
 import { PlanDiscount, PlanDiscountInterface } from './planDiscount';
 
@@ -33,7 +34,7 @@ export class PlanBilling extends ValidatedBase implements PlanBillingInterface {
     this.subscriptionItemId = params.subscriptionItemId;
     this.delinquent = params.delinquent;
     this.priceCents = params.priceCents;
-    this.nextBillDate = params.nextBillDate;
+    this.nextBillDate = params.nextBillDate ? toDate(params.nextBillDate) : params.nextBillDate;
     this.last4 = params.last4;
     this.email = params.email;
     this.expiry = params.expiry;
