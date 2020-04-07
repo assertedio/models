@@ -74,7 +74,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
    * @param {Date} curDate
    * @returns {TestResult}
    */
-  static create(params: TestResultConstructorInterface, curDate = DateTime.utc().toJSDate()): TestResult {
+  static create(params: Omit<TestResultConstructorInterface, 'createdAt'>, curDate = DateTime.utc().toJSDate()): TestResult {
     return new TestResult({
       ...params,
       createdAt: curDate,
