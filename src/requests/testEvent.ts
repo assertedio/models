@@ -1,9 +1,27 @@
-import { Allow, IsBoolean, IsDate, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { isNumber } from 'lodash';
 
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
-export interface StatsInterface {
+export enum TEST_EVENT_TYPES {
+  EVENT_HOOK_BEGIN = 'hook',
+  EVENT_HOOK_END = 'hook end',
+  EVENT_RUN_BEGIN = 'start',
+  EVENT_DELAY_BEGIN = 'waiting',
+  EVENT_DELAY_END = 'ready',
+  EVENT_RUN_END = 'end',
+  EVENT_SUITE_BEGIN = 'suite',
+  EVENT_SUITE_END = 'suite end',
+  EVENT_TEST_BEGIN = 'test',
+  EVENT_TEST_END = 'test end',
+  EVENT_TEST_FAIL = 'fail',
+  EVENT_TEST_PASS = 'pass',
+  EVENT_TEST_PENDING = 'pending',
+  EVENT_TEST_RETRY = 'retry',
+}
+
+export interface TestStatsInterface {
   suites: number;
   tests: number;
   passes: number;
@@ -11,10 +29,10 @@ export interface StatsInterface {
   failures: number;
   start?: Date;
   end?: Date;
-  duration?: number;
+  duration: number | null;
 }
 
-export interface StatsConstructorInterface extends Omit<StatsInterface, 'start' | 'end'> {
+export interface TestStatsConstructorInterface extends Omit<TestStatsInterface, 'start' | 'end'> {
   start?: Date | string;
   end?: Date | string;
 }
@@ -22,12 +40,12 @@ export interface StatsConstructorInterface extends Omit<StatsInterface, 'start' 
 /**
  * @class
  */
-export class Stats extends ValidatedBase implements StatsInterface {
+export class TestStats extends ValidatedBase implements TestStatsInterface {
   /**
-   * @param {StatsInterface} params
+   * @param {TestStatsInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: StatsConstructorInterface, validate = true) {
+  constructor(params: TestStatsConstructorInterface, validate = true) {
     super();
 
     this.suites = params.suites;
@@ -37,7 +55,7 @@ export class Stats extends ValidatedBase implements StatsInterface {
     this.failures = params.failures;
     this.start = params.start ? toDate(params.start) : undefined;
     this.end = params.end ? toDate(params.end) : undefined;
-    this.duration = params.duration;
+    this.duration = isNumber(params.duration) ? params.duration : null;
 
     if (validate) {
       this.validate();
@@ -46,7 +64,7 @@ export class Stats extends ValidatedBase implements StatsInterface {
 
   @IsOptional()
   @IsNumber()
-  duration?: number;
+  duration: number | null;
 
   @IsOptional()
   @IsDate()
@@ -73,13 +91,10 @@ export class Stats extends ValidatedBase implements StatsInterface {
 }
 
 export interface TestErrorInterface {
-  fullTitle?: string;
   stack?: string | null;
   message?: string;
-  code?: string;
-  actual?: any;
-  expected?: any;
-  operator?: string;
+  diff?: string;
+  code?: string | number;
 }
 
 /**
@@ -93,22 +108,15 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
   constructor(params: TestErrorInterface, validate = true) {
     super();
 
-    this.fullTitle = params.fullTitle;
-    this.stack = params.stack;
+    this.stack = params.stack || null;
     this.message = params.message;
+    this.diff = params.diff;
     this.code = params.code;
-    this.actual = params.actual;
-    this.expected = params.expected;
-    this.operator = params.operator;
 
     if (validate) {
       this.validate();
     }
   }
-
-  @IsOptional()
-  @IsString()
-  fullTitle?: string;
 
   @IsOptional()
   @IsString()
@@ -120,34 +128,30 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
 
   @IsOptional()
   @IsString()
-  code?: string;
-
-  @IsOptional()
-  @Allow()
-  actual?: any;
-
-  @IsOptional()
-  @Allow()
-  expected?: any;
+  diff?: string;
 
   @IsOptional()
   @IsString()
-  operator?: string;
+  code?: string | number;
+}
+
+export enum TestResultEnum {
+  PASSED = 'passed',
+  FAILED = 'failed',
+  PENDING = 'pending',
 }
 
 export interface TestDataInterface {
-  total: number;
-  title?: string;
-  fullTitle?: string;
-  duration?: number;
-  result?: string;
-  root?: boolean;
-  err?: TestErrorInterface | null;
-  stats: StatsInterface;
-}
-
-export interface TestDataConstructorInterface extends Omit<TestDataInterface, 'stats'> {
-  stats: StatsConstructorInterface;
+  id: string | null;
+  title: string | null;
+  fullTitle: string | null;
+  fullTitlePath: string[];
+  duration: number | null;
+  result: TestResultEnum | null;
+  root: boolean;
+  file: string | null;
+  error: TestErrorInterface | null;
+  timedOut: boolean;
 }
 
 /**
@@ -158,17 +162,19 @@ export class TestData extends ValidatedBase implements TestDataInterface {
    * @param {TestDataInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: TestDataConstructorInterface, validate = true) {
+  constructor(params: TestDataInterface, validate = true) {
     super();
 
-    this.duration = params.duration;
-    this.err = params.err ? new TestError(params.err, false) : undefined;
-    this.fullTitle = params.fullTitle;
-    this.result = params.result;
-    this.root = params.root;
-    this.stats = new Stats(params.stats, false);
-    this.title = params.title;
-    this.total = params.total;
+    this.id = params.id || null;
+    this.duration = isNumber(params.duration) ? params.duration : null;
+    this.title = params.title || null;
+    this.fullTitle = params.fullTitle || null;
+    this.fullTitlePath = params.fullTitlePath || [];
+    this.result = params.result || null;
+    this.root = params.root || false;
+    this.file = params.file || null;
+    this.error = params.error ? new TestError(params.error, false) : null;
+    this.timedOut = params.timedOut || false;
 
     if (validate) {
       this.validate();
@@ -176,52 +182,56 @@ export class TestData extends ValidatedBase implements TestDataInterface {
   }
 
   @IsOptional()
+  @IsString()
+  id: string | null;
+
+  @IsOptional()
+  @IsString()
+  title: string | null;
+
+  @IsOptional()
+  @IsString()
+  fullTitle: string | null;
+
+  @IsString({ each: true })
+  fullTitlePath: string[];
+
+  @IsOptional()
   @IsNumber()
-  duration?: number;
+  duration: number | null;
+
+  @IsOptional()
+  @IsEnum(TestResultEnum)
+  result: TestResultEnum | null;
+
+  @IsBoolean()
+  root: boolean;
+
+  @IsOptional()
+  @IsString()
+  file: string | null;
 
   @ValidateNested()
   @IsOptional()
   @IsInstance(TestError)
-  err?: TestErrorInterface | null;
+  error: TestErrorInterface | null;
 
-  @IsOptional()
-  @IsString()
-  fullTitle?: string;
-
-  @IsOptional()
-  @IsString()
-  result?: string;
-
-  @IsOptional()
   @IsBoolean()
-  root?: boolean;
-
-  @ValidateNested()
-  @IsInstance(Stats)
-  stats: StatsInterface;
-
-  @IsOptional()
-  @IsString()
-  title?: string;
-
-  @IsOptional()
-  @IsNumber()
-  total: number;
+  timedOut: boolean;
 }
 
 // Should be the same as mocha-ldjson-> TestDataInterface, but don't want to import that whole thing
 export interface TestEventInterface {
-  type: string;
-  data?: TestDataInterface;
+  type: TEST_EVENT_TYPES;
+  data: TestDataInterface;
+  stats: TestStatsInterface;
   timestamp: Date;
-  timeMs: number;
+  elapsedMs: number;
 }
 
-export interface TestEventConstructorInterface {
-  type: string;
-  data?: TestDataConstructorInterface;
+export interface TestEventConstructorInterface extends Omit<TestEventInterface, 'timestamp' | 'stats'> {
+  stats: TestStatsConstructorInterface;
   timestamp: Date | string;
-  timeMs: number;
 }
 
 /**
@@ -236,26 +246,30 @@ export class TestEvent extends ValidatedBase implements TestEventInterface {
     super();
 
     this.type = params.type;
-    this.data = params.data ? new TestData(params.data, false) : undefined;
+    this.data = new TestData(params.data, false);
+    this.stats = new TestStats(params.stats, false);
     this.timestamp = toDate(params.timestamp);
-    this.timeMs = params.timeMs;
+    this.elapsedMs = params.elapsedMs;
 
     if (validate) {
       this.validate();
     }
   }
 
-  @IsOptional()
+  @IsEnum(TEST_EVENT_TYPES)
+  type: TEST_EVENT_TYPES;
+
   @ValidateNested()
   @IsInstance(TestData)
-  data?: TestDataInterface;
+  data: TestDataInterface;
+
+  @ValidateNested()
+  @IsInstance(TestStats)
+  stats: TestStatsInterface;
 
   @IsNumber()
-  timeMs: number;
+  elapsedMs: number;
 
   @IsDate()
   timestamp: Date;
-
-  @IsString()
-  type: string;
 }

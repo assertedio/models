@@ -11,7 +11,7 @@ export interface CreateTestResultInterface {
   console: string | null;
   type: RUN_TYPE;
   runDurationMs: number;
-  events: TestEventConstructorInterface[];
+  events: TestEventInterface[];
 }
 
 export interface TestResultInterface extends Omit<CreateTestResultInterface, 'events'> {
@@ -19,7 +19,8 @@ export interface TestResultInterface extends Omit<CreateTestResultInterface, 'ev
   events: TestEventInterface[];
 }
 
-interface TestResultConstructorInterface extends Omit<TestResultInterface, 'events'> {
+interface TestResultConstructorInterface extends Omit<TestResultInterface, 'events' | 'createdAt'> {
+  createdAt: Date | string;
   events: TestEventConstructorInterface[];
 }
 
@@ -73,7 +74,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
    * @param {Date} curDate
    * @returns {TestResult}
    */
-  static create(params: CreateTestResultInterface, curDate = DateTime.utc().toJSDate()): TestResult {
+  static create(params: TestResultConstructorInterface, curDate = DateTime.utc().toJSDate()): TestResult {
     return new TestResult({
       ...params,
       createdAt: curDate,
