@@ -4,6 +4,7 @@ import { isNumber } from 'lodash';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
+// Should map directly to: RunnerConstants in Mocha
 export enum TEST_EVENT_TYPES {
   EVENT_HOOK_BEGIN = 'hook',
   EVENT_HOOK_END = 'hook end',
