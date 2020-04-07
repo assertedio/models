@@ -1,4 +1,4 @@
-import { isDate, isFunction, isString } from 'lodash';
+import { isDate, isFunction, isNil, isString } from 'lodash';
 import { DateTime } from 'luxon';
 
 export const stringNotDate = (input: any | string): input is string => {
@@ -14,6 +14,7 @@ export const firestoreTimestamp = (input: any | FirestoreTimestamp): input is Fi
 };
 
 export const toDate = (input: Date | string | FirestoreTimestamp): Date => {
+  if (isNil(input)) return input;
   if (isDate(input)) return input;
   if (firestoreTimestamp(input)) return input.toDate();
   return stringNotDate(input) ? DateTime.fromISO(input).toUTC().toJSDate() : input;
