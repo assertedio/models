@@ -1,7 +1,7 @@
 {
   "name": "@asserted/models",
   "description": "Shared asserted models",
-  "version": "4.0.4-17",
+  "version": "4.0.4-18",
   "author": "Eric Hacke",
   "bugs": {
     "url": "https://github.com/assertedio/models/issues"
