@@ -136,6 +136,7 @@ export enum TIMELINE_EVENT_STATUS {
   UP = 'up',
   IMPAIRED = 'impaired',
   DOWN = 'down',
+  TIMEOUT = 'timeout',
   UNKNOWN = 'unknown',
 }
 
