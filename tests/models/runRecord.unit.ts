@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
 import { CompletedRunRecord, RUN_STATUS, RunRecord } from '../../src/models/runRecord';
-import { TEST_EVENT_TYPES, TestResultInterface } from '../../src/requests';
+import { RUN_TIMEOUT_TYPE, TEST_EVENT_TYPES, TestResultInterface } from '../../src/requests';
 import { Run, RUN_TYPE } from '../../src/requests/run';
 
 describe('runRecord unit tests', () => {
@@ -34,6 +34,7 @@ describe('runRecord unit tests', () => {
       stats: null,
       console: null,
       failType: null,
+      timeoutType: null,
       testDurationMs: null,
       runDurationMs: null,
       completedAt: null,
@@ -56,6 +57,7 @@ describe('runRecord unit tests', () => {
       testDurationMs: 0,
       console: null,
       failType: null,
+      timeoutType: null,
       errors: null,
       stats: {
         duration: null,
@@ -154,6 +156,7 @@ describe('runRecord unit tests', () => {
       console: null,
       status: 'created',
       failType: null,
+      timeoutType: null,
       createdAt: curDate,
       updatedAt: curDate,
       completedAt: null,
@@ -170,6 +173,7 @@ describe('runRecord unit tests', () => {
       runDurationMs: 0,
       console: null,
       type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
           type: 'test' as TEST_EVENT_TYPES,
@@ -332,6 +336,7 @@ describe('runRecord unit tests', () => {
       completedAt: curDate,
       status: 'failed',
       failType: 'test',
+      timeoutType: null,
     };
     expect(patch).to.eql(expected);
   });
@@ -344,6 +349,7 @@ describe('runRecord unit tests', () => {
       runDurationMs: 0,
       console: null,
       type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
           type: 'end' as TEST_EVENT_TYPES,
@@ -382,6 +388,7 @@ describe('runRecord unit tests', () => {
       console: null,
       runDurationMs: 0,
       testDurationMs: 75,
+      timeoutType: null,
       stats: {
         suites: 4,
         tests: 7,
@@ -428,6 +435,196 @@ describe('runRecord unit tests', () => {
     };
     expect(expected).to.eql(patch);
   });
+
+  it('gets patch from explicit timed out run', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      runDurationMs: 0,
+      console: null,
+      type: 'manual' as any,
+      timeoutType: RUN_TIMEOUT_TYPE.EXEC,
+      events: [
+        {
+          type: 'end' as TEST_EVENT_TYPES,
+          data: {
+            duration: null,
+            error: null,
+            file: null,
+            fullTitle: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            root: false,
+            timedOut: false,
+            title: null,
+          },
+          stats: {
+            suites: 4,
+            tests: 7,
+            passes: 5,
+            pending: 0,
+            failures: 0,
+            start: curDate,
+            end: curDate,
+            duration: 75,
+          },
+          timestamp: curDate,
+          elapsedMs: 75,
+        },
+      ],
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: null,
+      runDurationMs: 0,
+      testDurationMs: 75,
+      timeoutType: RUN_TIMEOUT_TYPE.EXEC,
+      stats: {
+        suites: 4,
+        tests: 7,
+        passes: 5,
+        pending: 0,
+        failures: 0,
+        start: curDate,
+        end: curDate,
+        duration: 75,
+      },
+      errors: null,
+      events: [
+        {
+          type: 'end',
+          data: {
+            duration: null,
+            error: null,
+            file: null,
+            fullTitle: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            root: false,
+            timedOut: false,
+            title: null,
+          },
+          stats: {
+            suites: 4,
+            tests: 7,
+            passes: 5,
+            pending: 0,
+            failures: 0,
+            start: curDate,
+            end: curDate,
+            duration: 75,
+          },
+          timestamp: curDate,
+          elapsedMs: 75,
+        },
+      ],
+      completedAt: curDate,
+      status: 'failed',
+      failType: 'timeout',
+    };
+    expect(expected).to.eql(patch);
+  });
+
+  it('gets patch from implicit timed out run', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      runDurationMs: 0,
+      console: null,
+      type: 'manual' as any,
+      timeoutType: null,
+      events: [
+        {
+          type: 'start' as TEST_EVENT_TYPES,
+          data: {
+            duration: null,
+            error: null,
+            file: null,
+            fullTitle: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            root: false,
+            timedOut: false,
+            title: null,
+          },
+          stats: {
+            suites: 4,
+            tests: 7,
+            passes: 5,
+            pending: 0,
+            failures: 0,
+            start: curDate,
+            end: curDate,
+            duration: 75,
+          },
+          timestamp: curDate,
+          elapsedMs: 75,
+        },
+      ],
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: null,
+      runDurationMs: 0,
+      testDurationMs: 75,
+      timeoutType: RUN_TIMEOUT_TYPE.UNKNOWN,
+      stats: {
+        suites: 4,
+        tests: 7,
+        passes: 5,
+        pending: 0,
+        failures: 0,
+        start: curDate,
+        end: curDate,
+        duration: 75,
+      },
+      errors: null,
+      events: [
+        {
+          type: 'start',
+          data: {
+            duration: null,
+            error: null,
+            file: null,
+            fullTitle: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            root: false,
+            timedOut: false,
+            title: null,
+          },
+          stats: {
+            suites: 4,
+            tests: 7,
+            passes: 5,
+            pending: 0,
+            failures: 0,
+            start: curDate,
+            end: curDate,
+            duration: 75,
+          },
+          timestamp: curDate,
+          elapsedMs: 75,
+        },
+      ],
+      completedAt: curDate,
+      status: 'failed',
+      failType: 'timeout',
+    };
+    expect(expected).to.eql(patch);
+  });
 });
 
 describe('completed runRecord', () => {
@@ -444,6 +641,7 @@ describe('completed runRecord', () => {
       testDurationMs: 0,
       console: null,
       failType: null,
+      timeoutType: null,
       errors: null,
       stats: {
         duration: null,
@@ -513,6 +711,7 @@ describe('completed runRecord', () => {
       console: null,
       status: 'passed',
       failType: null,
+      timeoutType: null,
       completedAt: curDate,
     };
 
@@ -532,6 +731,7 @@ describe('completed runRecord', () => {
       testDurationMs: 0,
       console: null,
       failType: null,
+      timeoutType: null,
       errors: null,
       stats: {
         duration: null,
@@ -570,6 +770,7 @@ describe('completed runRecord', () => {
       console: null,
       status: 'passed',
       failType: null,
+      timeoutType: null,
       completedAt: curDate,
     };
 
@@ -592,6 +793,7 @@ describe('completed runRecord', () => {
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
       failType: 'error',
+      timeoutType: null,
       createdAt: '2020-04-02T16:44:34.926Z',
       updatedAt: '2020-04-02T16:44:41.116Z',
       completedAt: '2020-04-02T16:44:36.462Z',
@@ -613,6 +815,7 @@ describe('completed runRecord', () => {
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
       failType: 'error',
+      timeoutType: null,
       completedAt: new Date('2020-04-02T16:44:36.462Z'),
     };
 

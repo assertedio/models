@@ -12,6 +12,7 @@ describe('testResult unit tests', () => {
       runDurationMs: 0,
       console: null,
       type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
           type: 'suite' as TEST_EVENT_TYPES,
@@ -50,6 +51,7 @@ describe('testResult unit tests', () => {
       type: 'manual',
       console: null,
       runDurationMs: 0,
+      timeoutType: null,
       events: [
         {
           type: 'suite',
@@ -93,6 +95,7 @@ describe('testResult unit tests', () => {
       runDurationMs: 0,
       console: null,
       type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
           type: 'suite' as TEST_EVENT_TYPES,
@@ -124,6 +127,7 @@ describe('testResult unit tests', () => {
       type: 'manual',
       console: null,
       runDurationMs: 0,
+      timeoutType: null,
       events: [
         {
           type: 'suite',
