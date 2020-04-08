@@ -114,11 +114,11 @@ describe('runRecord unit tests', () => {
           type: 'suite',
           data: {
             fullTitle: 'suite 1 nested describe 2',
+            title: 'nested describe 2',
             result: null,
             error: null,
             duration: null,
             root: false,
-            title: 'nested describe 2',
             file: null,
             fullTitlePath: [],
             id: null,
