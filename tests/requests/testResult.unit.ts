@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { TestResult } from '../../src/requests';
+import { TEST_EVENT_TYPES, TestResult } from '../../src/requests';
 
 describe('testResult unit tests', () => {
   it('construct', () => {
@@ -12,18 +12,33 @@ describe('testResult unit tests', () => {
       runDurationMs: 0,
       console: null,
       type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
-          type: 'suite',
+          type: 'suite' as TEST_EVENT_TYPES,
           data: {
-            total: 1,
-            title: 'nested describe 2',
             fullTitle: 'suite 1 nested describe 2',
             root: false,
-            stats: { suites: 3, tests: 5, passes: 3, pending: 0, failures: 2, start: '2020-03-16T01:33:23.753Z' },
+            title: 'nested describe 2',
+            duration: null,
+            error: null,
+            file: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            timedOut: false,
           },
-          timestamp: '2020-03-16T01:33:23.826Z',
-          timeMs: 73,
+          stats: {
+            duration: null,
+            suites: 3,
+            tests: 5,
+            passes: 3,
+            pending: 0,
+            failures: 2,
+            start: new Date('2020-03-16T01:33:23.753Z'),
+          },
+          timestamp: new Date('2020-03-16T01:33:23.826Z'),
+          elapsedMs: 73,
         },
       ],
       createdAt: curDate,
@@ -33,36 +48,40 @@ describe('testResult unit tests', () => {
 
     const expected = {
       runId: 'run-id',
-      runDurationMs: 0,
+      type: 'manual',
       console: null,
-      type: 'manual' as any,
+      runDurationMs: 0,
+      timeoutType: null,
       events: [
         {
           type: 'suite',
           data: {
-            fullTitle: 'suite 1 nested describe 2',
-            root: false,
-            duration: undefined,
-            err: undefined,
-            result: undefined,
-            stats: {
-              duration: undefined,
-              end: undefined,
-              suites: 3,
-              tests: 5,
-              passes: 3,
-              pending: 0,
-              failures: 2,
-              start: new Date('2020-03-16T01:33:23.753Z'),
-            },
+            id: null,
+            duration: null,
             title: 'nested describe 2',
-            total: 1,
+            fullTitle: 'suite 1 nested describe 2',
+            fullTitlePath: [],
+            result: null,
+            root: false,
+            file: null,
+            error: null,
+            timedOut: false,
+          },
+          stats: {
+            suites: 3,
+            tests: 5,
+            passes: 3,
+            pending: 0,
+            failures: 2,
+            start: new Date('2020-03-16T01:33:23.753Z'),
+            end: undefined,
+            duration: null,
           },
           timestamp: new Date('2020-03-16T01:33:23.826Z'),
-          timeMs: 73,
+          elapsedMs: 73,
         },
       ],
-      createdAt: curDate,
+      createdAt: new Date('2018-01-01T00:00:00.000Z'),
     };
 
     expect(testResult).to.eql(expected);
@@ -76,18 +95,26 @@ describe('testResult unit tests', () => {
       runDurationMs: 0,
       console: null,
       type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
-          type: 'suite',
+          type: 'suite' as TEST_EVENT_TYPES,
           data: {
             total: 1,
             title: 'nested describe 2',
             fullTitle: 'suite 1 nested describe 2',
             root: false,
-            stats: { suites: 3, tests: 5, passes: 3, pending: 0, failures: 2, start: '2020-03-16T01:33:23.753Z' },
+            duration: null,
+            error: null,
+            file: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            timedOut: false,
           },
+          stats: { duration: null, suites: 3, tests: 5, passes: 3, pending: 0, failures: 2, start: '2020-03-16T01:33:23.753Z' },
           timestamp: '2020-03-16T01:33:23.826Z',
-          timeMs: 73,
+          elapsedMs: 73,
         },
       ],
       createdAt: curDate,
@@ -97,36 +124,40 @@ describe('testResult unit tests', () => {
 
     const expected = {
       runId: 'run-id',
-      runDurationMs: 0,
+      type: 'manual',
       console: null,
-      type: 'manual' as any,
+      runDurationMs: 0,
+      timeoutType: null,
       events: [
         {
           type: 'suite',
           data: {
-            fullTitle: 'suite 1 nested describe 2',
-            root: false,
-            duration: undefined,
-            err: undefined,
-            result: undefined,
-            stats: {
-              duration: undefined,
-              end: undefined,
-              suites: 3,
-              tests: 5,
-              passes: 3,
-              pending: 0,
-              failures: 2,
-              start: new Date('2020-03-16T01:33:23.753Z'),
-            },
+            id: null,
+            duration: null,
             title: 'nested describe 2',
-            total: 1,
+            fullTitle: 'suite 1 nested describe 2',
+            fullTitlePath: [],
+            result: null,
+            root: false,
+            file: null,
+            error: null,
+            timedOut: false,
+          },
+          stats: {
+            suites: 3,
+            tests: 5,
+            passes: 3,
+            pending: 0,
+            failures: 2,
+            start: new Date('2020-03-16T01:33:23.753Z'),
+            end: undefined,
+            duration: null,
           },
           timestamp: new Date('2020-03-16T01:33:23.826Z'),
-          timeMs: 73,
+          elapsedMs: 73,
         },
       ],
-      createdAt: curDate,
+      createdAt: new Date('2018-01-01T00:00:00.000Z'),
     };
 
     expect(testResult).to.eql(expected);

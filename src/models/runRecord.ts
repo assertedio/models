@@ -5,15 +5,16 @@ import { DeepPartial } from 'ts-essentials';
 
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import {
-  Stats,
-  StatsConstructorInterface,
-  StatsInterface,
+  TEST_EVENT_TYPES,
   TestError,
   TestErrorInterface,
   TestEvent,
   TestEventInterface,
+  TestStats,
+  TestStatsConstructorInterface,
+  TestStatsInterface,
 } from '../requests/testEvent';
-import { TestResultInterface } from '../requests/testResult';
+import { RUN_TIMEOUT_TYPE, TestResultInterface } from '../requests/testResult';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
@@ -38,13 +39,14 @@ interface CreateRunRecordInterface {
 export interface RunRecordInterface extends CreateRunRecordInterface {
   id: string;
   events: TestEventInterface[] | null;
-  stats: StatsInterface | null;
+  stats: TestStatsInterface | null;
   runDurationMs: number | null;
   testDurationMs: number | null;
   type: RUN_TYPE;
   errors: TestErrorInterface[] | null;
   status: RUN_STATUS;
   failType: RUN_FAIL_TYPE | null;
+  timeoutType: RUN_TIMEOUT_TYPE | null;
   console: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -72,13 +74,14 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     this.routineId = params.routineId;
     this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
     this.events = params.events ? params.events.map((event) => new TestEvent(event, false)) : null;
-    this.stats = params.stats ? new Stats(params.stats, false) : null;
+    this.stats = params.stats ? new TestStats(params.stats, false) : null;
     this.runDurationMs = params.runDurationMs;
     this.testDurationMs = params.testDurationMs;
     this.type = params.type;
     this.console = params.console;
     this.status = params.status;
     this.failType = params.failType;
+    this.timeoutType = params.timeoutType || null;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
     this.completedAt = params.completedAt ? toDate(params.completedAt) : null;
@@ -115,8 +118,8 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   @IsOptional()
   @ValidateNested()
-  @IsInstance(Stats)
-  stats: StatsInterface | null;
+  @IsInstance(TestStats)
+  stats: TestStatsInterface | null;
 
   @IsOptional()
   @IsInt()
@@ -138,6 +141,10 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   @IsOptional()
   @IsEnum(RUN_FAIL_TYPE)
   failType: RUN_FAIL_TYPE | null;
+
+  @IsOptional()
+  @IsEnum(RUN_TIMEOUT_TYPE)
+  timeoutType: RUN_TIMEOUT_TYPE | null;
 
   @IsDate()
   readonly createdAt: Date;
@@ -177,6 +184,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       stats: null,
       console: null,
       failType: null,
+      timeoutType: null,
       status: RUN_STATUS.CREATED,
       id: RunRecord.generateId(runRequest.id),
       runDurationMs: null,
@@ -196,10 +204,11 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     const patch = {} as {
       status: RUN_STATUS;
       failType: RUN_FAIL_TYPE | null;
+      timeoutType: RUN_TIMEOUT_TYPE | null;
       console: string | null;
       errors: TestErrorInterface[] | null;
       events: TestEventInterface[] | null;
-      stats: StatsInterface | null;
+      stats: TestStatsInterface | null;
       runDurationMs: number;
       testDurationMs: number | null;
       completedAt: Date;
@@ -208,24 +217,25 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     const lastEvent = last(testResult.events || []);
 
     patch.errors = (testResult.events || [])
-      .filter((event) => !!event.data?.err)
-      .map((event) => new TestError({ ...event.data?.err, fullTitle: event.data?.fullTitle } as TestErrorInterface));
+      .filter((event) => !!event.data?.error)
+      .map((event) => new TestError({ ...event.data?.error, fullTitle: event.data?.fullTitle } as TestErrorInterface));
     patch.errors = patch.errors.length > 0 ? patch.errors : null;
 
     patch.console = testResult.console;
     patch.runDurationMs = testResult.runDurationMs;
-    patch.testDurationMs = lastEvent?.timeMs || null;
-    patch.stats = lastEvent?.data?.stats || null;
-    patch.events = testResult.events || null;
+    patch.testDurationMs = lastEvent?.elapsedMs || null;
+    patch.stats = lastEvent?.stats || null;
+    patch.events = (testResult.events || []).map((event) => new TestEvent(event));
     patch.completedAt = testResult.createdAt;
+    patch.timeoutType = testResult.timeoutType || null;
 
-    if (testResult.events.length === 0) {
-      patch.status = RUN_STATUS.FAILED;
-      patch.failType = RUN_FAIL_TYPE.ERROR;
-      // EVENT_RUN_END in mocha
-    } else if (lastEvent?.type !== 'end') {
+    if (lastEvent?.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!patch.timeoutType) {
       patch.status = RUN_STATUS.FAILED;
       patch.failType = RUN_FAIL_TYPE.TIMEOUT;
+      patch.timeoutType = testResult.timeoutType || RUN_TIMEOUT_TYPE.UNKNOWN;
+    } else if (testResult.events.length === 0) {
+      patch.status = RUN_STATUS.FAILED;
+      patch.failType = RUN_FAIL_TYPE.ERROR;
     } else if (patch.stats?.failures && patch.stats?.failures > 0) {
       patch.status = RUN_STATUS.FAILED;
       patch.failType = RUN_FAIL_TYPE.TEST;
@@ -288,7 +298,7 @@ export interface CompletedRunRecordInterface
 
 export interface CompletedRunRecordConstructorInterface extends Omit<CompletedRunRecordInterface, 'completedAt' | 'stats'> {
   completedAt: Date | string;
-  stats: StatsInterface | StatsConstructorInterface | null;
+  stats: TestStatsInterface | TestStatsConstructorInterface | null;
 }
 
 /**
@@ -323,13 +333,14 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
     this.runId = params.runId;
     this.routineId = params.routineId;
     this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
-    this.stats = params.stats ? new Stats(params.stats, false) : null;
+    this.stats = params.stats ? new TestStats(params.stats, false) : null;
     this.runDurationMs = params.runDurationMs;
     this.testDurationMs = params.testDurationMs;
     this.type = params.type;
     this.console = params.console;
     this.status = params.status;
     this.failType = params.failType;
+    this.timeoutType = params.timeoutType || null;
     this.completedAt = toDate(params.completedAt);
 
     if (validate) {
@@ -360,8 +371,8 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   // Need to allow this to be optional in case user pushes no files or something
   @IsOptional()
   @ValidateNested()
-  @IsInstance(Stats)
-  readonly stats: StatsInterface | null;
+  @IsInstance(TestStats)
+  readonly stats: TestStatsInterface | null;
 
   @IsInt()
   @Min(0)
@@ -383,6 +394,10 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   @IsOptional()
   @IsEnum(RUN_FAIL_TYPE)
   readonly failType: RUN_FAIL_TYPE | null;
+
+  @IsOptional()
+  @IsEnum(RUN_TIMEOUT_TYPE)
+  timeoutType: RUN_TIMEOUT_TYPE | null;
 
   @IsDate()
   readonly completedAt: Date;

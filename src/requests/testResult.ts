@@ -6,12 +6,20 @@ import { ValidatedBase } from '../validatedBase';
 import { RUN_TYPE } from './run';
 import { TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
 
+export enum RUN_TIMEOUT_TYPE {
+  JOB = 'job',
+  EXEC = 'exec',
+  REPORTER = 'reporter',
+  UNKNOWN = 'unknown',
+}
+
 export interface CreateTestResultInterface {
   runId: string;
   console: string | null;
   type: RUN_TYPE;
   runDurationMs: number;
-  events: TestEventConstructorInterface[];
+  events: TestEventInterface[];
+  timeoutType: RUN_TIMEOUT_TYPE | null;
 }
 
 export interface TestResultInterface extends Omit<CreateTestResultInterface, 'events'> {
@@ -19,7 +27,8 @@ export interface TestResultInterface extends Omit<CreateTestResultInterface, 'ev
   events: TestEventInterface[];
 }
 
-interface TestResultConstructorInterface extends Omit<TestResultInterface, 'events'> {
+interface TestResultConstructorInterface extends Omit<TestResultInterface, 'events' | 'createdAt'> {
+  createdAt: Date | string;
   events: TestEventConstructorInterface[];
 }
 
@@ -39,6 +48,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
     this.console = params.console;
     this.runDurationMs = params.runDurationMs;
     this.events = (params.events || []).map((event) => new TestEvent(event, false));
+    this.timeoutType = params.timeoutType || null;
     this.createdAt = toDate(params.createdAt);
 
     if (validate) {
@@ -64,6 +74,10 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   @IsInstance(TestEvent, { each: true })
   events: TestEventInterface[];
 
+  @IsOptional()
+  @IsEnum(RUN_TIMEOUT_TYPE)
+  timeoutType: RUN_TIMEOUT_TYPE | null;
+
   @IsDate()
   createdAt: Date;
 
@@ -73,7 +87,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
    * @param {Date} curDate
    * @returns {TestResult}
    */
-  static create(params: CreateTestResultInterface, curDate = DateTime.utc().toJSDate()): TestResult {
+  static create(params: Omit<TestResultConstructorInterface, 'createdAt'>, curDate = DateTime.utc().toJSDate()): TestResult {
     return new TestResult({
       ...params,
       createdAt: curDate,
