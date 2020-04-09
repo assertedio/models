@@ -1,4 +1,4 @@
-import { IsInstance, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { IsInstance, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 import { DeepPartial } from 'ts-essentials';
 
 import { Interval, IntervalInterface, Mocha, MochaInterface, Routine } from '../models';
@@ -51,10 +51,12 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
   @IsString()
   projectId: string;
 
+  @ValidateNested()
   @IsOptional()
   @IsInstance(Interval)
   interval?: IntervalInterface;
 
+  @ValidateNested()
   @IsOptional()
   @IsInstance(Mocha)
   mocha?: MochaInterface;

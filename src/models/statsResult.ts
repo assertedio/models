@@ -244,20 +244,25 @@ export class SummaryResult extends ValidatedBase implements SummaryResultInterfa
   @IsDate()
   end: Date;
 
+  @ValidateNested()
   @IsOptional()
   @IsInstance(TimelineEvent)
   latestDowntime: TimelineEventInterface | null;
 
+  @ValidateNested()
   @IsOptional()
   @IsInstance(TimelineEvent)
   latestStatus: TimelineEventInterface | null;
 
+  @ValidateNested()
   @IsInstance(StatsResult)
   month: StatsResultInterface;
 
+  @ValidateNested()
   @IsInstance(StatsResult)
   week: StatsResultInterface;
 
+  @ValidateNested()
   @IsInstance(StatsResult)
   day: StatsResultInterface;
 }

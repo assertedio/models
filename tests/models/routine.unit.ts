@@ -32,6 +32,52 @@ describe('routine config unit tests', () => {
     expect(routineConfig).to.eql(expected);
   });
 
+  it('create with minimum interval', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      interval: {
+        unit: 'min' as any,
+        value: 1,
+      },
+    };
+
+    const routineConfig = new Routine(params);
+
+    const expected = {
+      id: 'something',
+      projectId: 'project-id',
+      name: '',
+      description: '',
+      interval: {
+        unit: 'min',
+        value: 1,
+      },
+      mocha: {
+        files: ['**/*.asrtd.js'],
+        ignore: [],
+        bail: false,
+        ui: 'bdd',
+      },
+      timeoutSec: 1,
+    };
+
+    expect(routineConfig).to.eql(expected);
+  });
+
+  it('fail to create with minimum interval as string', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      interval: {
+        unit: 'min' as any,
+        value: '1',
+      },
+    };
+
+    expect(() => new Routine(params as any)).to.throw();
+  });
+
   it('minimal create with empty mocha array', () => {
     const params = {
       id: 'something',

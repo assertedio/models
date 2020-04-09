@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min } from 'class-validator';
+import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min, ValidateNested } from 'class-validator';
 import cuid from 'cuid';
 import { DateTime } from 'luxon';
 
@@ -64,6 +64,7 @@ export class Run extends ValidatedBase implements RunInterface {
   @IsEnum(RUN_TYPE)
   readonly type: RUN_TYPE;
 
+  @ValidateNested()
   @IsInstance(Mocha)
   mocha: MochaInterface;
 

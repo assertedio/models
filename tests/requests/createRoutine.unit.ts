@@ -60,4 +60,25 @@ describe('createRoutine unit tests', () => {
 
     expect(createRoutine).to.eql(expected);
   });
+
+  it('fail on invalid interval', () => {
+    const params = {
+      name: 'foo',
+      projectId: 'foo-id',
+      description: 'bar',
+      mocha: {
+        files: ['bar.js'],
+        ignore: ['foo.js'],
+        ui: 'require',
+        bail: true,
+      },
+      interval: {
+        unit: INTERVAL_UNITS.DAY,
+        value: '1',
+      },
+      timeoutSec: 10,
+    };
+
+    expect(() => new CreateRoutine(params as any)).to.throw('value');
+  });
 });

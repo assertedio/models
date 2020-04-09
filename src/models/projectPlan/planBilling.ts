@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsInstance, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsBoolean, IsDate, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import { toDate } from '../../utils';
@@ -52,6 +52,7 @@ export class PlanBilling extends ValidatedBase implements PlanBillingInterface {
   @IsInt()
   priceCents: number;
 
+  @ValidateNested()
   @IsInstance(PlanDiscount)
   @IsOptional()
   discount: PlanDiscountInterface | null;
