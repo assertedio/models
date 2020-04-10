@@ -44,6 +44,14 @@ export class Routine extends RoutineConfig {
   updatedAt: Date;
 
   /**
+   * Routine is active
+   * @returns {boolean}
+   */
+  isActive(): boolean {
+    return this.hasPackage && this.enabled;
+  }
+
+  /**
    * Convert to simpler config instance
    * @returns {RoutineConfig}
    */
