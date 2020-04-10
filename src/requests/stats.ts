@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 import { CompletedRunRecordInterface, StatsResultInterface } from '../models';
 import { BUCKET_SIZE, BucketResultInterface, SummaryResultInterface, TimelineEventInterface } from '../models/statsResult';
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 interface TimelineStatsConstructorInterface {
@@ -128,7 +128,7 @@ export class BucketStats extends ValidatedBase implements BucketStatsInterface {
     }
   }
 
-  @IsEnum(BUCKET_SIZE)
+  @IsEnum(BUCKET_SIZE, { message: enumError(BUCKET_SIZE) })
   bucketSize: BUCKET_SIZE;
 
   @IsDate()

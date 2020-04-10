@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 import { DeepPartial } from 'ts-essentials';
 
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export enum PROJECT_ROLE {
@@ -59,7 +59,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
   @IsString()
   userId: string;
 
-  @IsEnum(PROJECT_ROLE)
+  @IsEnum(PROJECT_ROLE, { message: enumError(PROJECT_ROLE) })
   role: PROJECT_ROLE;
 
   @IsDate()

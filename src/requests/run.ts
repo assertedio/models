@@ -3,7 +3,7 @@ import cuid from 'cuid';
 import { DateTime } from 'luxon';
 
 import { Mocha, MochaInterface } from '../models/routineConfig';
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
 
@@ -61,7 +61,7 @@ export class Run extends ValidatedBase implements RunInterface {
   @IsString()
   readonly id: string;
 
-  @IsEnum(RUN_TYPE)
+  @IsEnum(RUN_TYPE, { message: enumError(RUN_TYPE) })
   readonly type: RUN_TYPE;
 
   @ValidateNested()

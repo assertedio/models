@@ -4,7 +4,7 @@ import HTTP_STATUS from 'http-status';
 import { DateTime } from 'luxon';
 
 import { RUN_STATUS } from '../models/runRecord';
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 interface FilterRecordsConstructorInterface {
@@ -57,7 +57,7 @@ export class FilterRecords extends ValidatedBase implements FilterRecordsInterfa
   routineIds: string[] | null;
 
   @IsOptional()
-  @IsEnum(RUN_STATUS)
+  @IsEnum(RUN_STATUS, { message: enumError(RUN_STATUS) })
   status: RUN_STATUS | null;
 
   @IsDate()

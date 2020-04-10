@@ -15,7 +15,7 @@ import {
   TestStatsInterface,
 } from '../requests/testEvent';
 import { RUN_TIMEOUT_TYPE, TestResultInterface } from '../requests/testResult';
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export enum RUN_STATUS {
@@ -103,7 +103,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   @IsString()
   readonly routineId: string;
 
-  @IsEnum(RUN_TYPE)
+  @IsEnum(RUN_TYPE, { message: enumError(RUN_TYPE) })
   readonly type: RUN_TYPE;
 
   @IsOptional()
@@ -135,15 +135,15 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   @IsString()
   console: string | null;
 
-  @IsEnum(RUN_STATUS)
+  @IsEnum(RUN_STATUS, { message: enumError(RUN_STATUS) })
   status: RUN_STATUS;
 
   @IsOptional()
-  @IsEnum(RUN_FAIL_TYPE)
+  @IsEnum(RUN_FAIL_TYPE, { message: enumError(RUN_FAIL_TYPE) })
   failType: RUN_FAIL_TYPE | null;
 
   @IsOptional()
-  @IsEnum(RUN_TIMEOUT_TYPE)
+  @IsEnum(RUN_TIMEOUT_TYPE, { message: enumError(RUN_TIMEOUT_TYPE) })
   timeoutType: RUN_TIMEOUT_TYPE | null;
 
   @IsDate()
@@ -360,7 +360,7 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   @IsString()
   readonly routineId: string;
 
-  @IsEnum(RUN_TYPE)
+  @IsEnum(RUN_TYPE, { message: enumError(RUN_TYPE) })
   readonly type: RUN_TYPE;
 
   @IsOptional()
@@ -388,15 +388,15 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   @IsString()
   readonly console: string | null;
 
-  @IsEnum(RUN_STATUS)
+  @IsEnum(RUN_STATUS, { message: enumError(RUN_STATUS) })
   readonly status: RUN_STATUS;
 
   @IsOptional()
-  @IsEnum(RUN_FAIL_TYPE)
+  @IsEnum(RUN_FAIL_TYPE, { message: enumError(RUN_FAIL_TYPE) })
   readonly failType: RUN_FAIL_TYPE | null;
 
   @IsOptional()
-  @IsEnum(RUN_TIMEOUT_TYPE)
+  @IsEnum(RUN_TIMEOUT_TYPE, { message: enumError(RUN_TIMEOUT_TYPE) })
   timeoutType: RUN_TIMEOUT_TYPE | null;
 
   @IsDate()

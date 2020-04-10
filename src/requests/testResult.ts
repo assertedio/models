@@ -1,7 +1,7 @@
 import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { RUN_TYPE } from './run';
 import { TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
@@ -59,7 +59,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   @IsString()
   runId: string;
 
-  @IsEnum(RUN_TYPE)
+  @IsEnum(RUN_TYPE, { message: enumError(RUN_TYPE) })
   type: RUN_TYPE;
 
   @IsOptional()
@@ -75,7 +75,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   events: TestEventInterface[];
 
   @IsOptional()
-  @IsEnum(RUN_TIMEOUT_TYPE)
+  @IsEnum(RUN_TIMEOUT_TYPE, { message: enumError(RUN_TIMEOUT_TYPE) })
   timeoutType: RUN_TIMEOUT_TYPE | null;
 
   @IsDate()

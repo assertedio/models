@@ -2,7 +2,7 @@ import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, Va
 import { isNil } from 'lodash';
 import { DeepPartial } from 'ts-essentials';
 
-import { cleanString } from '../utils';
+import { cleanString, enumError } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export enum INTERVAL_UNITS {
@@ -42,7 +42,7 @@ export class Interval extends ValidatedBase implements IntervalInterface {
     }
   }
 
-  @IsEnum(INTERVAL_UNITS)
+  @IsEnum(INTERVAL_UNITS, { message: enumError(INTERVAL_UNITS) })
   unit: INTERVAL_UNITS;
 
   @IsInt()
@@ -102,7 +102,7 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   @IsString({ each: true })
   ignore: string[];
 
-  @IsEnum(MOCHA_UI)
+  @IsEnum(MOCHA_UI, { message: enumError(MOCHA_UI) })
   ui: MOCHA_UI;
 }
 

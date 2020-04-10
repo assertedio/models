@@ -1,7 +1,7 @@
 import { IsBoolean, IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { isNumber } from 'lodash';
 
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 // Should map directly to: RunnerConstants in Mocha
@@ -202,7 +202,7 @@ export class TestData extends ValidatedBase implements TestDataInterface {
   duration: number | null;
 
   @IsOptional()
-  @IsEnum(TEST_RESULT_STATUS)
+  @IsEnum(TEST_RESULT_STATUS, { message: enumError(TEST_RESULT_STATUS) })
   result: TEST_RESULT_STATUS | null;
 
   @IsBoolean()
@@ -257,7 +257,7 @@ export class TestEvent extends ValidatedBase implements TestEventInterface {
     }
   }
 
-  @IsEnum(TEST_EVENT_TYPES)
+  @IsEnum(TEST_EVENT_TYPES, { message: enumError(TEST_EVENT_TYPES) })
   type: TEST_EVENT_TYPES;
 
   @ValidateNested()

@@ -1,7 +1,7 @@
 import { Allow, IsDate, IsEnum, IsInstance, IsInt, IsOptional, Min, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { CompletedRunRecord, CompletedRunRecordConstructorInterface, CompletedRunRecordInterface, RunRecordInterface } from './runRecord';
 
@@ -120,7 +120,7 @@ export class BucketResult extends ValidatedBase implements BucketResultInterface
   @IsDate()
   end: Date;
 
-  @IsEnum(BUCKET_SIZE)
+  @IsEnum(BUCKET_SIZE, { message: enumError(BUCKET_SIZE) })
   bucketSize: BUCKET_SIZE;
 
   @ValidateNested({ each: true })
@@ -190,7 +190,7 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
   @IsInstance(CompletedRunRecord, { each: true })
   records: CompletedRunRecordInterface[];
 
-  @IsEnum(TIMELINE_EVENT_STATUS)
+  @IsEnum(TIMELINE_EVENT_STATUS, { message: enumError(TIMELINE_EVENT_STATUS) })
   status: TIMELINE_EVENT_STATUS;
 }
 
