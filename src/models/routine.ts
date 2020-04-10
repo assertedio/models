@@ -42,4 +42,12 @@ export class Routine extends RoutineConfig {
 
   @IsDate()
   updatedAt: Date;
+
+  /**
+   * Convert to simpler config instance
+   * @returns {RoutineConfig}
+   */
+  toRoutineConfig(): RoutineConfig {
+    return new RoutineConfig(this);
+  }
 }
