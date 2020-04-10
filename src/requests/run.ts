@@ -2,7 +2,7 @@ import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min, ValidateNested }
 import cuid from 'cuid';
 import { DateTime } from 'luxon';
 
-import { Mocha, MochaInterface } from '../models/routine';
+import { Mocha, MochaInterface } from '../models/routineConfig';
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';

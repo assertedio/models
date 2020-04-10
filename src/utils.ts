@@ -19,3 +19,12 @@ export const toDate = (input: Date | string | FirestoreTimestamp): Date => {
   if (firestoreTimestamp(input)) return input.toDate();
   return stringNotDate(input) ? DateTime.fromISO(input).toUTC().toJSDate() : input;
 };
+
+/**
+ * Strip unsupported characters
+ * @param {string} input
+ * @returns {string}
+ */
+export const cleanString = (input: string): string => {
+  return input.replace(/\s+/g, ' ').trim();
+};

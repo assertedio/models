@@ -5,3 +5,4 @@ export * from './routine';
 export * from './runRecord';
 export * from './token';
 export * from './statsResult';
+export * from './routineConfig';

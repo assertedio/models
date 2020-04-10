@@ -1,9 +1,9 @@
 import { IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface, Routine, RoutineInterface } from '../models';
+import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineConfig, RoutineConfigInterface } from '../models/routineConfig';
 import { ValidatedBase } from '../validatedBase';
 
-export interface UpdateRoutineInterface extends Omit<RoutineInterface, 'id' | 'projectId'> {
+export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'projectId'> {
   package: string;
 }
 
@@ -30,11 +30,11 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
     }
   }
 
-  @MaxLength(Routine.CONSTANTS.NAME_MAX_LENGTH)
+  @MaxLength(RoutineConfig.CONSTANTS.NAME_MAX_LENGTH)
   @IsString()
   name: string;
 
-  @MaxLength(Routine.CONSTANTS.DESCRIPTION_MAX_LENGTH)
+  @MaxLength(RoutineConfig.CONSTANTS.DESCRIPTION_MAX_LENGTH)
   @IsString()
   description: string;
 
@@ -50,7 +50,7 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
   package: string;
 
   @Min(1)
-  @Max(Routine.CONSTANTS.MAX_TIMEOUT_SEC, { message: Routine.CONSTANTS.MAX_TIMEOUT_ERROR })
+  @Max(RoutineConfig.CONSTANTS.MAX_TIMEOUT_SEC, { message: RoutineConfig.CONSTANTS.MAX_TIMEOUT_ERROR })
   @IsInt()
   timeoutSec: number;
 
@@ -60,7 +60,7 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
    * @param {string} pkg
    * @returns {UpdateRoutine}
    */
-  static create(routine: RoutineInterface, pkg: string): UpdateRoutine {
+  static create(routine: RoutineConfigInterface, pkg: string): UpdateRoutine {
     return new UpdateRoutine({
       ...routine,
       package: pkg,

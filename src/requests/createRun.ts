@@ -1,6 +1,6 @@
 import { IsInstance, IsString, ValidateNested } from 'class-validator';
 
-import { Mocha, MochaInterface } from '../models/routine';
+import { Mocha, MochaInterface } from '../models/routineConfig';
 import { ValidatedBase } from '../validatedBase';
 
 export interface CreateRunInterface {

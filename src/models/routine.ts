@@ -1,90 +1,30 @@
-import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
-import { isNil } from 'lodash';
+import { IsBoolean, IsDate } from 'class-validator';
 
-import { ValidatedBase } from '../validatedBase';
+import { toDate } from '../utils';
+import { RoutineConfig, RoutineConfigInterface } from './routineConfig';
 
-export enum INTERVAL_UNITS {
-  MIN = 'min',
-  HR = 'hr',
-  DAY = 'day',
+export interface RoutineInterface extends RoutineConfigInterface {
+  hasPackage: boolean;
+  enabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
-
-export interface IntervalInterface {
-  value: number;
-  unit: INTERVAL_UNITS;
-}
-
-const INTERVAL_CONSTANTS = {
-  DEFAULT_INTERVAL_VALUE: 5,
-  DEFAULT_INTERVAL_UNIT: INTERVAL_UNITS.MIN,
-};
 
 /**
  * @class
  */
-export class Interval extends ValidatedBase implements IntervalInterface {
-  static CONSTANTS = INTERVAL_CONSTANTS;
-
+export class Routine extends RoutineConfig {
   /**
-   * @param {IntervalInterface} params
-   * @param {boolean} [validate=true]
+   * @param {RoutineInterface} params
+   * @param {boolean} validate
    */
-  constructor(params?: Partial<IntervalInterface>, validate = true) {
-    super();
+  constructor(params: RoutineInterface, validate = true) {
+    super(params, false);
 
-    this.unit = params?.unit || INTERVAL_CONSTANTS.DEFAULT_INTERVAL_UNIT;
-    this.value = isNil(params?.value) ? INTERVAL_CONSTANTS.DEFAULT_INTERVAL_VALUE : (params?.value as number);
-
-    if (validate) {
-      this.validate();
-    }
-  }
-
-  @IsEnum(INTERVAL_UNITS)
-  unit: INTERVAL_UNITS;
-
-  @IsInt()
-  @Min(1)
-  value: number;
-}
-
-export enum MOCHA_UI {
-  BDD = 'bdd',
-  TDD = 'tdd',
-  EXPORTS = 'exports',
-  QUNIT = 'qunit',
-  REQUIRE = 'require',
-}
-
-export interface MochaInterface {
-  files: string[];
-  ignore: string[];
-  bail: boolean;
-  ui: MOCHA_UI;
-}
-
-const MOCHA_CONSTANTS = {
-  DEFAULT_FILES_GLOB: '**/*.asrtd.js',
-};
-
-/**
- * @class
- */
-export class Mocha extends ValidatedBase implements MochaInterface {
-  static CONSTANTS = MOCHA_CONSTANTS;
-
-  /**
-   * @param {Partial<MochaInterface>} params
-   * @param {boolean} [validate]
-   */
-  constructor(params?: Partial<MochaInterface>, validate = true) {
-    super();
-
-    this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB];
-    this.files = this.files.length === 0 ? [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB] : this.files;
-    this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
-    this.bail = params?.bail || false;
-    this.ui = params?.ui || MOCHA_UI.BDD;
+    this.hasPackage = params.hasPackage;
+    this.enabled = params.enabled;
+    this.createdAt = params.createdAt ? toDate(params.createdAt) : params.createdAt;
+    this.updatedAt = params.updatedAt ? toDate(params.updatedAt) : params.updatedAt;
 
     if (validate) {
       this.validate();
@@ -92,111 +32,14 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   }
 
   @IsBoolean()
-  bail: boolean;
+  hasPackage: boolean;
 
-  @IsString({ each: true })
-  files: string[];
+  @IsBoolean()
+  enabled: boolean;
 
-  @IsString({ each: true })
-  ignore: string[];
+  @IsDate()
+  createdAt: Date;
 
-  @IsEnum(MOCHA_UI)
-  ui: MOCHA_UI;
-}
-
-export interface RoutineInterface {
-  id: string;
-  projectId: string;
-  name: string;
-  description: string;
-  interval: IntervalInterface;
-  mocha: MochaInterface;
-  timeoutSec: number;
-}
-
-interface CreateRoutineInterface {
-  id: string;
-  projectId: string;
-  name?: string;
-  description?: string;
-  interval?: IntervalInterface;
-  files?: string[];
-  ignore?: string[];
-  mocha?: MochaInterface;
-  timeoutSec?: number;
-}
-
-const MAX_TIMEOUT_MIN = 8;
-// eslint-disable-next-line no-magic-numbers
-const MAX_TIMEOUT_SEC = 60 * MAX_TIMEOUT_MIN;
-
-const ROUTINE_CONSTANTS = {
-  NAME_MAX_LENGTH: 30,
-  DESCRIPTION_MAX_LENGTH: 100,
-  DEFAULT_TIMEOUT_SEC: 1,
-  MAX_TIMEOUT_SEC,
-  MAX_TIMEOUT_ERROR: `Max timeout is ${MAX_TIMEOUT_MIN} minutes, or ${MAX_TIMEOUT_SEC} seconds`,
-};
-
-/**
- * @class
- */
-export class Routine extends ValidatedBase implements RoutineInterface {
-  static CONSTANTS = ROUTINE_CONSTANTS;
-
-  /**
-   * @param {RoutineInterface} params
-   * @param {boolean} validate
-   */
-  constructor(params: CreateRoutineInterface, validate = true) {
-    super();
-
-    this.id = params?.id;
-    this.projectId = params?.projectId;
-    this.name = Routine.cleanString(params?.name || '');
-    this.description = Routine.cleanString(params?.description || '');
-    this.interval = new Interval(params?.interval, false);
-    this.mocha = new Mocha({ ...params?.mocha }, false);
-    this.timeoutSec = params.timeoutSec || ROUTINE_CONSTANTS.DEFAULT_TIMEOUT_SEC;
-
-    if (validate) {
-      this.validate();
-    }
-  }
-
-  @MaxLength(Routine.CONSTANTS.NAME_MAX_LENGTH)
-  @IsString()
-  name: string;
-
-  @MaxLength(Routine.CONSTANTS.DESCRIPTION_MAX_LENGTH)
-  @IsString()
-  description: string;
-
-  @ValidateNested()
-  @IsInstance(Interval)
-  interval: IntervalInterface;
-
-  @Min(1)
-  @Max(ROUTINE_CONSTANTS.MAX_TIMEOUT_SEC, { message: ROUTINE_CONSTANTS.MAX_TIMEOUT_ERROR })
-  @IsInt()
-  timeoutSec: number;
-
-  @ValidateNested()
-  @IsInstance(Mocha)
-  mocha: MochaInterface;
-
-  @IsString()
-  id: string;
-
-  @IsString()
-  projectId: string;
-
-  /**
-   * Strip unsupported characters
-   * @param {string} input
-   * @returns {string}
-   */
-  static cleanString(input: string): string {
-    return input.replace(/\s+/g, ' ').trim();
-  }
+  @IsDate()
+  updatedAt: Date;
 }
