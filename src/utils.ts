@@ -36,5 +36,5 @@ export const cleanString = (input: string): string => {
  */
 export const enumError = (entity: any): string | undefined => {
   if (!isObject(entity)) return undefined;
-  return `'$property' is '$value' must be one of: ${Object.values(entity).join(', ')}`;
+  return `$property must be one of: ${Object.values(entity).join(', ')}`;
 };

@@ -24,6 +24,6 @@ describe('utils unit tests', () => {
       something: Something;
     }
 
-    expect(() => new WithEnum({ something: 'yo' })).to.throw("'something' is 'yo' must be one of: first, second");
+    expect(() => new WithEnum({ something: 'yo' })).to.throw('something must be one of: first, second');
   });
 });
