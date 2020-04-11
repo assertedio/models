@@ -142,6 +142,15 @@ export class BucketStats extends ValidatedBase implements BucketStatsInterface {
   routineId: string | null;
 }
 
+export enum STATS_WINDOW {
+  HOUR = 'hour',
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+}
+
+export const STATS_WINDOW_VALUES = Object.values(STATS_WINDOW);
+
 export interface BucketsResponseInterface {
   [k: string]: BucketResultInterface;
 }
