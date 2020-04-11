@@ -301,6 +301,12 @@ export interface CompletedRunRecordConstructorInterface extends Omit<CompletedRu
   stats: TestStatsInterface | TestStatsConstructorInterface | null;
 }
 
+export const isCompletedRun = (
+  record: RunRecordInterface | CompletedRunRecordConstructorInterface
+): record is CompletedRunRecordConstructorInterface => {
+  return !!record.completedAt;
+};
+
 /**
  * @class
  */

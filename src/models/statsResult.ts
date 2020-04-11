@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 
 import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
-import { CompletedRunRecord, CompletedRunRecordConstructorInterface, CompletedRunRecordInterface, RunRecordInterface } from './runRecord';
+import { CompletedRunRecord, CompletedRunRecordConstructorInterface, CompletedRunRecordInterface } from './runRecord';
 
 export enum BUCKET_SIZE {
   HOUR = 'hour',
@@ -271,5 +271,5 @@ export interface StatusResultInterface {
   start: Date;
   end: Date;
   latestStatus: TimelineEventInterface | null;
-  records: RunRecordInterface[];
+  records: CompletedRunRecordInterface[];
 }
