@@ -1,6 +1,5 @@
 export * from './createRoutine';
 export * from './createRun';
-export * from './filterRecords';
 export * from './run';
 export * from './testEvent';
 export * from './testResult';
