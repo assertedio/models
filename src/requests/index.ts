@@ -5,4 +5,7 @@ export * from './testEvent';
 export * from './testResult';
 export * from './updateRoutine';
 export * from './upsertBilling';
-export * from './stats';
+export * from './routineStatus';
+export * from './bucketResult';
+export * from './summaryResult';
+export * from './timelineEvent';

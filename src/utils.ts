@@ -13,10 +13,13 @@ export const firestoreTimestamp = (input: any | FirestoreTimestamp): input is Fi
   return isFunction((input as FirestoreTimestamp).toDate);
 };
 
-export const toDate = (input: Date | string | FirestoreTimestamp): Date => {
+export const toDate = (input: Date | string | FirestoreTimestamp | DateTime): Date => {
+  // This nil case expects that the validation will throw elsewhere
   if (isNil(input)) return input;
-  if (isDate(input)) return input;
-  if (firestoreTimestamp(input)) return input.toDate();
+  if (isDate(input)) return DateTime.fromJSDate(input).toUTC().toJSDate();
+  if (firestoreTimestamp(input)) return DateTime.fromJSDate(input.toDate()).toJSDate();
+  if (DateTime.isDateTime(input)) return input.toJSDate();
+
   return stringNotDate(input) ? DateTime.fromISO(input).toUTC().toJSDate() : input;
 };
 
