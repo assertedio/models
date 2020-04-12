@@ -1,6 +1,6 @@
 import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min, ValidateNested } from 'class-validator';
-import cuid from 'cuid';
 import { DateTime } from 'luxon';
+import shortid from 'shortid';
 
 import { Mocha, MochaInterface } from '../models/routineConfig';
 import { enumError, toDate } from '../utils';
@@ -84,7 +84,7 @@ export class Run extends ValidatedBase implements RunInterface {
    * @returns {string}
    */
   static generateId(): string {
-    return `${CONSTANTS.ID_PREFIX}${cuid()}`;
+    return `${CONSTANTS.ID_PREFIX}${shortid.generate()}`;
   }
 
   /**
