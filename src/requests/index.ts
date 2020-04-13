@@ -10,3 +10,4 @@ export * from './bucketResult';
 export * from './summaryResult';
 export * from './timelineEvent';
 export * from './dateFilter';
+export * from './socketEvents';
