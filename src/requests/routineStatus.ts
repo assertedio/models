@@ -8,6 +8,7 @@ export enum ROUTINE_CONFIG_STATUS {
   DISABLED = 'disabled',
   NOT_PUSHED = 'notPushed',
   NO_RECORDS = 'noRecords',
+  ACTIVE = 'active',
 }
 
 export type OVERALL_ROUTINE_STATUS = ROUTINE_CONFIG_STATUS | TIMELINE_EVENT_STATUS;
