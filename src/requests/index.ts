@@ -9,3 +9,4 @@ export * from './routineStatus';
 export * from './bucketResult';
 export * from './summaryResult';
 export * from './timelineEvent';
+export * from './dateFilter';
