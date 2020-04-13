@@ -209,7 +209,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
         return event;
       })
       .reduce((result, event) => {
-        if (!CONSTANTS.INCLUDED_EVENT_TYPES.includes(event.type)) return result;
+        if (!CONSTANTS.INCLUDED_EVENT_TYPES.includes(event.data.type)) return result;
 
         // Ignore root events, they are empty and not useful
         const { id, root } = event.data;
@@ -263,7 +263,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     patch.completedAt = testResult.createdAt;
     patch.timeoutType = testResult.timeoutType || null;
 
-    if (lastEvent?.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!patch.timeoutType) {
+    if (lastEvent?.data.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!patch.timeoutType) {
       patch.status = RUN_STATUS.FAILED;
       patch.failType = RUN_FAIL_TYPE.TIMEOUT;
       patch.timeoutType = testResult.timeoutType || RUN_TIMEOUT_TYPE.UNKNOWN;

@@ -15,8 +15,8 @@ describe('testResult unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'suite' as TEST_EVENT_TYPES,
           data: {
+            type: 'suite' as TEST_EVENT_TYPES,
             fullTitle: 'suite 1 nested describe 2',
             root: false,
             title: 'nested describe 2',
@@ -54,8 +54,8 @@ describe('testResult unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'suite',
           data: {
+            type: 'suite',
             id: null,
             duration: null,
             title: 'nested describe 2',
@@ -98,8 +98,8 @@ describe('testResult unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'suite' as TEST_EVENT_TYPES,
           data: {
+            type: 'suite' as TEST_EVENT_TYPES,
             total: 1,
             title: 'nested describe 2',
             fullTitle: 'suite 1 nested describe 2',
@@ -112,7 +112,15 @@ describe('testResult unit tests', () => {
             result: null,
             timedOut: false,
           },
-          stats: { duration: null, suites: 3, tests: 5, passes: 3, pending: 0, failures: 2, start: '2020-03-16T01:33:23.753Z' },
+          stats: {
+            duration: null,
+            suites: 3,
+            tests: 5,
+            passes: 3,
+            pending: 0,
+            failures: 2,
+            start: '2020-03-16T01:33:23.753Z',
+          },
           timestamp: '2020-03-16T01:33:23.826Z',
           elapsedMs: 73,
         },
@@ -130,8 +138,8 @@ describe('testResult unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'suite',
           data: {
+            type: 'suite',
             id: null,
             duration: null,
             title: 'nested describe 2',

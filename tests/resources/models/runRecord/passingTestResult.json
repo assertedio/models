@@ -5,8 +5,8 @@
   "runDurationMs": 2251,
   "events": [
     {
-      "type": "start",
       "data": {
+        "type": "start",
         "id": null,
         "duration": null,
         "title": null,
@@ -31,8 +31,8 @@
       "elapsedMs": 22
     },
     {
-      "type": "suite",
       "data": {
+        "type": "suite",
         "id": "ck8ymhu9s0000xhs63rp35p8v",
         "duration": null,
         "title": null,
@@ -57,8 +57,8 @@
       "elapsedMs": 29
     },
     {
-      "type": "suite",
       "data": {
+        "type": "suite",
         "id": "ck8ymhu9v0001xhs6a62i0b6n",
         "duration": null,
         "title": "example tests",
@@ -85,8 +85,8 @@
       "elapsedMs": 32
     },
     {
-      "type": "hook",
       "data": {
+        "type": "hook",
         "id": "ck8ymhu9x0002xhs6eq1w61tp",
         "duration": null,
         "title": "\"before all\" hook",
@@ -114,8 +114,8 @@
       "elapsedMs": 34
     },
     {
-      "type": "hook end",
       "data": {
+        "type": "hook end",
         "id": "ck8ymhu9x0002xhs6eq1w61tp",
         "duration": 2,
         "title": "\"before all\" hook",
@@ -143,8 +143,8 @@
       "elapsedMs": 40
     },
     {
-      "type": "test",
       "data": {
+        "type": "test",
         "id": "ck8ymhua80003xhs64cxibi5o",
         "duration": null,
         "title": "get endpoint returns 200",
@@ -172,8 +172,8 @@
       "elapsedMs": 45
     },
     {
-      "type": "hook",
       "data": {
+        "type": "hook",
         "id": "ck8ymhuaa0004xhs68zbhh1zc",
         "duration": null,
         "title": "\"before each\" hook",
@@ -201,8 +201,8 @@
       "elapsedMs": 47
     },
     {
-      "type": "hook end",
       "data": {
+        "type": "hook end",
         "id": "ck8ymhuaa0004xhs68zbhh1zc",
         "duration": 2,
         "title": "\"before each\" hook",
@@ -230,8 +230,8 @@
       "elapsedMs": 49
     },
     {
-      "type": "fail",
       "data": {
+        "type": "fail",
         "id": "ck8ymhua80003xhs64cxibi5o",
         "duration": 185,
         "title": "get endpoint returns 200",
@@ -263,8 +263,8 @@
       "elapsedMs": 241
     },
     {
-      "type": "test",
       "data": {
+        "type": "test",
         "id": "ck8ymhufs0005xhs6e5l5ad8u",
         "duration": null,
         "title": "get endpoint returns 200 and body",
@@ -292,8 +292,8 @@
       "elapsedMs": 245
     },
     {
-      "type": "hook",
       "data": {
+        "type": "hook",
         "id": "ck8ymhufu0006xhs66da63ztm",
         "duration": 2,
         "title": "\"before each\" hook",
@@ -321,8 +321,8 @@
       "elapsedMs": 246
     },
     {
-      "type": "hook end",
       "data": {
+        "type": "hook end",
         "id": "ck8ymhufu0006xhs66da63ztm",
         "duration": 0,
         "title": "\"before each\" hook",
@@ -350,8 +350,8 @@
       "elapsedMs": 248
     },
     {
-      "type": "pass",
       "data": {
+        "type": "pass",
         "id": "ck8ymhufs0005xhs6e5l5ad8u",
         "duration": 133,
         "title": "get endpoint returns 200 and body",
@@ -379,8 +379,8 @@
       "elapsedMs": 382
     },
     {
-      "type": "test",
       "data": {
+        "type": "test",
         "id": "ck8ymhujo0007xhs6bd6cdhzm",
         "duration": null,
         "title": "post endpoint returns 200 and body",
@@ -408,8 +408,8 @@
       "elapsedMs": 384
     },
     {
-      "type": "hook",
       "data": {
+        "type": "hook",
         "id": "ck8ymhujp0008xhs69xan66ma",
         "duration": 0,
         "title": "\"before each\" hook",
@@ -437,8 +437,8 @@
       "elapsedMs": 385
     },
     {
-      "type": "hook end",
       "data": {
+        "type": "hook end",
         "id": "ck8ymhujp0008xhs69xan66ma",
         "duration": 0,
         "title": "\"before each\" hook",
@@ -466,8 +466,8 @@
       "elapsedMs": 386
     },
     {
-      "type": "pass",
       "data": {
+        "type": "pass",
         "id": "ck8ymhujo0007xhs6bd6cdhzm",
         "duration": 129,
         "title": "post endpoint returns 200 and body",
@@ -495,8 +495,8 @@
       "elapsedMs": 517
     },
     {
-      "type": "suite",
       "data": {
+        "type": "suite",
         "id": "ck8ymhune0009xhs603qd6vv1",
         "duration": null,
         "title": "nested thing",
@@ -524,8 +524,8 @@
       "elapsedMs": 519
     },
     {
-      "type": "test",
       "data": {
+        "type": "test",
         "id": "ck8ymhunh000axhs6dis62051",
         "duration": null,
         "title": "post endpoint returns 200 and body",
@@ -554,8 +554,8 @@
       "elapsedMs": 522
     },
     {
-      "type": "hook",
       "data": {
+        "type": "hook",
         "id": "ck8ymhuni000bxhs664l6hz9y",
         "duration": 0,
         "title": "\"before each\" hook",
@@ -583,8 +583,8 @@
       "elapsedMs": 523
     },
     {
-      "type": "hook end",
       "data": {
+        "type": "hook end",
         "id": "ck8ymhuni000bxhs664l6hz9y",
         "duration": 0,
         "title": "\"before each\" hook",
@@ -612,8 +612,8 @@
       "elapsedMs": 524
     },
     {
-      "type": "hook",
       "data": {
+        "type": "hook",
         "id": "ck8ymhunk000cxhs6df9nfrh6",
         "duration": null,
         "title": "\"before each\" hook",
@@ -642,8 +642,8 @@
       "elapsedMs": 525
     },
     {
-      "type": "hook end",
       "data": {
+        "type": "hook end",
         "id": "ck8ymhunk000cxhs6df9nfrh6",
         "duration": 0,
         "title": "\"before each\" hook",
@@ -672,8 +672,8 @@
       "elapsedMs": 526
     },
     {
-      "type": "pass",
       "data": {
+        "type": "pass",
         "id": "ck8ymhunh000axhs6dis62051",
         "duration": 132,
         "title": "post endpoint returns 200 and body",
@@ -702,8 +702,8 @@
       "elapsedMs": 660
     },
     {
-      "type": "suite end",
       "data": {
+        "type": "suite end",
         "id": "ck8ymhune0009xhs603qd6vv1",
         "duration": null,
         "title": "nested thing",
@@ -731,8 +731,8 @@
       "elapsedMs": 664
     },
     {
-      "type": "suite end",
       "data": {
+        "type": "suite end",
         "id": "ck8ymhu9v0001xhs6a62i0b6n",
         "duration": null,
         "title": "example tests",
@@ -759,8 +759,8 @@
       "elapsedMs": 666
     },
     {
-      "type": "suite end",
       "data": {
+        "type": "suite end",
         "id": "ck8ymhu9s0000xhs63rp35p8v",
         "duration": null,
         "title": null,
@@ -785,8 +785,8 @@
       "elapsedMs": 667
     },
     {
-      "type": "end",
       "data": {
+        "type": "end",
         "id": null,
         "duration": null,
         "title": null,

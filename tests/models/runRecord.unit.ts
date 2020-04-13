@@ -121,8 +121,8 @@ describe('runRecord unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'test' as TEST_EVENT_TYPES,
           data: {
+            type: 'test' as TEST_EVENT_TYPES,
             id: 'foo-id',
             duration: null,
             error: {
@@ -150,8 +150,8 @@ describe('runRecord unit tests', () => {
           elapsedMs: 75,
         },
         {
-          type: 'end' as TEST_EVENT_TYPES,
           data: {
+            type: 'end' as TEST_EVENT_TYPES,
             duration: null,
             error: {
               diff: 'some-other-diff',
@@ -201,6 +201,7 @@ describe('runRecord unit tests', () => {
       results: [
         {
           id: 'foo-id',
+          type: 'test',
           duration: null,
           error: {
             code: undefined,
@@ -237,8 +238,8 @@ describe('runRecord unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'end' as TEST_EVENT_TYPES,
           data: {
+            type: 'end' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -303,8 +304,8 @@ describe('runRecord unit tests', () => {
       timeoutType: RUN_TIMEOUT_TYPE.EXEC,
       events: [
         {
-          type: 'end' as TEST_EVENT_TYPES,
           data: {
+            type: 'end' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -369,8 +370,8 @@ describe('runRecord unit tests', () => {
       timeoutType: null,
       events: [
         {
-          type: 'start' as TEST_EVENT_TYPES,
           data: {
+            type: 'start' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -453,8 +454,8 @@ describe('completed runRecord', () => {
       },
       events: [
         {
-          type: 'suite' as TEST_EVENT_TYPES,
           data: {
+            type: 'suite' as TEST_EVENT_TYPES,
             fullTitle: 'suite 1 nested describe 2',
             duration: null,
             error: null,
