@@ -6,8 +6,8 @@ import { DeepPartial } from 'ts-essentials';
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import {
   TEST_EVENT_TYPES,
-  TestError,
-  TestErrorInterface,
+  TestData,
+  TestDataInterface,
   TestEvent,
   TestEventInterface,
   TestStats,
@@ -38,12 +38,11 @@ interface CreateRunRecordInterface {
 
 export interface RunRecordInterface extends CreateRunRecordInterface {
   id: string;
-  events: TestEventInterface[] | null;
   stats: TestStatsInterface | null;
   runDurationMs: number | null;
   testDurationMs: number | null;
   type: RUN_TYPE;
-  errors: TestErrorInterface[] | null;
+  results: TestDataInterface[] | null;
   status: RUN_STATUS;
   failType: RUN_FAIL_TYPE | null;
   timeoutType: RUN_TIMEOUT_TYPE | null;
@@ -55,6 +54,14 @@ export interface RunRecordInterface extends CreateRunRecordInterface {
 
 const CONSTANTS = {
   ID_PREFIX: 'rs-',
+  INCLUDED_EVENT_TYPES: [
+    TEST_EVENT_TYPES.EVENT_HOOK_BEGIN,
+    TEST_EVENT_TYPES.EVENT_HOOK_END,
+    TEST_EVENT_TYPES.EVENT_TEST_BEGIN,
+    TEST_EVENT_TYPES.EVENT_TEST_PASS,
+    TEST_EVENT_TYPES.EVENT_TEST_FAIL,
+    TEST_EVENT_TYPES.EVENT_TEST_PENDING,
+  ],
 };
 
 /**
@@ -72,8 +79,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     this.projectId = params.projectId;
     this.runId = params.runId;
     this.routineId = params.routineId;
-    this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
-    this.events = params.events ? params.events.map((event) => new TestEvent(event, false)) : null;
+    this.results = params.results ? params.results.map((result) => new TestData(result, false)) : null;
     this.stats = params.stats ? new TestStats(params.stats, false) : null;
     this.runDurationMs = params.runDurationMs;
     this.testDurationMs = params.testDurationMs;
@@ -108,13 +114,8 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @IsInstance(TestError, { each: true })
-  errors: TestErrorInterface[] | null;
-
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @IsInstance(TestEvent, { each: true })
-  events: TestEventInterface[] | null;
+  @IsInstance(TestData, { each: true })
+  results: TestDataInterface[] | null;
 
   @IsOptional()
   @ValidateNested()
@@ -179,8 +180,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       runId: runRequest.id,
       type: runRequest.type,
       routineId,
-      errors: null,
-      events: null,
+      results: null,
       stats: null,
       console: null,
       failType: null,
@@ -196,6 +196,45 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   }
 
   /**
+   * - Assume that all IDs come in pairs (start and end of event)
+   * - Data and timestamp from the second are used if found
+   * - If there is no second event, that will indicate an incomplete event, visible by the missing duration
+   * @param {TestEventInterface[]} events
+   * @returns {TestDataInterface[]}
+   */
+  static getResults(events: TestEventInterface[] = []): TestDataInterface[] {
+    const dataMap = events
+      .map((event) => {
+        if (!(event instanceof TestEvent)) return new TestEvent(event);
+        return event;
+      })
+      .reduce((result, event) => {
+        if (!CONSTANTS.INCLUDED_EVENT_TYPES.includes(event.type)) return result;
+
+        // Ignore root events, they are empty and not useful
+        const { id, root } = event.data;
+        if (!id || root) return result;
+
+        if (!result[id]) {
+          result[id] = {
+            timestamp: event.timestamp,
+            data: event.data,
+          };
+        } else {
+          result[id].data = event.data;
+          result[id].timestamp = event.timestamp;
+        }
+
+        return result;
+      }, {} as { [k: string]: { timestamp: Date; data: TestDataInterface } });
+
+    const sortedData = Object.values(dataMap).sort(
+      ({ timestamp: firstTime }, { timestamp: secondTime }) => firstTime.valueOf() - secondTime.valueOf()
+    );
+    return sortedData.map(({ data }) => data);
+  }
+
+  /**
    * Get patch from test result
    * @param {TestResultInterface} testResult
    * @returns {Partial<RunRecord>}
@@ -206,8 +245,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       failType: RUN_FAIL_TYPE | null;
       timeoutType: RUN_TIMEOUT_TYPE | null;
       console: string | null;
-      errors: TestErrorInterface[] | null;
-      events: TestEventInterface[] | null;
+      results: TestDataInterface[];
       stats: TestStatsInterface | null;
       runDurationMs: number;
       testDurationMs: number | null;
@@ -216,16 +254,12 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
     const lastEvent = last(testResult.events || []);
 
-    patch.errors = (testResult.events || [])
-      .filter((event) => !!event.data?.error)
-      .map((event) => new TestError({ ...event.data?.error, fullTitle: event.data?.fullTitle } as TestErrorInterface));
-    patch.errors = patch.errors.length > 0 ? patch.errors : null;
+    patch.results = RunRecord.getResults(testResult.events || []);
 
     patch.console = testResult.console;
     patch.runDurationMs = testResult.runDurationMs;
     patch.testDurationMs = lastEvent?.elapsedMs || null;
     patch.stats = lastEvent?.stats || null;
-    patch.events = (testResult.events || []).map((event) => new TestEvent(event));
     patch.completedAt = testResult.createdAt;
     patch.timeoutType = testResult.timeoutType || null;
 
@@ -291,9 +325,10 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 }
 
 export interface CompletedRunRecordInterface
-  extends Omit<RunRecordInterface, 'updatedAt' | 'createdAt' | 'completedAt' | 'events' | 'runDurationMs'> {
+  extends Omit<RunRecordInterface, 'updatedAt' | 'createdAt' | 'completedAt' | 'results' | 'runDurationMs'> {
   completedAt: Date;
   runDurationMs: number;
+  results: TestDataInterface[];
 }
 
 export interface CompletedRunRecordConstructorInterface extends Omit<CompletedRunRecordInterface, 'completedAt' | 'stats'> {
@@ -338,7 +373,6 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
     this.projectId = params.projectId;
     this.runId = params.runId;
     this.routineId = params.routineId;
-    this.errors = params.errors ? params.errors.map((error) => new TestError(error, false)) : null;
     this.stats = params.stats ? new TestStats(params.stats, false) : null;
     this.runDurationMs = params.runDurationMs;
     this.testDurationMs = params.testDurationMs;
@@ -348,6 +382,7 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
     this.failType = params.failType;
     this.timeoutType = params.timeoutType || null;
     this.completedAt = toDate(params.completedAt);
+    this.results = params.results ? params.results.map((result) => new TestData(result, false)) : [];
 
     if (validate) {
       this.validate();
@@ -369,10 +404,9 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   @IsEnum(RUN_TYPE, { message: enumError(RUN_TYPE) })
   readonly type: RUN_TYPE;
 
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @IsInstance(TestError, { each: true })
-  readonly errors: TestErrorInterface[] | null;
+  @ValidateNested()
+  @IsInstance(TestData, { each: true })
+  readonly results: TestDataInterface[];
 
   // Need to allow this to be optional in case user pushes no files or something
   @IsOptional()
