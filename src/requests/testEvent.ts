@@ -92,6 +92,7 @@ export class TestStats extends ValidatedBase implements TestStatsInterface {
 }
 
 export interface TestErrorInterface {
+  fullTitle?: string;
   stack?: string | null;
   message?: string;
   diff?: string;
@@ -109,6 +110,7 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
   constructor(params: TestErrorInterface, validate = true) {
     super();
 
+    this.fullTitle = params.fullTitle;
     this.stack = params.stack || null;
     this.message = params.message;
     this.diff = params.diff;
@@ -118,6 +120,10 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
       this.validate();
     }
   }
+
+  @IsOptional()
+  @IsString()
+  fullTitle?: string;
 
   @IsOptional()
   @IsString()
