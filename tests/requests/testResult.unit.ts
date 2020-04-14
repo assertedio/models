@@ -11,6 +11,7 @@ describe('testResult unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
@@ -50,6 +51,7 @@ describe('testResult unit tests', () => {
       runId: 'run-id',
       type: 'manual',
       console: null,
+      error: null,
       runDurationMs: 0,
       timeoutType: null,
       events: [
@@ -94,6 +96,7 @@ describe('testResult unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
@@ -134,6 +137,7 @@ describe('testResult unit tests', () => {
       runId: 'run-id',
       type: 'manual',
       console: null,
+      error: null,
       runDurationMs: 0,
       timeoutType: null,
       events: [

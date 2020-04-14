@@ -47,6 +47,7 @@ export interface RunRecordInterface extends CreateRunRecordInterface {
   failType: RUN_FAIL_TYPE | null;
   timeoutType: RUN_TIMEOUT_TYPE | null;
   console: string | null;
+  error: string | null;
   createdAt: Date;
   updatedAt: Date;
   completedAt: Date | null;
@@ -85,6 +86,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     this.testDurationMs = params.testDurationMs;
     this.type = params.type;
     this.console = params.console;
+    this.error = params.error || null;
     this.status = params.status;
     this.failType = params.failType;
     this.timeoutType = params.timeoutType || null;
@@ -136,6 +138,10 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   @IsString()
   console: string | null;
 
+  @IsOptional()
+  @IsString()
+  error: string | null;
+
   @IsEnum(RUN_STATUS, { message: enumError(RUN_STATUS) })
   status: RUN_STATUS;
 
@@ -183,6 +189,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       results: null,
       stats: null,
       console: null,
+      error: null,
       failType: null,
       timeoutType: null,
       status: RUN_STATUS.CREATED,
@@ -245,6 +252,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
       failType: RUN_FAIL_TYPE | null;
       timeoutType: RUN_TIMEOUT_TYPE | null;
       console: string | null;
+      error: string | null;
       results: TestDataInterface[];
       stats: TestStatsInterface | null;
       runDurationMs: number;
@@ -263,7 +271,11 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     patch.completedAt = testResult.createdAt;
     patch.timeoutType = testResult.timeoutType || null;
 
-    if (lastEvent?.data.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!patch.timeoutType) {
+    if (testResult.error) {
+      patch.status = RUN_STATUS.FAILED;
+      patch.failType = RUN_FAIL_TYPE.ERROR;
+      patch.error = testResult.error;
+    } else if (lastEvent?.data.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!patch.timeoutType) {
       patch.status = RUN_STATUS.FAILED;
       patch.failType = RUN_FAIL_TYPE.TIMEOUT;
       patch.timeoutType = testResult.timeoutType || RUN_TIMEOUT_TYPE.UNKNOWN;
@@ -378,6 +390,7 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
     this.testDurationMs = params.testDurationMs;
     this.type = params.type;
     this.console = params.console;
+    this.error = params.error || null;
     this.status = params.status;
     this.failType = params.failType;
     this.timeoutType = params.timeoutType || null;
@@ -427,6 +440,10 @@ export class CompletedRunRecord extends ValidatedBase implements CompletedRunRec
   @IsOptional()
   @IsString()
   readonly console: string | null;
+
+  @IsOptional()
+  @IsString()
+  readonly error: string | null;
 
   @IsEnum(RUN_STATUS, { message: enumError(RUN_STATUS) })
   readonly status: RUN_STATUS;

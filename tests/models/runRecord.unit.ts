@@ -35,6 +35,7 @@ describe('runRecord unit tests', () => {
       type: RUN_TYPE.MANUAL,
       results: null,
       stats: null,
+      error: null,
       console: null,
       failType: null,
       timeoutType: null,
@@ -59,6 +60,7 @@ describe('runRecord unit tests', () => {
       runDurationMs: 0,
       testDurationMs: 0,
       console: null,
+      error: null,
       failType: null,
       timeoutType: null,
       stats: {
@@ -99,6 +101,7 @@ describe('runRecord unit tests', () => {
       testDurationMs: 0,
       type: 'manual',
       console: null,
+      error: null,
       status: 'created',
       failType: null,
       timeoutType: null,
@@ -117,6 +120,7 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
@@ -234,6 +238,7 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
@@ -300,6 +305,7 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: RUN_TIMEOUT_TYPE.EXEC,
       events: [
@@ -366,6 +372,7 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
@@ -424,6 +431,74 @@ describe('runRecord unit tests', () => {
     };
     expect(expected).to.eql(patch);
   });
+
+  it('gets patch with error', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      runDurationMs: 0,
+      console: null,
+      error: 'something bad happened',
+      type: 'manual' as any,
+      timeoutType: null,
+      events: [
+        {
+          data: {
+            type: 'start' as TEST_EVENT_TYPES,
+            duration: null,
+            error: null,
+            file: null,
+            fullTitle: null,
+            fullTitlePath: [],
+            id: null,
+            result: null,
+            root: false,
+            timedOut: false,
+            title: null,
+          },
+          stats: {
+            suites: 4,
+            tests: 7,
+            passes: 5,
+            pending: 0,
+            failures: 0,
+            start: curDate,
+            end: curDate,
+            duration: 75,
+          },
+          timestamp: curDate,
+          elapsedMs: 75,
+        },
+      ],
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: null,
+      runDurationMs: 0,
+      testDurationMs: 75,
+      timeoutType: null,
+      error: 'something bad happened',
+      stats: {
+        suites: 4,
+        tests: 7,
+        passes: 5,
+        pending: 0,
+        failures: 0,
+        start: curDate,
+        end: curDate,
+        duration: 75,
+      },
+      results: [],
+      completedAt: curDate,
+      status: 'failed',
+      failType: 'error',
+    };
+    expect(expected).to.eql(patch);
+  });
 });
 
 describe('completed runRecord', () => {
@@ -439,6 +514,7 @@ describe('completed runRecord', () => {
       runDurationMs: 0,
       testDurationMs: 0,
       console: null,
+      error: null,
       failType: null,
       timeoutType: null,
       results: [],
@@ -508,6 +584,7 @@ describe('completed runRecord', () => {
       testDurationMs: 0,
       type: 'manual',
       console: null,
+      error: null,
       status: 'passed',
       failType: null,
       timeoutType: null,
@@ -531,7 +608,7 @@ describe('completed runRecord', () => {
       console: null,
       failType: null,
       timeoutType: null,
-
+      error: null,
       results: [],
       stats: {
         duration: null,
@@ -569,6 +646,7 @@ describe('completed runRecord', () => {
       testDurationMs: 0,
       type: 'manual',
       console: null,
+      error: null,
       status: 'passed',
       failType: null,
       timeoutType: null,
@@ -607,7 +685,7 @@ describe('completed runRecord', () => {
       projectId: 'p-WQmmjAF2P',
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
-
+      error: null,
       stats: null,
       runDurationMs: 3635,
       testDurationMs: null,

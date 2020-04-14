@@ -20,6 +20,7 @@ export interface CreateTestResultInterface {
   runDurationMs: number;
   events: TestEventInterface[];
   timeoutType: RUN_TIMEOUT_TYPE | null;
+  error: string | null;
 }
 
 export interface TestResultInterface extends Omit<CreateTestResultInterface, 'events'> {
@@ -46,6 +47,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
     this.runId = params.runId;
     this.type = params.type;
     this.console = params.console;
+    this.error = params.error || null;
     this.runDurationMs = params.runDurationMs;
     this.events = (params.events || []).map((event) => new TestEvent(event, false));
     this.timeoutType = params.timeoutType || null;
@@ -65,6 +67,10 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
   @IsOptional()
   @IsString()
   console: string | null;
+
+  @IsOptional()
+  @IsString()
+  error: string | null;
 
   @Min(0)
   @IsInt()
