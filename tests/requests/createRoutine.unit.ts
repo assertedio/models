@@ -10,12 +10,12 @@ describe('createRoutine unit tests', () => {
     const createRoutine = new CreateRoutine(params);
 
     const expected = {
-      name: '',
+      name: undefined,
       projectId: 'foo-id',
-      description: '',
+      description: undefined,
       interval: undefined,
       mocha: undefined,
-      timeoutSec: 1,
+      timeoutSec: undefined,
     };
 
     expect(createRoutine).to.eql(expected);
@@ -29,7 +29,7 @@ describe('createRoutine unit tests', () => {
       mocha: {
         files: ['bar.js'],
         ignore: ['foo.js'],
-        ui: 'require',
+        ui: 'require' as any,
         bail: true,
       },
       interval: {
@@ -39,7 +39,7 @@ describe('createRoutine unit tests', () => {
       timeoutSec: 10,
     };
 
-    const createRoutine = new CreateRoutine(params as any);
+    const createRoutine = new CreateRoutine(params);
 
     const expected = {
       name: 'foo',
@@ -59,5 +59,26 @@ describe('createRoutine unit tests', () => {
     };
 
     expect(createRoutine).to.eql(expected);
+  });
+
+  it('fail on invalid interval', () => {
+    const params = {
+      name: 'foo',
+      projectId: 'foo-id',
+      description: 'bar',
+      mocha: {
+        files: ['bar.js'],
+        ignore: ['foo.js'],
+        ui: 'require' as any,
+        bail: true,
+      },
+      interval: {
+        unit: INTERVAL_UNITS.DAY,
+        value: '1',
+      },
+      timeoutSec: 10,
+    };
+
+    expect(() => new CreateRoutine(params as any)).to.throw('value');
   });
 });

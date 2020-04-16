@@ -45,7 +45,7 @@ export class Token extends ValidatedBase implements TokenInterface {
     this.name = params.name;
     this.userId = params.userId;
     this.createdAt = toDate(params.createdAt);
-    this.updatedAt = params.updatedAt;
+    this.updatedAt = toDate(params.updatedAt);
     this.lastUsedAt = params.lastUsedAt ? toDate(params.lastUsedAt) : params.lastUsedAt;
 
     if (validate) {

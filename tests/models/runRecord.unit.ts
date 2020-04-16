@@ -1,9 +1,13 @@
 import { expect } from 'chai';
+import fs from 'fs-extra';
 import { DateTime } from 'luxon';
+import path from 'path';
 
 import { CompletedRunRecord, RUN_STATUS, RunRecord } from '../../src/models/runRecord';
-import { RUN_TIMEOUT_TYPE, TEST_EVENT_TYPES, TestResultInterface } from '../../src/requests';
+import { RUN_TIMEOUT_TYPE, TEST_EVENT_TYPES, TestResult, TestResultInterface } from '../../src/requests';
 import { Run, RUN_TYPE } from '../../src/requests/run';
+
+const RESOURCE_PATH = path.join(__dirname, '../resources/models/runRecord');
 
 describe('runRecord unit tests', () => {
   it('create from run', () => {
@@ -27,11 +31,11 @@ describe('runRecord unit tests', () => {
       status: RUN_STATUS.CREATED,
       routineId: 'routine-id',
       projectId: 'project-id',
-      errors: null,
       runId: runRequest.id,
       type: RUN_TYPE.MANUAL,
-      events: null,
+      results: null,
       stats: null,
+      error: null,
       console: null,
       failType: null,
       timeoutType: null,
@@ -56,9 +60,9 @@ describe('runRecord unit tests', () => {
       runDurationMs: 0,
       testDurationMs: 0,
       console: null,
+      error: null,
       failType: null,
       timeoutType: null,
-      errors: null,
       stats: {
         duration: null,
         end: undefined,
@@ -69,35 +73,7 @@ describe('runRecord unit tests', () => {
         failures: 2,
         start: new Date('2020-03-16T01:33:23.753Z'),
       },
-      events: [
-        {
-          type: 'suite' as TEST_EVENT_TYPES,
-          data: {
-            fullTitle: 'suite 1 nested describe 2',
-            title: 'nested describe 2',
-            duration: null,
-            error: null,
-            file: null,
-            fullTitlePath: [],
-            id: null,
-            result: null,
-            root: false,
-            timedOut: false,
-          },
-          stats: {
-            duration: null,
-            end: undefined,
-            suites: 3,
-            tests: 5,
-            passes: 3,
-            pending: 0,
-            failures: 2,
-            start: new Date('2020-03-16T01:33:23.753Z'),
-          },
-          timestamp: new Date('2020-03-16T01:33:23.826Z'),
-          elapsedMs: 73,
-        },
-      ],
+      results: [],
       createdAt: curDate,
       updatedAt: curDate,
       completedAt: null,
@@ -110,36 +86,7 @@ describe('runRecord unit tests', () => {
       projectId: 'project-id',
       runId: 'rn-run-id',
       routineId: 'routine-id',
-      errors: null,
-      events: [
-        {
-          type: 'suite',
-          data: {
-            fullTitle: 'suite 1 nested describe 2',
-            title: 'nested describe 2',
-            result: null,
-            error: null,
-            duration: null,
-            root: false,
-            file: null,
-            fullTitlePath: [],
-            id: null,
-            timedOut: false,
-          },
-          stats: {
-            end: undefined,
-            duration: null,
-            suites: 3,
-            tests: 5,
-            passes: 3,
-            pending: 0,
-            failures: 2,
-            start: new Date('2020-03-16T01:33:23.753Z'),
-          },
-          timestamp: new Date('2020-03-16T01:33:23.826Z'),
-          elapsedMs: 73,
-        },
-      ],
+      results: [],
       stats: {
         end: undefined,
         duration: null,
@@ -154,6 +101,7 @@ describe('runRecord unit tests', () => {
       testDurationMs: 0,
       type: 'manual',
       console: null,
+      error: null,
       status: 'created',
       failType: null,
       timeoutType: null,
@@ -172,20 +120,21 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
         {
-          type: 'test' as TEST_EVENT_TYPES,
           data: {
+            type: 'test' as TEST_EVENT_TYPES,
+            id: 'foo-id',
             duration: null,
             error: {
               diff: 'some-diff',
             },
             file: null,
-            fullTitle: null,
+            fullTitle: 'full title',
             fullTitlePath: [],
-            id: null,
             result: null,
             root: false,
             timedOut: false,
@@ -205,14 +154,14 @@ describe('runRecord unit tests', () => {
           elapsedMs: 75,
         },
         {
-          type: 'end' as TEST_EVENT_TYPES,
           data: {
+            type: 'end' as TEST_EVENT_TYPES,
             duration: null,
             error: {
               diff: 'some-other-diff',
             },
             file: null,
-            fullTitle: null,
+            fullTitle: 'full title',
             fullTitlePath: [],
             id: null,
             result: null,
@@ -253,84 +202,25 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
-      errors: [
+      results: [
         {
-          code: undefined,
-          message: undefined,
-          stack: null,
-          diff: 'some-diff',
-        },
-        {
-          code: undefined,
-          message: undefined,
-          stack: null,
-          diff: 'some-other-diff',
-        },
-      ],
-      events: [
-        {
+          id: 'foo-id',
           type: 'test',
-          data: {
-            duration: null,
-            error: {
-              code: undefined,
-              message: undefined,
-              stack: null,
-              diff: 'some-diff',
-            },
-            file: null,
-            fullTitle: null,
-            fullTitlePath: [],
-            id: null,
-            result: null,
-            root: false,
-            timedOut: false,
-            title: null,
+          duration: null,
+          error: {
+            code: undefined,
+            fullTitle: undefined,
+            message: undefined,
+            stack: null,
+            diff: 'some-diff',
           },
-          stats: {
-            suites: 4,
-            tests: 7,
-            passes: 5,
-            pending: 0,
-            failures: 2,
-            start: curDate,
-            end: curDate,
-            duration: 75,
-          },
-          timestamp: curDate,
-          elapsedMs: 75,
-        },
-        {
-          type: 'end',
-          data: {
-            duration: null,
-            error: {
-              code: undefined,
-              message: undefined,
-              stack: null,
-              diff: 'some-other-diff',
-            },
-            file: null,
-            fullTitle: null,
-            fullTitlePath: [],
-            id: null,
-            result: null,
-            root: false,
-            timedOut: false,
-            title: null,
-          },
-          stats: {
-            suites: 4,
-            tests: 7,
-            passes: 5,
-            pending: 0,
-            failures: 2,
-            start: curDate,
-            end: curDate,
-            duration: 75,
-          },
-          timestamp: curDate,
-          elapsedMs: 75,
+          file: null,
+          fullTitle: 'full title',
+          fullTitlePath: [],
+          result: null,
+          root: false,
+          timedOut: false,
+          title: null,
         },
       ],
       completedAt: curDate,
@@ -348,12 +238,13 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
         {
-          type: 'end' as TEST_EVENT_TYPES,
           data: {
+            type: 'end' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -399,36 +290,7 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
-      errors: null,
-      events: [
-        {
-          type: 'end',
-          data: {
-            duration: null,
-            error: null,
-            file: null,
-            fullTitle: null,
-            fullTitlePath: [],
-            id: null,
-            result: null,
-            root: false,
-            timedOut: false,
-            title: null,
-          },
-          stats: {
-            suites: 4,
-            tests: 7,
-            passes: 5,
-            pending: 0,
-            failures: 0,
-            start: curDate,
-            end: curDate,
-            duration: 75,
-          },
-          timestamp: curDate,
-          elapsedMs: 75,
-        },
-      ],
+      results: [],
       completedAt: curDate,
       status: 'passed',
       failType: null,
@@ -443,12 +305,13 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: RUN_TIMEOUT_TYPE.EXEC,
       events: [
         {
-          type: 'end' as TEST_EVENT_TYPES,
           data: {
+            type: 'end' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -494,36 +357,7 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
-      errors: null,
-      events: [
-        {
-          type: 'end',
-          data: {
-            duration: null,
-            error: null,
-            file: null,
-            fullTitle: null,
-            fullTitlePath: [],
-            id: null,
-            result: null,
-            root: false,
-            timedOut: false,
-            title: null,
-          },
-          stats: {
-            suites: 4,
-            tests: 7,
-            passes: 5,
-            pending: 0,
-            failures: 0,
-            start: curDate,
-            end: curDate,
-            duration: 75,
-          },
-          timestamp: curDate,
-          elapsedMs: 75,
-        },
-      ],
+      results: [],
       completedAt: curDate,
       status: 'failed',
       failType: 'timeout',
@@ -538,12 +372,13 @@ describe('runRecord unit tests', () => {
       runId: 'run-id',
       runDurationMs: 0,
       console: null,
+      error: null,
       type: 'manual' as any,
       timeoutType: null,
       events: [
         {
-          type: 'start' as TEST_EVENT_TYPES,
           data: {
+            type: 'start' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -589,11 +424,28 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
-      errors: null,
+      results: [],
+      completedAt: curDate,
+      status: 'failed',
+      failType: 'timeout',
+    };
+    expect(expected).to.eql(patch);
+  });
+
+  it('gets patch with error', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      runDurationMs: 0,
+      console: null,
+      error: 'something bad happened',
+      type: 'manual' as any,
+      timeoutType: null,
       events: [
         {
-          type: 'start',
           data: {
+            type: 'start' as TEST_EVENT_TYPES,
             duration: null,
             error: null,
             file: null,
@@ -619,9 +471,31 @@ describe('runRecord unit tests', () => {
           elapsedMs: 75,
         },
       ],
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: null,
+      runDurationMs: 0,
+      testDurationMs: 75,
+      timeoutType: null,
+      error: 'something bad happened',
+      stats: {
+        suites: 4,
+        tests: 7,
+        passes: 5,
+        pending: 0,
+        failures: 0,
+        start: curDate,
+        end: curDate,
+        duration: 75,
+      },
+      results: [],
       completedAt: curDate,
       status: 'failed',
-      failType: 'timeout',
+      failType: 'error',
     };
     expect(expected).to.eql(patch);
   });
@@ -640,9 +514,10 @@ describe('completed runRecord', () => {
       runDurationMs: 0,
       testDurationMs: 0,
       console: null,
+      error: null,
       failType: null,
       timeoutType: null,
-      errors: null,
+      results: [],
       stats: {
         duration: null,
         end: undefined,
@@ -655,8 +530,8 @@ describe('completed runRecord', () => {
       },
       events: [
         {
-          type: 'suite' as TEST_EVENT_TYPES,
           data: {
+            type: 'suite' as TEST_EVENT_TYPES,
             fullTitle: 'suite 1 nested describe 2',
             duration: null,
             error: null,
@@ -694,7 +569,6 @@ describe('completed runRecord', () => {
       projectId: 'project-id',
       runId: 'rn-run-id',
       routineId: 'routine-id',
-      errors: null,
       stats: {
         end: undefined,
         duration: null,
@@ -705,10 +579,12 @@ describe('completed runRecord', () => {
         failures: 2,
         start: curDate,
       },
+      results: [],
       runDurationMs: 0,
       testDurationMs: 0,
       type: 'manual',
       console: null,
+      error: null,
       status: 'passed',
       failType: null,
       timeoutType: null,
@@ -732,7 +608,8 @@ describe('completed runRecord', () => {
       console: null,
       failType: null,
       timeoutType: null,
-      errors: null,
+      error: null,
+      results: [],
       stats: {
         duration: null,
         end: undefined,
@@ -753,7 +630,7 @@ describe('completed runRecord', () => {
       projectId: 'project-id',
       runId: 'rn-run-id',
       routineId: 'routine-id',
-      errors: null,
+
       stats: {
         end: undefined,
         duration: null,
@@ -764,10 +641,12 @@ describe('completed runRecord', () => {
         failures: 2,
         start: curDate,
       },
+      results: [],
       runDurationMs: 0,
       testDurationMs: 0,
       type: 'manual',
       console: null,
+      error: null,
       status: 'passed',
       failType: null,
       timeoutType: null,
@@ -783,7 +662,7 @@ describe('completed runRecord', () => {
       projectId: 'p-WQmmjAF2P',
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
-      errors: null,
+
       events: null,
       stats: null,
       runDurationMs: 3635,
@@ -806,11 +685,12 @@ describe('completed runRecord', () => {
       projectId: 'p-WQmmjAF2P',
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
-      errors: null,
+      error: null,
       stats: null,
       runDurationMs: 3635,
       testDurationMs: null,
       type: 'scheduled',
+      results: [],
       console:
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
@@ -820,5 +700,11 @@ describe('completed runRecord', () => {
     };
 
     expect(result).to.eql(expected);
+  });
+
+  it('extract test data from events', async () => {
+    const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'passingTestResult.json')));
+    const data = RunRecord.getResults(testResult.events);
+    expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'passingTestData.json')));
   });
 });

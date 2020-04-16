@@ -3,7 +3,7 @@ import { omit, startCase } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
-import { toDate } from '../../utils';
+import { enumError, toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
 import { PlanBilling, PlanBillingInterface } from './planBilling';
 import { PlanLimits, PlanLimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './planLimits';
@@ -122,14 +122,14 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
   @ValidateNested()
   limitsOverrides: PlanLimitsOverridesInterface | null;
 
-  @IsEnum(PLAN_IDS)
+  @IsEnum(PLAN_IDS, { message: enumError(PLAN_IDS) })
   planId: PLAN_IDS;
 
   @Min(0)
   @IsInt()
   extraSms: number;
 
-  @IsEnum(PLAN_STATUS)
+  @IsEnum(PLAN_STATUS, { message: enumError(PLAN_STATUS) })
   status: PLAN_STATUS;
 
   @IsOptional()

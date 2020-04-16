@@ -5,8 +5,8 @@ import { TEST_EVENT_TYPES, TestEvent } from '../../src/requests/testEvent';
 describe('testEvent unit tests', () => {
   it('create', () => {
     const params = {
-      type: TEST_EVENT_TYPES.EVENT_RUN_END,
       data: {
+        type: TEST_EVENT_TYPES.EVENT_RUN_END,
         duration: null,
         error: null,
         file: null,

@@ -1,0 +1,817 @@
+{
+  "runId": "rn-1m4SskCJ3",
+  "type": "scheduled",
+  "console": "stdout: before\nbefore\nbefore\nbefore\nbefore\nbefore nested",
+  "runDurationMs": 2251,
+  "events": [
+    {
+      "data": {
+        "type": "start",
+        "id": null,
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": false,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 0,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.522Z",
+      "elapsedMs": 22
+    },
+    {
+      "data": {
+        "type": "suite",
+        "id": "ck8ymhu9s0000xhs63rp35p8v",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": true,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 0,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.529Z",
+      "elapsedMs": 29
+    },
+    {
+      "data": {
+        "type": "suite",
+        "id": "ck8ymhu9v0001xhs6a62i0b6n",
+        "duration": null,
+        "title": "example tests",
+        "fullTitle": "example tests",
+        "fullTitlePath": [
+          "example tests"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.532Z",
+      "elapsedMs": 32
+    },
+    {
+      "data": {
+        "type": "hook",
+        "id": "ck8ymhu9x0002xhs6eq1w61tp",
+        "duration": null,
+        "title": "\"before all\" hook",
+        "fullTitle": "example tests -> \"before all\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before all\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.534Z",
+      "elapsedMs": 34
+    },
+    {
+      "data": {
+        "type": "hook end",
+        "id": "ck8ymhu9x0002xhs6eq1w61tp",
+        "duration": 2,
+        "title": "\"before all\" hook",
+        "fullTitle": "example tests -> \"before all\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before all\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.540Z",
+      "elapsedMs": 40
+    },
+    {
+      "data": {
+        "type": "test",
+        "id": "ck8ymhua80003xhs64cxibi5o",
+        "duration": null,
+        "title": "get endpoint returns 200",
+        "fullTitle": "example tests -> get endpoint returns 200",
+        "fullTitlePath": [
+          "example tests",
+          "get endpoint returns 200"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.545Z",
+      "elapsedMs": 45
+    },
+    {
+      "data": {
+        "type": "hook",
+        "id": "ck8ymhuaa0004xhs68zbhh1zc",
+        "duration": null,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.547Z",
+      "elapsedMs": 47
+    },
+    {
+      "data": {
+        "type": "hook end",
+        "id": "ck8ymhuaa0004xhs68zbhh1zc",
+        "duration": 2,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.549Z",
+      "elapsedMs": 49
+    },
+    {
+      "data": {
+        "type": "fail",
+        "id": "ck8ymhua80003xhs64cxibi5o",
+        "duration": 185,
+        "title": "get endpoint returns 200",
+        "fullTitle": "example tests -> get endpoint returns 200",
+        "fullTitlePath": [
+          "example tests",
+          "get endpoint returns 200"
+        ],
+        "result": "failed",
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": {
+          "stack": "AssertionError: expected 200 to deeply equal 400\n    at Context.it (/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js:18:23)\n    at process._tickCallback (internal/process/next_tick.js:68:7)",
+          "message": "AssertionError: expected 200 to deeply equal 400",
+          "diff": "- 200\n+ 400\n"
+        },
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.741Z",
+      "elapsedMs": 241
+    },
+    {
+      "data": {
+        "type": "test",
+        "id": "ck8ymhufs0005xhs6e5l5ad8u",
+        "duration": null,
+        "title": "get endpoint returns 200 and body",
+        "fullTitle": "example tests -> get endpoint returns 200 and body",
+        "fullTitlePath": [
+          "example tests",
+          "get endpoint returns 200 and body"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.745Z",
+      "elapsedMs": 245
+    },
+    {
+      "data": {
+        "type": "hook",
+        "id": "ck8ymhufu0006xhs66da63ztm",
+        "duration": 2,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.746Z",
+      "elapsedMs": 246
+    },
+    {
+      "data": {
+        "type": "hook end",
+        "id": "ck8ymhufu0006xhs66da63ztm",
+        "duration": 0,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.748Z",
+      "elapsedMs": 248
+    },
+    {
+      "data": {
+        "type": "pass",
+        "id": "ck8ymhufs0005xhs6e5l5ad8u",
+        "duration": 133,
+        "title": "get endpoint returns 200 and body",
+        "fullTitle": "example tests -> get endpoint returns 200 and body",
+        "fullTitlePath": [
+          "example tests",
+          "get endpoint returns 200 and body"
+        ],
+        "result": "passed",
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 1,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.882Z",
+      "elapsedMs": 382
+    },
+    {
+      "data": {
+        "type": "test",
+        "id": "ck8ymhujo0007xhs6bd6cdhzm",
+        "duration": null,
+        "title": "post endpoint returns 200 and body",
+        "fullTitle": "example tests -> post endpoint returns 200 and body",
+        "fullTitlePath": [
+          "example tests",
+          "post endpoint returns 200 and body"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 2,
+        "passes": 1,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.884Z",
+      "elapsedMs": 384
+    },
+    {
+      "data": {
+        "type": "hook",
+        "id": "ck8ymhujp0008xhs69xan66ma",
+        "duration": 0,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 2,
+        "passes": 1,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.885Z",
+      "elapsedMs": 385
+    },
+    {
+      "data": {
+        "type": "hook end",
+        "id": "ck8ymhujp0008xhs69xan66ma",
+        "duration": 0,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 2,
+        "passes": 1,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:34.886Z",
+      "elapsedMs": 386
+    },
+    {
+      "data": {
+        "type": "pass",
+        "id": "ck8ymhujo0007xhs6bd6cdhzm",
+        "duration": 129,
+        "title": "post endpoint returns 200 and body",
+        "fullTitle": "example tests -> post endpoint returns 200 and body",
+        "fullTitlePath": [
+          "example tests",
+          "post endpoint returns 200 and body"
+        ],
+        "result": "passed",
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 2,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.017Z",
+      "elapsedMs": 517
+    },
+    {
+      "data": {
+        "type": "suite",
+        "id": "ck8ymhune0009xhs603qd6vv1",
+        "duration": null,
+        "title": "nested thing",
+        "fullTitle": "example tests -> nested thing",
+        "fullTitlePath": [
+          "example tests",
+          "nested thing"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.019Z",
+      "elapsedMs": 519
+    },
+    {
+      "data": {
+        "type": "test",
+        "id": "ck8ymhunh000axhs6dis62051",
+        "duration": null,
+        "title": "post endpoint returns 200 and body",
+        "fullTitle": "example tests -> nested thing -> post endpoint returns 200 and body",
+        "fullTitlePath": [
+          "example tests",
+          "nested thing",
+          "post endpoint returns 200 and body"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.022Z",
+      "elapsedMs": 522
+    },
+    {
+      "data": {
+        "type": "hook",
+        "id": "ck8ymhuni000bxhs664l6hz9y",
+        "duration": 0,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.023Z",
+      "elapsedMs": 523
+    },
+    {
+      "data": {
+        "type": "hook end",
+        "id": "ck8ymhuni000bxhs664l6hz9y",
+        "duration": 0,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.024Z",
+      "elapsedMs": 524
+    },
+    {
+      "data": {
+        "type": "hook",
+        "id": "ck8ymhunk000cxhs6df9nfrh6",
+        "duration": null,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> nested thing -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "nested thing",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.025Z",
+      "elapsedMs": 525
+    },
+    {
+      "data": {
+        "type": "hook end",
+        "id": "ck8ymhunk000cxhs6df9nfrh6",
+        "duration": 0,
+        "title": "\"before each\" hook",
+        "fullTitle": "example tests -> nested thing -> \"before each\" hook",
+        "fullTitlePath": [
+          "example tests",
+          "nested thing",
+          "\"before each\" hook"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 2,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.026Z",
+      "elapsedMs": 526
+    },
+    {
+      "data": {
+        "type": "pass",
+        "id": "ck8ymhunh000axhs6dis62051",
+        "duration": 132,
+        "title": "post endpoint returns 200 and body",
+        "fullTitle": "example tests -> nested thing -> post endpoint returns 200 and body",
+        "fullTitlePath": [
+          "example tests",
+          "nested thing",
+          "post endpoint returns 200 and body"
+        ],
+        "result": "passed",
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 3,
+        "passes": 3,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.160Z",
+      "elapsedMs": 660
+    },
+    {
+      "data": {
+        "type": "suite end",
+        "id": "ck8ymhune0009xhs603qd6vv1",
+        "duration": null,
+        "title": "nested thing",
+        "fullTitle": "example tests -> nested thing",
+        "fullTitlePath": [
+          "example tests",
+          "nested thing"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 4,
+        "passes": 3,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.164Z",
+      "elapsedMs": 664
+    },
+    {
+      "data": {
+        "type": "suite end",
+        "id": "ck8ymhu9v0001xhs6a62i0b6n",
+        "duration": null,
+        "title": "example tests",
+        "fullTitle": "example tests",
+        "fullTitlePath": [
+          "example tests"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/tmp/asserted-rn-1m4SskCJ3-uJh1tU/package/example.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 4,
+        "passes": 3,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.166Z",
+      "elapsedMs": 666
+    },
+    {
+      "data": {
+        "type": "suite end",
+        "id": "ck8ymhu9s0000xhs63rp35p8v",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": true,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 4,
+        "passes": 3,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "duration": null
+      },
+      "timestamp": "2020-04-13T15:19:35.167Z",
+      "elapsedMs": 667
+    },
+    {
+      "data": {
+        "type": "end",
+        "id": null,
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": false,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 2,
+        "tests": 4,
+        "passes": 3,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-04-13T15:19:34.500Z",
+        "end": "2020-04-13T15:19:35.168Z",
+        "duration": 668
+      },
+      "timestamp": "2020-04-13T15:19:35.168Z",
+      "elapsedMs": 668
+    }
+  ],
+  "timeoutType": null,
+  "createdAt": "2020-04-13T15:19:32.967Z"
+}

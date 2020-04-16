@@ -1,7 +1,7 @@
 import { IsBoolean, IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { isNumber } from 'lodash';
 
-import { toDate } from '../utils';
+import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 // Should map directly to: RunnerConstants in Mocha
@@ -92,6 +92,7 @@ export class TestStats extends ValidatedBase implements TestStatsInterface {
 }
 
 export interface TestErrorInterface {
+  fullTitle?: string;
   stack?: string | null;
   message?: string;
   diff?: string;
@@ -109,6 +110,7 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
   constructor(params: TestErrorInterface, validate = true) {
     super();
 
+    this.fullTitle = params.fullTitle;
     this.stack = params.stack || null;
     this.message = params.message;
     this.diff = params.diff;
@@ -118,6 +120,10 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
       this.validate();
     }
   }
+
+  @IsOptional()
+  @IsString()
+  fullTitle?: string;
 
   @IsOptional()
   @IsString()
@@ -144,6 +150,7 @@ export enum TEST_RESULT_STATUS {
 
 export interface TestDataInterface {
   id: string | null;
+  type: TEST_EVENT_TYPES;
   title: string | null;
   fullTitle: string | null;
   fullTitlePath: string[];
@@ -167,6 +174,7 @@ export class TestData extends ValidatedBase implements TestDataInterface {
     super();
 
     this.id = params.id || null;
+    this.type = params.type;
     this.duration = isNumber(params.duration) ? params.duration : null;
     this.title = params.title || null;
     this.fullTitle = params.fullTitle || null;
@@ -186,6 +194,9 @@ export class TestData extends ValidatedBase implements TestDataInterface {
   @IsString()
   id: string | null;
 
+  @IsEnum(TEST_EVENT_TYPES, { message: enumError(TEST_EVENT_TYPES) })
+  type: TEST_EVENT_TYPES;
+
   @IsOptional()
   @IsString()
   title: string | null;
@@ -202,7 +213,7 @@ export class TestData extends ValidatedBase implements TestDataInterface {
   duration: number | null;
 
   @IsOptional()
-  @IsEnum(TEST_RESULT_STATUS)
+  @IsEnum(TEST_RESULT_STATUS, { message: enumError(TEST_RESULT_STATUS) })
   result: TEST_RESULT_STATUS | null;
 
   @IsBoolean()
@@ -223,7 +234,6 @@ export class TestData extends ValidatedBase implements TestDataInterface {
 
 // Should be the same as mocha-ldjson-> TestDataInterface, but don't want to import that whole thing
 export interface TestEventInterface {
-  type: TEST_EVENT_TYPES;
   data: TestDataInterface;
   stats: TestStatsInterface;
   timestamp: Date;
@@ -246,7 +256,6 @@ export class TestEvent extends ValidatedBase implements TestEventInterface {
   constructor(params: TestEventConstructorInterface, validate = true) {
     super();
 
-    this.type = params.type;
     this.data = new TestData(params.data, false);
     this.stats = new TestStats(params.stats, false);
     this.timestamp = toDate(params.timestamp);
@@ -256,9 +265,6 @@ export class TestEvent extends ValidatedBase implements TestEventInterface {
       this.validate();
     }
   }
-
-  @IsEnum(TEST_EVENT_TYPES)
-  type: TEST_EVENT_TYPES;
 
   @ValidateNested()
   @IsInstance(TestData)
