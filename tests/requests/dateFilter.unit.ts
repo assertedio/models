@@ -31,19 +31,13 @@ describe('date filter unit tests', () => {
     });
   });
 
-  it('full desc create', () => {
+  it('throws if wrong order', () => {
     const params = {
       start: '2018-01-01T01:00:00.000Z',
       end: '2018-01-01T00:00:00.000Z',
       order: 'desc' as any,
     };
 
-    const filter = new DateFilter(params);
-
-    expect(filter).to.eql({
-      start: new Date('2018-01-01T01:00:00.000Z'),
-      end: new Date('2018-01-01T00:00:00.000Z'),
-      order: 'desc',
-    });
+    expect(() => new DateFilter(params)).to.throw('if end and start, start must come before end');
   });
 });

@@ -44,12 +44,8 @@ export class DateFilter extends ValidatedBase implements DateFilterInterface {
     this.end = params.end ? toDate(params.end) : undefined;
     this.order = params.order || SORT_ORDER.ASC;
 
-    if (this.start && this.end && this.order === SORT_ORDER.ASC && this.start > this.end) {
-      throw new Err('if end and start are provided with asc order, start must come before end', HTTP_STATUS.BAD_REQUEST);
-    }
-
-    if (this.start && this.end && this.order === SORT_ORDER.DESC && this.start < this.end) {
-      throw new Err('if end and start are provided with desc order, start must come after end', HTTP_STATUS.BAD_REQUEST);
+    if (this.start && this.end && this.start > this.end) {
+      throw new Err('if end and start, start must come before end', HTTP_STATUS.BAD_REQUEST);
     }
 
     if (validate) {

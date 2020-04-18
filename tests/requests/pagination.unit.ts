@@ -6,8 +6,8 @@ describe('pagination unit tests', () => {
   it('create with defaults', () => {
     const pagination = new Pagination({});
     const expected = {
-      start: null,
-      end: null,
+      before: null,
+      after: null,
       limit: 20,
     };
     expect(pagination).to.eql(expected);
@@ -15,12 +15,12 @@ describe('pagination unit tests', () => {
 
   it('create with start', () => {
     const pagination = new Pagination({
-      start: '2018-01-01T00:00:00.000Z',
+      before: '2018-01-01T00:00:00.000Z',
       limit: 90,
     });
     const expected = {
-      start: new Date('2018-01-01T00:00:00.000Z'),
-      end: null,
+      before: new Date('2018-01-01T00:00:00.000Z'),
+      after: null,
       limit: 90,
     };
     expect(pagination).to.eql(expected);
@@ -28,12 +28,12 @@ describe('pagination unit tests', () => {
 
   it('create with end', () => {
     const pagination = new Pagination({
-      end: '2018-01-01T00:00:00.000Z',
+      after: '2018-01-01T00:00:00.000Z',
       limit: 90,
     });
     const expected = {
-      end: new Date('2018-01-01T00:00:00.000Z'),
-      start: null,
+      after: new Date('2018-01-01T00:00:00.000Z'),
+      before: null,
       limit: 90,
     };
     expect(pagination).to.eql(expected);
@@ -44,8 +44,8 @@ describe('pagination unit tests', () => {
   });
 
   it('start and end', () => {
-    expect(() => new Pagination({ start: '2018-01-01T00:00:00.000Z', end: '2018-01-01T00:00:00.000Z' })).to.throw(
-      'do not provide both start and end for pagination'
+    expect(() => new Pagination({ before: '2018-01-01T00:00:00.000Z', after: '2018-01-01T00:00:00.000Z' })).to.throw(
+      'do not provide both before and after for pagination'
     );
   });
 });

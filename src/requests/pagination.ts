@@ -6,14 +6,14 @@ import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export interface PaginationInterface {
-  start: Date | null;
-  end: Date | null;
+  before: Date | null;
+  after: Date | null;
   limit: number;
 }
 
 export interface PaginationConstructorInterface {
-  start?: Date | string | number;
-  end?: Date | string | number;
+  before?: Date | string | number;
+  after?: Date | string | number;
   limit?: number;
 }
 
@@ -33,12 +33,12 @@ export class Pagination extends ValidatedBase implements PaginationInterface {
   constructor(params: PaginationConstructorInterface, validate = true) {
     super();
 
-    this.start = params.start ? toDate(params.start) : null;
-    this.end = params.end ? toDate(params.end) : null;
+    this.before = params.before ? toDate(params.before) : null;
+    this.after = params.after ? toDate(params.after) : null;
     this.limit = params.limit || Pagination.CONSTANTS.DEFAULT_LIMIT;
 
-    if (this.start && this.end) {
-      throw new Err('do not provide both start and end for pagination', HTTP_STATUS.BAD_REQUEST);
+    if (this.before && this.after) {
+      throw new Err('do not provide both before and after for pagination', HTTP_STATUS.BAD_REQUEST);
     }
 
     if (validate) {
@@ -48,11 +48,11 @@ export class Pagination extends ValidatedBase implements PaginationInterface {
 
   @IsOptional()
   @IsDate()
-  start: Date | null;
+  before: Date | null;
 
   @IsOptional()
   @IsDate()
-  end: Date | null;
+  after: Date | null;
 
   @Min(0)
   @Max(Pagination.CONSTANTS.MAX_LIMIT)
