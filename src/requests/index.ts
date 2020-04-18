@@ -9,3 +9,4 @@ export * from './routineStatus';
 export * from './dateFilter';
 export * from './socketEvents';
 export * from './pagination';
+export * from './uptime';
