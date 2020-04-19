@@ -63,3 +63,48 @@ export class Uptime extends ValidatedBase implements UptimeInterface {
   @IsInstance(BucketStats)
   tests: BucketStatsInterface;
 }
+
+export interface UptimesInterface {
+  day: UptimeInterface;
+  week: UptimeInterface;
+  month: UptimeInterface;
+}
+
+export interface UptimesConstructorInterface {
+  day: UptimeConstructorInterface;
+  week: UptimeConstructorInterface;
+  month: UptimeConstructorInterface;
+}
+
+/**
+ * @class
+ */
+export class Uptimes extends ValidatedBase implements UptimesInterface {
+  /**
+   * @param {UptimeConstructorInterface} params
+   * @param {boolean} validate
+   */
+  constructor(params: UptimesConstructorInterface, validate = true) {
+    super();
+
+    this.day = new Uptime(params.day, false);
+    this.week = new Uptime(params.week, false);
+    this.month = new Uptime(params.month, false);
+
+    if (validate) {
+      this.validate();
+    }
+  }
+
+  @ValidateNested()
+  @IsInstance(Uptime)
+  day: UptimeInterface;
+
+  @ValidateNested()
+  @IsInstance(Uptime)
+  month: UptimeInterface;
+
+  @ValidateNested()
+  @IsInstance(Uptime)
+  week: UptimeInterface;
+}

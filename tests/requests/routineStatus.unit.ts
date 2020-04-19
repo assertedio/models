@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 
 import { CompletedRunRecord, Routine, RUN_STATUS } from '../../src/models';
 import { TIMELINE_EVENT_STATUS, TimelineEvent, TimelineEventConstructorInterface } from '../../src/models/timelineEvent';
-import { RoutineStatus, RUN_TYPE } from '../../src/requests';
+import { RoutineStatus, RoutineStatusConstructorInterface, RUN_TYPE } from '../../src/requests';
 
 describe('routine status unit', () => {
   it('create', () => {
@@ -75,7 +75,33 @@ describe('routine status unit', () => {
 
     const timelineEvent = new TimelineEvent(timelineParams);
 
-    const routineStatus = RoutineStatus.create(routine, timelineEvent, completeRunRecord);
+    const stats = {
+      passes: 1,
+      failures: 1,
+      total: 1,
+    };
+
+    const uptime = {
+      routineId: 'rout-id',
+      window: 'week' as any,
+      start: curDate,
+      end: curDate,
+      tests: stats,
+      runs: stats,
+    };
+
+    const params: Omit<RoutineStatusConstructorInterface, 'overallStatus'> = {
+      record: completeRunRecord,
+      status: timelineEvent,
+      downtime: timelineEvent,
+      uptimes: {
+        day: uptime,
+        week: uptime,
+        month: uptime,
+      },
+    };
+
+    const routineStatus = RoutineStatus.create(routine, params);
 
     const expected = {
       overallStatus: 'notPushed',
@@ -117,6 +143,74 @@ describe('routine status unit', () => {
         createdAt: curDate,
         updatedAt: curDate,
       },
+      downtime: {
+        id: 'foo-id',
+        start: curDate,
+        end: curDate,
+        projectId: 'project-id',
+        routineId: 'routine-id',
+        recordCount: 2,
+        durationMs: 0,
+        status: 'up',
+        createdAt: curDate,
+        updatedAt: curDate,
+      },
+      uptimes: {
+        day: {
+          window: 'week',
+          routineId: 'rout-id',
+          tests: {
+            availability: 1,
+            failures: 1,
+            passes: 1,
+            total: 1,
+          },
+          runs: {
+            availability: 1,
+            failures: 1,
+            passes: 1,
+            total: 1,
+          },
+          start: curDate,
+          end: curDate,
+        },
+        week: {
+          window: 'week',
+          routineId: 'rout-id',
+          tests: {
+            availability: 1,
+            failures: 1,
+            passes: 1,
+            total: 1,
+          },
+          runs: {
+            availability: 1,
+            failures: 1,
+            passes: 1,
+            total: 1,
+          },
+          start: curDate,
+          end: curDate,
+        },
+        month: {
+          window: 'week',
+          routineId: 'rout-id',
+          tests: {
+            availability: 1,
+            failures: 1,
+            passes: 1,
+            total: 1,
+          },
+          runs: {
+            availability: 1,
+            failures: 1,
+            passes: 1,
+            total: 1,
+          },
+          start: curDate,
+          end: curDate,
+        },
+      },
     };
 
     expect(routineStatus).to.eql(expected);
@@ -138,9 +232,9 @@ describe('routine status unit', () => {
 
     const timelineEvent = new TimelineEvent(timelineParams);
 
-    expect(RoutineStatus.create({ hasPackage: false, enabled: false } as any, null, null).overallStatus).to.eql('notPushed');
-    expect(RoutineStatus.create({ hasPackage: true, enabled: false } as any, null, null).overallStatus).to.eql('disabled');
-    expect(RoutineStatus.create({ hasPackage: true, enabled: true } as any, null, null).overallStatus).to.eql('noRecords');
-    expect(RoutineStatus.create({ hasPackage: true, enabled: true } as any, timelineEvent, null).overallStatus).to.eql('up');
+    expect(RoutineStatus.getOverallStatus({ hasPackage: false, enabled: false } as any, null)).to.eql('notPushed');
+    expect(RoutineStatus.getOverallStatus({ hasPackage: true, enabled: false } as any, null)).to.eql('disabled');
+    expect(RoutineStatus.getOverallStatus({ hasPackage: true, enabled: true } as any, null)).to.eql('noRecords');
+    expect(RoutineStatus.getOverallStatus({ hasPackage: true, enabled: true } as any, timelineEvent)).to.eql('up');
   });
 });
