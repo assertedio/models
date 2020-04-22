@@ -12,3 +12,4 @@ export * from './pagination';
 export * from './uptime';
 export * from './listResponse';
 export * from './search';
+export * from './notifications';
