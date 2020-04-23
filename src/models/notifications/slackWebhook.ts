@@ -1,7 +1,7 @@
 import { IsBoolean, IsDate, IsEnum, IsString, IsUrl, MaxLength } from 'class-validator';
 import Err from 'err';
 import HTTP_STATUS from 'http-status';
-import { isString } from 'lodash';
+import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
@@ -21,6 +21,9 @@ export interface SlackWebhookNotificationConfigConstructorInterface
 }
 
 export const isPossibleSlackWebhook = (input: string): boolean => isString(input) && input.startsWith('https://hooks.slack.com');
+
+export const isSlackWebhookConfig = (input: any): input is SlackWebhookNotificationConfigInterface =>
+  isObject(input) && (input as SlackWebhookNotificationConfigInterface).type === NOTIFICATION_TYPE.SLACK_WEBHOOK;
 
 /**
  * @class

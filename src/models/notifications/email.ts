@@ -1,5 +1,5 @@
 import { IsBoolean, IsDate, IsEmail, IsEnum, IsString, MaxLength } from 'class-validator';
-import { isString } from 'lodash';
+import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
@@ -16,6 +16,9 @@ export interface EmailNotificationConfigConstructorInterface extends Omit<EmailN
   createdAt: Date | string;
   updatedAt: Date | string;
 }
+
+export const isEmailConfig = (input: any): input is EmailNotificationConfigInterface =>
+  isObject(input) && (input as EmailNotificationConfigInterface).type === NOTIFICATION_TYPE.EMAIL;
 
 /**
  * @class

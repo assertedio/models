@@ -2,7 +2,7 @@ import { IsBoolean, IsDate, IsEnum, IsString, MaxLength } from 'class-validator'
 import Err from 'err';
 import HTTP_STATUS from 'http-status';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
-import { isString } from 'lodash';
+import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
@@ -25,6 +25,9 @@ export interface PhoneNotificationConfigConstructorInterface extends Omit<PhoneN
   createdAt: Date | string;
   updatedAt: Date | string;
 }
+
+export const isPhoneConfig = (input: any): input is PhoneNotificationConfigInterface =>
+  isObject(input) && (input as PhoneNotificationConfigInterface).type === NOTIFICATION_TYPE.PHONE;
 
 /**
  * @class
