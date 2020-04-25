@@ -4,4 +4,5 @@ export enum SOCKET_EVENTS {
   TIMELINE_UPSERT = 'timeline-upsert',
   BUCKET_UPSERT = 'bucket-upsert',
   UPSERT_NOTIFY_CONFIG = 'upsert-notify-config',
+  REMOVE_NOTIFY_CONFIG = 'remove-notify-config',
 }
