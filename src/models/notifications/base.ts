@@ -11,6 +11,7 @@ export const NOTIFICATION_CONSTANTS = {
 export interface BaseNotificationConfigInterface {
   id: string;
   routineId: string;
+  projectId: string;
   enabled: boolean;
   name: string;
   type: NOTIFICATION_TYPE;

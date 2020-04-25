@@ -49,6 +49,7 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
     this.name = params.name;
     this.enabled = params.enabled;
     this.routineId = params.routineId;
+    this.projectId = params.projectId;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
     this.email = params.email;
@@ -75,6 +76,9 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
   @IsString()
   readonly routineId: string;
 
+  @IsString()
+  readonly projectId: string;
+
   @IsDate()
   readonly createdAt: Date;
 
@@ -100,15 +104,17 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
   /**
    * Create instance of model
    * @param {string} routineId
+   * @param {string} projectId
    * @param {string} name
    * @param {string} email
    * @param {Date} curDate
    * @returns {EmailNotificationConfig}
    */
-  static create(routineId: string, name: string, email: string, curDate = DateTime.utc().toJSDate()): EmailNotificationConfig {
+  static create(routineId: string, projectId: string, name: string, email: string, curDate = DateTime.utc().toJSDate()): EmailNotificationConfig {
     return new EmailNotificationConfig({
       id: EmailNotificationConfig.generateId(routineId, email),
       routineId,
+      projectId,
       name,
       email,
       verified: false,

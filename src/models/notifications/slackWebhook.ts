@@ -55,6 +55,7 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
     this.enabled = params.enabled;
     this.verified = params.verified;
     this.routineId = params.routineId;
+    this.projectId = params.projectId;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
     this.webhookUrl = params.webhookUrl;
@@ -87,6 +88,9 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
   @IsString()
   readonly routineId: string;
 
+  @IsString()
+  readonly projectId: string;
+
   @IsDate()
   readonly createdAt: Date;
 
@@ -109,15 +113,23 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
   /**
    * Create instance of model
    * @param {string} routineId
+   * @param {string} projectId
    * @param {string} name
    * @param {string} webhookUrl
    * @param {Date} curDate
    * @returns {SlackWebhookNotificationConfig}
    */
-  static create(routineId: string, name: string, webhookUrl: string, curDate = DateTime.utc().toJSDate()): SlackWebhookNotificationConfig {
+  static create(
+    routineId: string,
+    projectId: string,
+    name: string,
+    webhookUrl: string,
+    curDate = DateTime.utc().toJSDate()
+  ): SlackWebhookNotificationConfig {
     return new SlackWebhookNotificationConfig({
       id: SlackWebhookNotificationConfig.generateId(routineId, webhookUrl),
       routineId,
+      projectId,
       name,
       webhookUrl,
       verified: false,

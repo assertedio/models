@@ -58,6 +58,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
     this.name = params.name;
     this.enabled = params.enabled;
     this.routineId = params.routineId;
+    this.projectId = params.projectId;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
 
@@ -86,6 +87,9 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
   @IsString()
   readonly routineId: string;
 
+  @IsString()
+  readonly projectId: string;
+
   @IsDate()
   readonly createdAt: Date;
 
@@ -112,9 +116,11 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
     return `${PhoneNotificationConfig.CONSTANTS.ID_PREFIX}${shorthash.unique(routineId + phone + notifyType)}`;
   }
 
+  /* eslint-disable max-params */
   /**
    * Create instance of model
    * @param {string} routineId
+   * @param {string} projectId
    * @param {string} name
    * @param {string} number
    * @param {PHONE_NOTIFY_TYPE} notifyType
@@ -123,6 +129,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
    */
   static create(
     routineId: string,
+    projectId: string,
     name: string,
     number: string,
     notifyType: PHONE_NOTIFY_TYPE,
@@ -147,9 +154,11 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
       verified: false,
       enabled: true,
       routineId,
+      projectId,
       name,
       createdAt: curDate,
       updatedAt: curDate,
     });
   }
+  /* eslint-enable max-params */
 }
