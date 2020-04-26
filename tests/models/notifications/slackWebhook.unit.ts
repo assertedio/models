@@ -13,6 +13,7 @@ describe('slackWebhook unit test', () => {
       id: 'nt-sw-Z1huH3N',
       type: 'slackWebhook',
       name: 'some-name',
+      verified: true,
       enabled: true,
       projectId: 'project-id',
       routineId: 'routine-id',

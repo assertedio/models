@@ -54,7 +54,6 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
     super();
 
     this.id = params.id;
-    this.type = NOTIFICATION_TYPE.PHONE;
     this.name = params.name;
     this.enabled = params.enabled;
     this.routineId = params.routineId;
@@ -75,7 +74,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
   readonly id: string;
 
   @IsEnum(NOTIFICATION_TYPE)
-  readonly type: NOTIFICATION_TYPE.PHONE;
+  readonly type: NOTIFICATION_TYPE.PHONE = NOTIFICATION_TYPE.PHONE;
 
   @MaxLength(NOTIFICATION_CONSTANTS.MAX_NAME_LENGTH)
   @IsString()

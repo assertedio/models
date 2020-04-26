@@ -45,7 +45,6 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
     super();
 
     this.id = params.id;
-    this.type = NOTIFICATION_TYPE.EMAIL;
     this.name = params.name;
     this.enabled = params.enabled;
     this.routineId = params.routineId;
@@ -64,7 +63,7 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
   readonly id: string;
 
   @IsEnum(NOTIFICATION_TYPE)
-  readonly type: NOTIFICATION_TYPE.EMAIL;
+  readonly type: NOTIFICATION_TYPE.EMAIL = NOTIFICATION_TYPE.EMAIL;
 
   @MaxLength(NOTIFICATION_CONSTANTS.MAX_NAME_LENGTH)
   @IsString()

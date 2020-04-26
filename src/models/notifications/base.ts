@@ -13,6 +13,7 @@ export interface BaseNotificationConfigInterface {
   routineId: string;
   projectId: string;
   enabled: boolean;
+  verified: boolean;
   name: string;
   type: NOTIFICATION_TYPE;
   createdAt: Date;

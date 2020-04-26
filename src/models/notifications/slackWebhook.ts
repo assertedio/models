@@ -14,7 +14,7 @@ export interface SlackWebhookNotificationConfigInterface extends BaseNotificatio
 }
 
 export interface SlackWebhookNotificationConfigConstructorInterface
-  extends Omit<SlackWebhookNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type'> {
+  extends Omit<SlackWebhookNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type' | 'verified'> {
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -49,7 +49,6 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
     super();
 
     this.id = params.id;
-    this.type = NOTIFICATION_TYPE.SLACK_WEBHOOK;
     this.name = params.name;
     this.enabled = params.enabled;
     this.routineId = params.routineId;
@@ -71,7 +70,7 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
   readonly id: string;
 
   @IsEnum(NOTIFICATION_TYPE)
-  readonly type: NOTIFICATION_TYPE.SLACK_WEBHOOK;
+  readonly type: NOTIFICATION_TYPE.SLACK_WEBHOOK = NOTIFICATION_TYPE.SLACK_WEBHOOK;
 
   @MaxLength(NOTIFICATION_CONSTANTS.MAX_NAME_LENGTH)
   @IsString()
@@ -79,6 +78,9 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
 
   @IsBoolean()
   enabled: boolean;
+
+  @IsBoolean()
+  readonly verified: boolean = true;
 
   @IsString()
   readonly routineId: string;
