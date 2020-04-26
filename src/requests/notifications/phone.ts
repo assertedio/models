@@ -1,4 +1,4 @@
-import { IsEnum, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsString, Length, Matches, MaxLength } from 'class-validator';
 
 import { NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from '../../models/notifications/base';
 import { PHONE_NOTIFY_TYPE } from '../../models/notifications/phone';
@@ -10,10 +10,12 @@ export interface CreatePhoneNotificationInterface {
   notifyType: PHONE_NOTIFY_TYPE;
   number: string;
   type: typeof NOTIFICATION_TYPE.PHONE;
+  code: string;
 }
 
 export type CreatePhoneNotificationConstructorInterface = Omit<CreatePhoneNotificationInterface, 'type'>;
 
+export const PHONE_CODE_REGEX = /^\d{6}$/;
 /**
  * @class
  */
@@ -29,6 +31,7 @@ export class CreatePhoneNotification extends ValidatedBase implements CreatePhon
     this.notifyType = params.notifyType;
     this.number = params.number;
     this.type = NOTIFICATION_TYPE.PHONE;
+    this.code = params.code;
 
     if (validate) {
       this.validate();
@@ -44,6 +47,13 @@ export class CreatePhoneNotification extends ValidatedBase implements CreatePhon
 
   @IsString()
   number: string;
+
+  /* eslint-disable no-magic-numbers */
+  @Matches(PHONE_CODE_REGEX, { message: 'Code must be 6 digits' })
+  @Length(6, undefined, { message: 'Code must be 6 digits' })
+  @IsString()
+  code: string;
+  /* eslint-enable no-magic-numbers */
 
   @IsEnum(NOTIFICATION_TYPE, { message: enumError({ email: NOTIFICATION_TYPE.PHONE }) })
   type: typeof NOTIFICATION_TYPE.PHONE;

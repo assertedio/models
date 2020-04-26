@@ -14,7 +14,6 @@ describe('slackWebhook unit test', () => {
       type: 'slackWebhook',
       name: 'some-name',
       enabled: true,
-      verified: false,
       projectId: 'project-id',
       routineId: 'routine-id',
       createdAt: curDate,

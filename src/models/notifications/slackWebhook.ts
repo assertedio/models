@@ -11,7 +11,6 @@ import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_T
 
 export interface SlackWebhookNotificationConfigInterface extends BaseNotificationConfigInterface {
   webhookUrl: string;
-  verified: boolean;
 }
 
 export interface SlackWebhookNotificationConfigConstructorInterface
@@ -53,7 +52,6 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
     this.type = NOTIFICATION_TYPE.SLACK_WEBHOOK;
     this.name = params.name;
     this.enabled = params.enabled;
-    this.verified = params.verified;
     this.routineId = params.routineId;
     this.projectId = params.projectId;
     this.createdAt = toDate(params.createdAt);
@@ -68,9 +66,6 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
       this.validate();
     }
   }
-
-  @IsBoolean()
-  verified: boolean;
 
   @IsString()
   readonly id: string;
@@ -132,7 +127,6 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
       projectId,
       name,
       webhookUrl,
-      verified: false,
       enabled: true,
       createdAt: curDate,
       updatedAt: curDate,
