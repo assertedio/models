@@ -11,9 +11,7 @@ describe('utils unit tests', () => {
       second = 'second',
     }
 
-    // eslint-disable-next-line require-jsdoc
     class WithEnum extends ValidatedBase {
-      // eslint-disable-next-line require-jsdoc
       constructor(params: any) {
         super();
         this.something = params.something;

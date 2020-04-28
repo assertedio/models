@@ -4,9 +4,7 @@ import { IsString } from 'class-validator';
 import { ValidatedBase } from '../../src';
 import { ListResponse } from '../../src/requests/listResponse';
 
-// eslint-disable-next-line require-jsdoc
 class TestClass extends ValidatedBase {
-  // eslint-disable-next-line require-jsdoc
   constructor(params) {
     super();
     this.foo = params.foo;

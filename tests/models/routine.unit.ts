@@ -65,7 +65,6 @@ describe('routine unit tests', () => {
       enabled: false,
     } as any;
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const throws = () => new Routine(params);
 
     expect(throws).to.throw('id must be a string');
@@ -85,7 +84,6 @@ describe('routine unit tests', () => {
       enabled: false,
     } as any;
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const throws = () => new Routine(params);
 
     expect(throws).to.throw('interval.value must be an integer number');
@@ -105,7 +103,6 @@ describe('routine unit tests', () => {
       enabled: false,
     } as any;
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const throws = () => new Routine(params);
 
     expect(throws).to.throw('interval.value must not be less than 1');
