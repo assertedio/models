@@ -14,3 +14,4 @@ export * from './listResponse';
 export * from './search';
 export * from './notifications';
 export * from './projectMember';
+export * from './deletionDetails';
