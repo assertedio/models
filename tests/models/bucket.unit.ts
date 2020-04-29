@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { CompletedRunRecord, RUN_STATUS } from '../../src/models';
+import { BucketStats, BucketStatsConstructorInterface, CompletedRunRecord, RUN_STATUS } from '../../src/models';
 import { Bucket, BUCKET_SIZE } from '../../src/models/bucket';
 import { RUN_TYPE } from '../../src/requests';
 
@@ -32,6 +32,17 @@ describe('bucket unit test', () => {
     expect(Bucket.getEnd(BUCKET_SIZE.HOUR, DateTime.fromISO('2018-01-01T00:46:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T00:59:59.999Z');
     expect(Bucket.getEnd(BUCKET_SIZE.HOUR, DateTime.fromISO('2018-01-01T00:59:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T00:59:59.999Z');
     expect(Bucket.getEnd(BUCKET_SIZE.HOUR, DateTime.fromISO('2018-01-01T01:05:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T01:59:59.999Z');
+  });
+
+  it('create empty bucket stats', () => {
+    const params: BucketStatsConstructorInterface = {
+      failures: 0,
+      passes: 0,
+      total: 0,
+    };
+
+    const bucketStats = new BucketStats(params);
+    expect(bucketStats).to.eql({ ...params, availability: 0 });
   });
 
   it('create bucket', () => {

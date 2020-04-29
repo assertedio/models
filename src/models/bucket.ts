@@ -50,7 +50,7 @@ export class BucketStats extends ValidatedBase implements BucketStatsInterface {
   constructor(params: BucketStatsConstructorInterface, validate = true) {
     super();
 
-    this.availability = params.passes / params.total;
+    this.availability = params.total > 0 ? params.passes / params.total : 0;
     this.failures = params.failures;
     this.passes = params.passes;
     this.total = params.total;
