@@ -11,7 +11,6 @@ describe('project plan model unit', () => {
       id: 'pp-id',
       planId: PLAN_IDS.FREE_V1,
       status: PLAN_STATUS.ACTIVE,
-      customerId: null,
       payment: null,
       subscription: null,
       limits: {
@@ -34,7 +33,6 @@ describe('project plan model unit', () => {
       id: 'pp-id',
       planId: PLAN_IDS.FREE_V1,
       status: PLAN_STATUS.ACTIVE,
-      customerId: 'customer-id',
       payment: {
         customerId: 'customer-id',
         delinquent: false,

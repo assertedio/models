@@ -41,7 +41,6 @@ export interface PlanInterface extends CreatePlanInterface {
   name: string;
   planId: PLAN_IDS;
   status: PLAN_STATUS;
-  customerId: string | null;
   payment: PaymentInterface | null;
   subscription: SubscriptionInterface | null;
   limits: LimitsInterface;
@@ -85,7 +84,6 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
 
     this.id = params.id;
     this.projectId = params.projectId;
-    this.customerId = params.customerId;
     this.limitsOverrides = params.limitsOverrides ? new PlanLimitsOverrides(params.limitsOverrides, false) : null;
     this.limits = new Limits(
       {
@@ -115,10 +113,6 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
 
   @IsString()
   projectId: string;
-
-  @IsOptional()
-  @IsString()
-  customerId: string | null;
 
   @IsInstance(Limits)
   @ValidateNested()
