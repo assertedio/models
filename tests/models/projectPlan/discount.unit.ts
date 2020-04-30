@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { PlanDiscount } from '../../../src/models/projectPlan/planDiscount';
+import { Discount } from '../../../src/models/projectPlan/discount';
 
 const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 
@@ -16,7 +16,7 @@ describe('plan discount model unit', () => {
       end: curDate,
     };
 
-    const planDiscount = new PlanDiscount(params);
+    const planDiscount = new Discount(params);
 
     expect(planDiscount).to.eql(params);
   });
@@ -31,9 +31,9 @@ describe('plan discount model unit', () => {
       end: curDate,
     };
 
-    const planDiscount = new PlanDiscount(params);
+    const planDiscount = new Discount(params);
 
-    expect(PlanDiscount.fromJson(JSON.parse(JSON.stringify(planDiscount)))).to.eql(planDiscount);
+    expect(Discount.fromJson(JSON.parse(JSON.stringify(planDiscount)))).to.eql(planDiscount);
   });
 
   it('to and from cache', () => {
@@ -46,8 +46,8 @@ describe('plan discount model unit', () => {
       end: curDate,
     };
 
-    const planDiscount = new PlanDiscount(params);
+    const planDiscount = new Discount(params);
 
-    expect(PlanDiscount.parseFromCache(PlanDiscount.stringifyForCache(planDiscount))).to.eql(planDiscount);
+    expect(Discount.parseFromCache(Discount.stringifyForCache(planDiscount))).to.eql(planDiscount);
   });
 });

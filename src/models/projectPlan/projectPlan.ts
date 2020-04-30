@@ -5,8 +5,9 @@ import { DeepPartial } from 'ts-essentials';
 
 import { enumError, toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
-import { PlanBilling, PlanBillingInterface } from './planBilling';
-import { PlanLimits, PlanLimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './planLimits';
+import { Limits, LimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './limits';
+import { Payment, PaymentInterface } from './payment';
+import { Subscription, SubscriptionInterface } from './subscription';
 
 export enum PLAN_IDS {
   FREE_V1 = 'free_v1',
@@ -41,8 +42,9 @@ export interface PlanInterface extends CreatePlanInterface {
   planId: PLAN_IDS;
   status: PLAN_STATUS;
   customerId: string | null;
-  billing: PlanBillingInterface | null;
-  limits: PlanLimitsInterface;
+  payment: PaymentInterface | null;
+  subscription: SubscriptionInterface | null;
+  limits: LimitsInterface;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -85,14 +87,15 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
     this.projectId = params.projectId;
     this.customerId = params.customerId;
     this.limitsOverrides = params.limitsOverrides ? new PlanLimitsOverrides(params.limitsOverrides, false) : null;
-    this.limits = new PlanLimits(
+    this.limits = new Limits(
       {
         cpuSeconds: this.limitsOverrides?.cpuSeconds || params.limits.cpuSeconds,
         smsCount: this.limitsOverrides?.smsCount || params.limits.smsCount || 0,
       },
       false
     );
-    this.billing = params.billing ? new PlanBilling(params.billing, false) : null;
+    this.payment = params.payment ? new Payment(params.payment, false) : null;
+    this.subscription = params.subscription ? new Subscription(params.subscription, false) : null;
     this.planId = params.planId;
     this.name = getPrettyName(params.planId);
     this.status = params.status;
@@ -117,9 +120,9 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
   @IsString()
   customerId: string | null;
 
-  @IsInstance(PlanLimits)
+  @IsInstance(Limits)
   @ValidateNested()
-  limits: PlanLimitsInterface;
+  limits: LimitsInterface;
 
   @IsOptional()
   @IsInstance(PlanLimitsOverrides)
@@ -133,9 +136,14 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
   status: PLAN_STATUS;
 
   @IsOptional()
-  @IsInstance(PlanBilling)
+  @IsInstance(Payment)
   @ValidateNested()
-  billing: PlanBillingInterface | null;
+  payment: PaymentInterface | null;
+
+  @IsOptional()
+  @IsInstance(Subscription)
+  @ValidateNested()
+  subscription: SubscriptionInterface | null;
 
   @IsDate()
   createdAt: Date;
@@ -187,7 +195,7 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
     const { createdAt, updatedAt, billing, ...rest } = object;
     return new ProjectPlan({
       ...rest,
-      billing: billing ? PlanBilling.fromJson(billing) : null,
+      payment: billing ? Payment.fromJson(billing) : null,
       createdAt: DateTime.fromISO(createdAt).toJSDate(),
       updatedAt: DateTime.fromISO(updatedAt).toJSDate(),
     });

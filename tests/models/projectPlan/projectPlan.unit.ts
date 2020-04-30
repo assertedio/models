@@ -12,7 +12,8 @@ describe('project plan model unit', () => {
       planId: PLAN_IDS.FREE_V1,
       status: PLAN_STATUS.ACTIVE,
       customerId: null,
-      billing: null,
+      payment: null,
+      subscription: null,
       limits: {
         smsCount: 10,
         cpuSeconds: 11,
@@ -34,15 +35,19 @@ describe('project plan model unit', () => {
       planId: PLAN_IDS.FREE_V1,
       status: PLAN_STATUS.ACTIVE,
       customerId: 'customer-id',
-      billing: {
-        subscriptionId: 'sub-id',
-        subscriptionItemId: 'sub-item-id',
+      payment: {
+        customerId: 'customer-id',
         delinquent: false,
-        priceCents: 0,
-        nextBillDate: curDate,
         last4: '9023',
         email: 'goo@bar.com',
         expiry: '12/12',
+        lastSyncAt: curDate,
+      },
+      subscription: {
+        quantity: 2,
+        subscriptionId: 'sub-id',
+        subscriptionItemId: 'sub-item-id',
+        nextBillDate: curDate,
         discount: {
           id: 'discount-id',
           name: 'discount-name',
@@ -51,6 +56,7 @@ describe('project plan model unit', () => {
           start: curDate,
           end: curDate,
         },
+        lastSyncAt: curDate,
       },
       limits: {
         smsCount: 10,

@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import { toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
 
-export interface PlanDiscountInterface {
+export interface DiscountInterface {
   amountOff: number | null;
   percentOff: number | null;
   name: string | null;
@@ -16,12 +16,12 @@ export interface PlanDiscountInterface {
 /**
  * @class
  */
-export class PlanDiscount extends ValidatedBase implements PlanDiscountInterface {
+export class Discount extends ValidatedBase implements DiscountInterface {
   /**
-   * @param {PlanDiscountInterface} params
+   * @param {DiscountInterface} params
    * @param {boolean} validate
    */
-  constructor(params: PlanDiscountInterface, validate = true) {
+  constructor(params: DiscountInterface, validate = true) {
     super();
 
     this.id = params.id;
@@ -60,21 +60,21 @@ export class PlanDiscount extends ValidatedBase implements PlanDiscountInterface
 
   /**
    * Stringify object
-   * @param {PlanDiscount} instance
+   * @param {Discount} instance
    * @returns {string}
    */
-  static stringifyForCache(instance: PlanDiscount): string {
+  static stringifyForCache(instance: Discount): string {
     return JSON.stringify(instance);
   }
 
   /**
    * Convert from JSON to instance
    * @param {object} object
-   * @returns {PlanDiscount}
+   * @returns {Discount}
    */
-  static fromJson(object): PlanDiscount {
+  static fromJson(object): Discount {
     const { start, end, ...rest } = object;
-    return new PlanDiscount({
+    return new Discount({
       ...rest,
       start: start ? DateTime.fromISO(start).toJSDate() : undefined,
       end: end ? DateTime.fromISO(end).toJSDate() : undefined,
@@ -84,9 +84,9 @@ export class PlanDiscount extends ValidatedBase implements PlanDiscountInterface
   /**
    * Parse from cache
    * @param {string} stringified
-   * @returns {PlanDiscount}
+   * @returns {Discount}
    */
-  static parseFromCache(stringified: string): PlanDiscount {
-    return PlanDiscount.fromJson(JSON.parse(stringified));
+  static parseFromCache(stringified: string): Discount {
+    return Discount.fromJson(JSON.parse(stringified));
   }
 }

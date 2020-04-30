@@ -2,7 +2,7 @@ import { IsInt, IsOptional, Min } from 'class-validator';
 
 import { ValidatedBase } from '../../validatedBase';
 
-export interface PlanLimitsInterface {
+export interface LimitsInterface {
   smsCount: number;
   cpuSeconds: number;
 }
@@ -10,12 +10,12 @@ export interface PlanLimitsInterface {
 /**
  * @class
  */
-export class PlanLimits extends ValidatedBase implements PlanLimitsInterface {
+export class Limits extends ValidatedBase implements LimitsInterface {
   /**
-   * @param {PlanLimitsInterface} params
+   * @param {LimitsInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: PlanLimitsInterface, validate = true) {
+  constructor(params: LimitsInterface, validate = true) {
     super();
 
     this.cpuSeconds = params.cpuSeconds;
