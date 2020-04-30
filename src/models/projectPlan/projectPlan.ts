@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { IsDate, IsEnum, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { omit, startCase } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
@@ -40,12 +40,17 @@ export interface PlanInterface extends CreatePlanInterface {
   name: string;
   planId: PLAN_IDS;
   status: PLAN_STATUS;
-  extraSms: number;
   customerId: string | null;
   billing: PlanBillingInterface | null;
   limits: PlanLimitsInterface;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface UsageAndLimitInterface {
+  planUsed: number;
+  extraRemaining: number;
+  limit: number;
 }
 
 const CONSTANTS = {
@@ -79,12 +84,11 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
     this.id = params.id;
     this.projectId = params.projectId;
     this.customerId = params.customerId;
-    this.extraSms = params.extraSms || 0;
     this.limitsOverrides = params.limitsOverrides ? new PlanLimitsOverrides(params.limitsOverrides, false) : null;
     this.limits = new PlanLimits(
       {
         cpuSeconds: this.limitsOverrides?.cpuSeconds || params.limits.cpuSeconds,
-        smsCount: (this.limitsOverrides?.smsCount || params.limits.smsCount || 0) + this.extraSms,
+        smsCount: this.limitsOverrides?.smsCount || params.limits.smsCount || 0,
       },
       false
     );
@@ -124,10 +128,6 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
 
   @IsEnum(PLAN_IDS, { message: enumError(PLAN_IDS) })
   planId: PLAN_IDS;
-
-  @Min(0)
-  @IsInt()
-  extraSms: number;
 
   @IsEnum(PLAN_STATUS, { message: enumError(PLAN_STATUS) })
   status: PLAN_STATUS;
