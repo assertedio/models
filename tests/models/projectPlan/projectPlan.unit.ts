@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { PLAN_IDS, PLAN_STATUS, ProjectPlan } from '../../../src/models/projectPlan/projectPlan';
+import { PLAN_STATUS, ProjectPlan } from '../../../src/models/projectPlan/projectPlan';
 
 const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 
@@ -9,7 +9,8 @@ describe('project plan model unit', () => {
   it('minimal create', () => {
     const params = {
       id: 'pp-id',
-      planId: PLAN_IDS.FREE_V1,
+      planId: 'plan-id',
+      name: 'some-name',
       status: PLAN_STATUS.ACTIVE,
       payment: null,
       subscription: null,
@@ -25,13 +26,14 @@ describe('project plan model unit', () => {
 
     const projectPlan = new ProjectPlan(params);
 
-    expect(projectPlan).to.eql({ ...params, name: 'Free' });
+    expect(projectPlan).to.eql(params);
   });
 
   it('full create', () => {
     const params = {
       id: 'pp-id',
-      planId: PLAN_IDS.FREE_V1,
+      planId: 'plan-id',
+      name: 'some-name',
       status: PLAN_STATUS.ACTIVE,
       payment: {
         customerId: 'customer-id',
@@ -71,6 +73,6 @@ describe('project plan model unit', () => {
 
     const projectPlan = new ProjectPlan(params);
 
-    expect(projectPlan).to.eql({ ...params, name: 'Free', limits: { smsCount: 32, cpuSeconds: 34 } });
+    expect(projectPlan).to.eql({ ...params, limits: { smsCount: 32, cpuSeconds: 34 } });
   });
 });

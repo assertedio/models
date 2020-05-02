@@ -1,13 +1,11 @@
-import { IsEmail, IsEnum, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
-import { PLAN_IDS } from '../models/projectPlan';
-import { enumError } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export interface UpsertBillingInterface {
   email: string;
   source: string;
-  planId: PLAN_IDS;
+  planId: string;
 }
 
 /**
@@ -30,8 +28,8 @@ export class UpsertBilling extends ValidatedBase implements UpsertBillingInterfa
     }
   }
 
-  @IsEnum(PLAN_IDS, { message: enumError(PLAN_IDS) })
-  planId: PLAN_IDS;
+  @IsString()
+  planId: string;
 
   @IsEmail()
   email: string;

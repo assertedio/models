@@ -1,5 +1,5 @@
 import { IsDate, IsEnum, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { omit, startCase } from 'lodash';
+import { omit } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
@@ -8,22 +8,6 @@ import { ValidatedBase } from '../../validatedBase';
 import { Limits, LimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './limits';
 import { Payment, PaymentInterface } from './payment';
 import { Subscription, SubscriptionInterface } from './subscription';
-
-export enum PLAN_IDS {
-  FREE_V1 = 'free_v1',
-  STANDARD_V1 = 'standard_v1',
-  PRO_V1 = 'pro_v1',
-}
-
-export const PLAN_ID_VALUES = Object.values(PLAN_IDS);
-
-export const getPrettyName = (planId) => {
-  if (!PLAN_ID_VALUES.includes(planId)) {
-    throw new Error(`${planId} is not a valid planId`);
-  }
-
-  return startCase(planId.split('_v')[0]);
-};
 
 export enum PLAN_STATUS {
   FAILED_PAYMENT = 'failedPayment',
@@ -39,7 +23,7 @@ export interface CreateProjectPlanInterface {
 export interface ProjectPlanInterface extends CreateProjectPlanInterface {
   id: string;
   name: string;
-  planId: PLAN_IDS;
+  planId: string;
   status: PLAN_STATUS;
   payment: PaymentInterface | null;
   subscription: SubscriptionInterface | null;
@@ -79,7 +63,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @param {ProjectPlanInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: Omit<ProjectPlanInterface, 'name'>, validate = true) {
+  constructor(params: ProjectPlanInterface, validate = true) {
     super();
 
     this.id = params.id;
@@ -95,7 +79,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
     this.payment = params.payment ? new Payment(params.payment, false) : null;
     this.subscription = params.subscription ? new Subscription(params.subscription, false) : null;
     this.planId = params.planId;
-    this.name = getPrettyName(params.planId);
+    this.name = params.name;
     this.status = params.status;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
@@ -123,8 +107,8 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
   @ValidateNested()
   limitsOverrides: PlanLimitsOverridesInterface | null;
 
-  @IsEnum(PLAN_IDS, { message: enumError(PLAN_IDS) })
-  planId: PLAN_IDS;
+  @IsString()
+  planId: string;
 
   @IsEnum(PLAN_STATUS, { message: enumError(PLAN_STATUS) })
   status: PLAN_STATUS;
