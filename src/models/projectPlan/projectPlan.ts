@@ -31,12 +31,12 @@ export enum PLAN_STATUS {
   CANCELLED = 'cancelled',
 }
 
-export interface CreatePlanInterface {
+export interface CreateProjectPlanInterface {
   projectId: string;
   limitsOverrides: PlanLimitsOverridesInterface | null;
 }
 
-export interface PlanInterface extends CreatePlanInterface {
+export interface ProjectPlanInterface extends CreateProjectPlanInterface {
   id: string;
   name: string;
   planId: PLAN_IDS;
@@ -72,14 +72,14 @@ export interface InvoiceInterface {
 /**
  * @class
  */
-export class ProjectPlan extends ValidatedBase implements PlanInterface {
+export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
   static CONSTANTS = CONSTANTS;
 
   /**
-   * @param {PlanInterface} params
+   * @param {ProjectPlanInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: Omit<PlanInterface, 'name'>, validate = true) {
+  constructor(params: Omit<ProjectPlanInterface, 'name'>, validate = true) {
     super();
 
     this.id = params.id;
