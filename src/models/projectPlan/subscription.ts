@@ -1,4 +1,4 @@
-import { IsDate, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
 import { toDate } from '../../utils';
@@ -6,7 +6,6 @@ import { ValidatedBase } from '../../validatedBase';
 import { Discount, DiscountInterface } from './discount';
 
 export interface SubscriptionInterface {
-  quantity: number;
   nextBillDate: Date | null;
   discount: DiscountInterface | null;
   subscriptionId: string;
@@ -25,7 +24,6 @@ export class Subscription extends ValidatedBase implements SubscriptionInterface
   constructor(params: SubscriptionInterface, validate = true) {
     super();
 
-    this.quantity = params.quantity;
     this.subscriptionId = params.subscriptionId;
     this.subscriptionItemId = params.subscriptionItemId;
     this.nextBillDate = params.nextBillDate ? toDate(params.nextBillDate) : params.nextBillDate;
@@ -36,10 +34,6 @@ export class Subscription extends ValidatedBase implements SubscriptionInterface
       this.validate();
     }
   }
-
-  @Min(1)
-  @IsInt()
-  quantity: number;
 
   @ValidateNested()
   @IsInstance(Discount)

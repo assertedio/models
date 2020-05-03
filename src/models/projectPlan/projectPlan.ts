@@ -40,8 +40,6 @@ export interface UsageAndLimitInterface {
 
 const CONSTANTS = {
   ID_PREFIX: 'pl-',
-  OMITTED_DB_PROPERTIES: ['name', 'limits', 'status', 'billing'],
-  FREE_PLAN_SECONDS: 2,
 };
 
 export interface InvoiceInterface {
@@ -135,7 +133,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @returns {object}
    */
   clean(): object {
-    return omit(this, ['billing.subscriptionId', 'billing.subscriptionItemId', 'billing.customerId']);
+    return omit(this, ['subscription.subscriptionId', 'subscription.subscriptionItemId', 'payment.customerId']);
   }
 
   /**
@@ -153,7 +151,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @returns {object}
    */
   static forDb(instance: DeepPartial<ProjectPlan>): object {
-    return omit(instance, CONSTANTS.OMITTED_DB_PROPERTIES);
+    return omit(instance, 'limits');
   }
 
   /**

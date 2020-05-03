@@ -8,7 +8,6 @@ const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 describe('subscription model unit', () => {
   it('create', () => {
     const params: SubscriptionInterface = {
-      quantity: 1,
       subscriptionId: 'sub-id',
       subscriptionItemId: 'sub-item-id',
       nextBillDate: curDate,
@@ -30,7 +29,6 @@ describe('subscription model unit', () => {
 
   it('minimal create', () => {
     const params: SubscriptionInterface = {
-      quantity: 1,
       subscriptionId: 'sub-id',
       subscriptionItemId: 'sub-item-id',
       nextBillDate: null,
@@ -45,7 +43,6 @@ describe('subscription model unit', () => {
 
   it('to and from db', () => {
     const params: SubscriptionInterface = {
-      quantity: 1,
       subscriptionId: 'sub-id',
       subscriptionItemId: 'sub-item-id',
       nextBillDate: null,
@@ -60,7 +57,6 @@ describe('subscription model unit', () => {
 
   it('to and from cache', () => {
     const params: SubscriptionInterface = {
-      quantity: 1,
       subscriptionId: 'sub-id',
       subscriptionItemId: 'sub-item-id',
       nextBillDate: null,
