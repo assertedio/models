@@ -17,6 +17,7 @@ describe('project plan model unit', () => {
       limits: {
         smsCount: 10,
         cpuSeconds: 11,
+        routines: 3,
       },
       limitsOverrides: null,
       projectId: 'project-id',
@@ -61,10 +62,12 @@ describe('project plan model unit', () => {
       limits: {
         smsCount: 10,
         cpuSeconds: 11,
+        routines: 3,
       },
       limitsOverrides: {
         smsCount: 32,
         cpuSeconds: 34,
+        routines: 21,
       },
       projectId: 'project-id',
       createdAt: curDate,
@@ -73,6 +76,6 @@ describe('project plan model unit', () => {
 
     const projectPlan = new ProjectPlan(params);
 
-    expect(projectPlan).to.eql({ ...params, limits: { smsCount: 32, cpuSeconds: 34 } });
+    expect(projectPlan).to.eql({ ...params, limits: { smsCount: 32, cpuSeconds: 34, routines: 21 } });
   });
 });

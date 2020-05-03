@@ -73,6 +73,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
       {
         cpuSeconds: this.limitsOverrides?.cpuSeconds || params.limits.cpuSeconds,
         smsCount: this.limitsOverrides?.smsCount || params.limits.smsCount || 0,
+        routines: this.limitsOverrides?.routines || params.limits.routines || 1,
       },
       false
     );
