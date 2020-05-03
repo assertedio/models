@@ -22,7 +22,7 @@ export interface PlanInterface {
   price: number;
   currency: string;
   description: string;
-  metadata: {
+  limits: {
     seconds: number;
     sms: number;
     routines: number;
@@ -55,7 +55,7 @@ export class Plan extends ValidatedBase implements PlanInterface {
     this.price = params.price;
     this.currency = params.currency;
     this.description = params.description;
-    this.metadata = params.metadata;
+    this.limits = params.limits;
 
     if (validate) {
       this.validate();
@@ -85,5 +85,5 @@ export class Plan extends ValidatedBase implements PlanInterface {
   description: string;
 
   @Allow()
-  metadata: { seconds: number; sms: number; routines: number };
+  limits: { seconds: number; sms: number; routines: number };
 }
