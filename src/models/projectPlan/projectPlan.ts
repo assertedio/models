@@ -22,7 +22,6 @@ export interface CreateProjectPlanInterface {
 
 export interface ProjectPlanInterface extends CreateProjectPlanInterface {
   id: string;
-  name: string;
   planId: string;
   status: PLAN_STATUS;
   payment: PaymentInterface | null;
@@ -78,7 +77,6 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
     this.payment = params.payment ? new Payment(params.payment, false) : null;
     this.subscription = params.subscription ? new Subscription(params.subscription, false) : null;
     this.planId = params.planId;
-    this.name = params.name;
     this.status = params.status;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
@@ -90,9 +88,6 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   @IsString()
   id: string;
-
-  @IsString()
-  name: string;
 
   @IsString()
   projectId: string;

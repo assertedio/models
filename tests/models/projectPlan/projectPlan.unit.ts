@@ -11,7 +11,6 @@ describe('project plan model unit', () => {
     const params = {
       id: 'pp-id',
       planId: 'plan-id',
-      name: 'some-name',
       status: PLAN_STATUS.ACTIVE,
       payment: null,
       subscription: null,
@@ -35,7 +34,6 @@ describe('project plan model unit', () => {
     const params = {
       id: 'pp-id',
       planId: 'plan-id',
-      name: 'some-name',
       status: PLAN_STATUS.ACTIVE,
       payment: {
         customerId: 'customer-id',
@@ -83,7 +81,6 @@ describe('project plan model unit', () => {
     const params = {
       id: 'pp-id',
       planId: 'plan-id',
-      name: 'some-name',
       status: PLAN_STATUS.ACTIVE,
       payment: {
         customerId: 'customer-id',
@@ -131,7 +128,6 @@ describe('project plan model unit', () => {
     const params = {
       id: 'pp-id',
       planId: 'plan-id',
-      name: 'some-name',
       status: PLAN_STATUS.ACTIVE,
       payment: {
         customerId: 'customer-id',
