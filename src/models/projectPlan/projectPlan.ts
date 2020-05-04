@@ -32,9 +32,19 @@ export interface ProjectPlanInterface extends CreateProjectPlanInterface {
 }
 
 export interface UsageAndLimitInterface {
-  planUsed: number;
-  extraRemaining: number;
-  limit: number;
+  sms: {
+    planUsed: number;
+    extraRemaining: number;
+    limit: number;
+  };
+  routines: {
+    count: number;
+    limit: number;
+  };
+  seconds: {
+    allocated: number;
+    limit: number;
+  };
 }
 
 const CONSTANTS = {
