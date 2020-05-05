@@ -1,6 +1,5 @@
 import { IsDate, IsEnum, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { omit } from 'lodash';
-import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
 import { enumError, toDate } from '../../utils';
@@ -174,13 +173,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @returns {Plan}
    */
   static fromJson(object): ProjectPlan {
-    const { createdAt, updatedAt, billing, ...rest } = object;
-    return new ProjectPlan({
-      ...rest,
-      payment: billing ? Payment.fromJson(billing) : null,
-      createdAt: DateTime.fromISO(createdAt).toJSDate(),
-      updatedAt: DateTime.fromISO(updatedAt).toJSDate(),
-    });
+    return new ProjectPlan(object);
   }
 
   /**

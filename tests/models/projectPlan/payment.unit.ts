@@ -35,34 +35,4 @@ describe('plan billing model unit', () => {
 
     expect(payment).to.eql(params);
   });
-
-  it('to and from db', () => {
-    const params: PaymentInterface = {
-      customerId: 'customer-id',
-      delinquent: false,
-      last4: null,
-      email: 'goo@bar.com',
-      expiry: null,
-      lastSyncAt: curDate,
-    };
-
-    const payment = new Payment(params);
-
-    expect(Payment.fromJson(JSON.parse(JSON.stringify(payment)))).to.eql(payment);
-  });
-
-  it('to and from cache', () => {
-    const params: PaymentInterface = {
-      customerId: 'customer-id',
-      delinquent: false,
-      last4: null,
-      email: 'goo@bar.com',
-      expiry: null,
-      lastSyncAt: curDate,
-    };
-
-    const payment = new Payment(params);
-
-    expect(Payment.parseFromCache(Payment.stringifyForCache(payment))).to.eql(payment);
-  });
 });

@@ -182,4 +182,51 @@ describe('project plan model unit', () => {
       )
     );
   });
+
+  it('reads and writes to cache', () => {
+    const params = {
+      id: 'pp-id',
+      planId: 'plan-id',
+      status: PLAN_STATUS.ACTIVE,
+      payment: {
+        customerId: 'customer-id',
+        delinquent: false,
+        last4: '9023',
+        email: 'goo@bar.com',
+        expiry: '12/12',
+        lastSyncAt: curDate,
+      },
+      subscription: {
+        subscriptionId: 'sub-id',
+        subscriptionItemId: 'sub-item-id',
+        nextBillDate: curDate,
+        discount: {
+          id: 'discount-id',
+          name: 'discount-name',
+          amountOff: 0.1,
+          percentOff: 0.9,
+          start: curDate,
+          end: curDate,
+        },
+        lastSyncAt: curDate,
+      },
+      limits: {
+        smsCount: 10,
+        cpuSeconds: 11,
+        routines: 3,
+      },
+      limitsOverrides: {
+        smsCount: 32,
+        cpuSeconds: 34,
+        routines: 21,
+      },
+      projectId: 'project-id',
+      createdAt: curDate,
+      updatedAt: curDate,
+    };
+
+    const projectPlan = new ProjectPlan(params);
+
+    expect(ProjectPlan.parseFromCache(ProjectPlan.stringifyForCache(projectPlan))).to.eql(projectPlan);
+  });
 });

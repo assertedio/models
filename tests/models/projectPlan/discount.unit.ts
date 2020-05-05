@@ -20,34 +20,4 @@ describe('plan discount model unit', () => {
 
     expect(planDiscount).to.eql(params);
   });
-
-  it('to and from db', () => {
-    const params = {
-      id: 'discount-id',
-      name: 'discount-name',
-      amountOff: 0.1,
-      percentOff: 0.9,
-      start: curDate,
-      end: curDate,
-    };
-
-    const planDiscount = new Discount(params);
-
-    expect(Discount.fromJson(JSON.parse(JSON.stringify(planDiscount)))).to.eql(planDiscount);
-  });
-
-  it('to and from cache', () => {
-    const params = {
-      id: 'discount-id',
-      name: 'discount-name',
-      amountOff: 0.1,
-      percentOff: 0.9,
-      start: curDate,
-      end: curDate,
-    };
-
-    const planDiscount = new Discount(params);
-
-    expect(Discount.parseFromCache(Discount.stringifyForCache(planDiscount))).to.eql(planDiscount);
-  });
 });

@@ -40,32 +40,4 @@ describe('subscription model unit', () => {
 
     expect(subscription).to.eql(params);
   });
-
-  it('to and from db', () => {
-    const params: SubscriptionInterface = {
-      subscriptionId: 'sub-id',
-      subscriptionItemId: 'sub-item-id',
-      nextBillDate: null,
-      discount: null,
-      lastSyncAt: curDate,
-    };
-
-    const subscription = new Subscription(params);
-
-    expect(Subscription.fromJson(JSON.parse(JSON.stringify(subscription)))).to.eql(subscription);
-  });
-
-  it('to and from cache', () => {
-    const params: SubscriptionInterface = {
-      subscriptionId: 'sub-id',
-      subscriptionItemId: 'sub-item-id',
-      nextBillDate: null,
-      discount: null,
-      lastSyncAt: curDate,
-    };
-
-    const subscription = new Subscription(params);
-
-    expect(Subscription.parseFromCache(Subscription.stringifyForCache(subscription))).to.eql(subscription);
-  });
 });

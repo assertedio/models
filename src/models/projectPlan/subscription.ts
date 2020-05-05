@@ -1,5 +1,4 @@
 import { IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { DateTime } from 'luxon';
 
 import { toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
@@ -52,36 +51,4 @@ export class Subscription extends ValidatedBase implements SubscriptionInterface
 
   @IsDate()
   lastSyncAt: Date;
-
-  /**
-   * Stringify object
-   * @param {Subscription} instance
-   * @returns {string}
-   */
-  static stringifyForCache(instance: Subscription): string {
-    return JSON.stringify(instance);
-  }
-
-  /**
-   * Convert from JSON to instance
-   * @param {object} object
-   * @returns {Subscription}
-   */
-  static fromJson(object): Subscription {
-    const { nextBillDate, discount, ...rest } = object;
-    return new Subscription({
-      ...rest,
-      discount: discount ? Discount.fromJson(discount) : null,
-      nextBillDate: nextBillDate ? DateTime.fromISO(nextBillDate).toJSDate() : null,
-    });
-  }
-
-  /**
-   * Parse from cache
-   * @param {string} stringified
-   * @returns {Subscription}
-   */
-  static parseFromCache(stringified: string): Subscription {
-    return Subscription.fromJson(JSON.parse(stringified));
-  }
 }
