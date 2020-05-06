@@ -6,4 +6,5 @@ export enum SOCKET_EVENTS {
   UPSERT_NOTIFY_CONFIG = 'upsert-notify-config',
   REMOVE_NOTIFY_CONFIG = 'remove-notify-config',
   PROJECT_UPDATES = 'project-updates',
+  PROJECT_PLAN_UPDATES = 'project-plan-updates',
 }

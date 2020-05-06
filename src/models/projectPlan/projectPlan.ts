@@ -1,28 +1,12 @@
-import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
-import { omit, startCase } from 'lodash';
-import { DateTime } from 'luxon';
+import { IsDate, IsEnum, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { omit } from 'lodash';
 import { DeepPartial } from 'ts-essentials';
 
 import { enumError, toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
-import { PlanBilling, PlanBillingInterface } from './planBilling';
-import { PlanLimits, PlanLimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './planLimits';
-
-export enum PLAN_IDS {
-  FREE_V1 = 'free_v1',
-  STANDARD_V1 = 'standard_v1',
-  PRO_V1 = 'pro_v1',
-}
-
-export const PLAN_ID_VALUES = Object.values(PLAN_IDS);
-
-export const getPrettyName = (planId) => {
-  if (!PLAN_ID_VALUES.includes(planId)) {
-    throw new Error(`${planId} is not a valid planId`);
-  }
-
-  return startCase(planId.split('_v')[0]);
-};
+import { Limits, LimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './limits';
+import { Payment, PaymentInterface } from './payment';
+import { Subscription, SubscriptionInterface } from './subscription';
 
 export enum PLAN_STATUS {
   FAILED_PAYMENT = 'failedPayment',
@@ -30,28 +14,40 @@ export enum PLAN_STATUS {
   CANCELLED = 'cancelled',
 }
 
-export interface CreatePlanInterface {
+export interface CreateProjectPlanInterface {
   projectId: string;
   limitsOverrides: PlanLimitsOverridesInterface | null;
 }
 
-export interface PlanInterface extends CreatePlanInterface {
+export interface ProjectPlanInterface extends CreateProjectPlanInterface {
   id: string;
-  name: string;
-  planId: PLAN_IDS;
+  planId: string;
   status: PLAN_STATUS;
-  extraSms: number;
-  customerId: string | null;
-  billing: PlanBillingInterface | null;
-  limits: PlanLimitsInterface;
+  payment: PaymentInterface | null;
+  subscription: SubscriptionInterface | null;
+  limits: LimitsInterface;
   createdAt: Date;
   updatedAt: Date;
 }
 
+export interface UsageAndLimitInterface {
+  sms: {
+    planUsed: number;
+    extraRemaining: number;
+    limit: number;
+  };
+  routines: {
+    count: number;
+    limit: number;
+  };
+  seconds: {
+    allocated: number;
+    limit: number;
+  };
+}
+
 const CONSTANTS = {
   ID_PREFIX: 'pl-',
-  OMITTED_DB_PROPERTIES: ['name', 'limits', 'status', 'billing'],
-  FREE_PLAN_SECONDS: 2,
 };
 
 export interface InvoiceInterface {
@@ -66,31 +62,30 @@ export interface InvoiceInterface {
 /**
  * @class
  */
-export class ProjectPlan extends ValidatedBase implements PlanInterface {
+export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
   static CONSTANTS = CONSTANTS;
 
   /**
-   * @param {PlanInterface} params
+   * @param {ProjectPlanInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: Omit<PlanInterface, 'name'>, validate = true) {
+  constructor(params: ProjectPlanInterface, validate = true) {
     super();
 
     this.id = params.id;
     this.projectId = params.projectId;
-    this.customerId = params.customerId;
-    this.extraSms = params.extraSms || 0;
     this.limitsOverrides = params.limitsOverrides ? new PlanLimitsOverrides(params.limitsOverrides, false) : null;
-    this.limits = new PlanLimits(
+    this.limits = new Limits(
       {
         cpuSeconds: this.limitsOverrides?.cpuSeconds || params.limits.cpuSeconds,
-        smsCount: (this.limitsOverrides?.smsCount || params.limits.smsCount || 0) + this.extraSms,
+        smsCount: this.limitsOverrides?.smsCount || params.limits.smsCount || 0,
+        routines: this.limitsOverrides?.routines || params.limits.routines || 1,
       },
       false
     );
-    this.billing = params.billing ? new PlanBilling(params.billing, false) : null;
+    this.payment = params.payment ? new Payment(params.payment, false) : null;
+    this.subscription = params.subscription ? new Subscription(params.subscription, false) : null;
     this.planId = params.planId;
-    this.name = getPrettyName(params.planId);
     this.status = params.status;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
@@ -104,38 +99,32 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
   id: string;
 
   @IsString()
-  name: string;
-
-  @IsString()
   projectId: string;
 
-  @IsOptional()
-  @IsString()
-  customerId: string | null;
-
-  @IsInstance(PlanLimits)
+  @IsInstance(Limits)
   @ValidateNested()
-  limits: PlanLimitsInterface;
+  limits: LimitsInterface;
 
   @IsOptional()
   @IsInstance(PlanLimitsOverrides)
   @ValidateNested()
   limitsOverrides: PlanLimitsOverridesInterface | null;
 
-  @IsEnum(PLAN_IDS, { message: enumError(PLAN_IDS) })
-  planId: PLAN_IDS;
-
-  @Min(0)
-  @IsInt()
-  extraSms: number;
+  @IsString()
+  planId: string;
 
   @IsEnum(PLAN_STATUS, { message: enumError(PLAN_STATUS) })
   status: PLAN_STATUS;
 
   @IsOptional()
-  @IsInstance(PlanBilling)
+  @IsInstance(Payment)
   @ValidateNested()
-  billing: PlanBillingInterface | null;
+  payment: PaymentInterface | null;
+
+  @IsOptional()
+  @IsInstance(Subscription)
+  @ValidateNested()
+  subscription: SubscriptionInterface | null;
 
   @IsDate()
   createdAt: Date;
@@ -148,7 +137,7 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
    * @returns {object}
    */
   clean(): object {
-    return omit(this, ['billing.subscriptionId', 'billing.subscriptionItemId', 'billing.customerId']);
+    return omit(this, ['subscription.subscriptionId', 'subscription.subscriptionItemId', 'payment.customerId']);
   }
 
   /**
@@ -166,7 +155,7 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
    * @returns {object}
    */
   static forDb(instance: DeepPartial<ProjectPlan>): object {
-    return omit(instance, CONSTANTS.OMITTED_DB_PROPERTIES);
+    return omit(instance, 'limits');
   }
 
   /**
@@ -184,13 +173,7 @@ export class ProjectPlan extends ValidatedBase implements PlanInterface {
    * @returns {Plan}
    */
   static fromJson(object): ProjectPlan {
-    const { createdAt, updatedAt, billing, ...rest } = object;
-    return new ProjectPlan({
-      ...rest,
-      billing: billing ? PlanBilling.fromJson(billing) : null,
-      createdAt: DateTime.fromISO(createdAt).toJSDate(),
-      updatedAt: DateTime.fromISO(updatedAt).toJSDate(),
-    });
+    return new ProjectPlan(object);
   }
 
   /**

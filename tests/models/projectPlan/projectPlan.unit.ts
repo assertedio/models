@@ -1,7 +1,8 @@
 import { expect } from 'chai';
+import { omit } from 'lodash';
 import { DateTime } from 'luxon';
 
-import { PLAN_IDS, PLAN_STATUS, ProjectPlan } from '../../../src/models/projectPlan/projectPlan';
+import { PLAN_STATUS, ProjectPlan } from '../../../src/models/projectPlan/projectPlan';
 
 const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
 
@@ -9,14 +10,14 @@ describe('project plan model unit', () => {
   it('minimal create', () => {
     const params = {
       id: 'pp-id',
-      planId: PLAN_IDS.FREE_V1,
+      planId: 'plan-id',
       status: PLAN_STATUS.ACTIVE,
-      extraSms: 0,
-      customerId: null,
-      billing: null,
+      payment: null,
+      subscription: null,
       limits: {
         smsCount: 10,
         cpuSeconds: 11,
+        routines: 3,
       },
       limitsOverrides: null,
       projectId: 'project-id',
@@ -26,25 +27,26 @@ describe('project plan model unit', () => {
 
     const projectPlan = new ProjectPlan(params);
 
-    expect(projectPlan).to.eql({ ...params, name: 'Free' });
+    expect(projectPlan).to.eql(params);
   });
 
   it('full create', () => {
     const params = {
       id: 'pp-id',
-      planId: PLAN_IDS.FREE_V1,
+      planId: 'plan-id',
       status: PLAN_STATUS.ACTIVE,
-      extraSms: 0,
-      customerId: 'customer-id',
-      billing: {
-        subscriptionId: 'sub-id',
-        subscriptionItemId: 'sub-item-id',
+      payment: {
+        customerId: 'customer-id',
         delinquent: false,
-        priceCents: 0,
-        nextBillDate: curDate,
         last4: '9023',
         email: 'goo@bar.com',
         expiry: '12/12',
+        lastSyncAt: curDate,
+      },
+      subscription: {
+        subscriptionId: 'sub-id',
+        subscriptionItemId: 'sub-item-id',
+        nextBillDate: curDate,
         discount: {
           id: 'discount-id',
           name: 'discount-name',
@@ -53,14 +55,17 @@ describe('project plan model unit', () => {
           start: curDate,
           end: curDate,
         },
+        lastSyncAt: curDate,
       },
       limits: {
         smsCount: 10,
         cpuSeconds: 11,
+        routines: 3,
       },
       limitsOverrides: {
         smsCount: 32,
         cpuSeconds: 34,
+        routines: 21,
       },
       projectId: 'project-id',
       createdAt: curDate,
@@ -69,6 +74,159 @@ describe('project plan model unit', () => {
 
     const projectPlan = new ProjectPlan(params);
 
-    expect(projectPlan).to.eql({ ...params, name: 'Free', limits: { smsCount: 32, cpuSeconds: 34 } });
+    expect(projectPlan).to.eql({ ...params, limits: { smsCount: 32, cpuSeconds: 34, routines: 21 } });
+  });
+
+  it('for db', () => {
+    const params = {
+      id: 'pp-id',
+      planId: 'plan-id',
+      status: PLAN_STATUS.ACTIVE,
+      payment: {
+        customerId: 'customer-id',
+        delinquent: false,
+        last4: '9023',
+        email: 'goo@bar.com',
+        expiry: '12/12',
+        lastSyncAt: curDate,
+      },
+      subscription: {
+        subscriptionId: 'sub-id',
+        subscriptionItemId: 'sub-item-id',
+        nextBillDate: curDate,
+        discount: {
+          id: 'discount-id',
+          name: 'discount-name',
+          amountOff: 0.1,
+          percentOff: 0.9,
+          start: curDate,
+          end: curDate,
+        },
+        lastSyncAt: curDate,
+      },
+      limits: {
+        smsCount: 10,
+        cpuSeconds: 11,
+        routines: 3,
+      },
+      limitsOverrides: {
+        smsCount: 32,
+        cpuSeconds: 34,
+        routines: 21,
+      },
+      projectId: 'project-id',
+      createdAt: curDate,
+      updatedAt: curDate,
+    };
+
+    const projectPlan = new ProjectPlan(params);
+
+    expect(ProjectPlan.forDb(projectPlan)).to.eql(omit(params, 'limits'));
+  });
+
+  it('clean', () => {
+    const params = {
+      id: 'pp-id',
+      planId: 'plan-id',
+      status: PLAN_STATUS.ACTIVE,
+      payment: {
+        customerId: 'customer-id',
+        delinquent: false,
+        last4: '9023',
+        email: 'goo@bar.com',
+        expiry: '12/12',
+        lastSyncAt: curDate,
+      },
+      subscription: {
+        subscriptionId: 'sub-id',
+        subscriptionItemId: 'sub-item-id',
+        nextBillDate: curDate,
+        discount: {
+          id: 'discount-id',
+          name: 'discount-name',
+          amountOff: 0.1,
+          percentOff: 0.9,
+          start: curDate,
+          end: curDate,
+        },
+        lastSyncAt: curDate,
+      },
+      limits: {
+        smsCount: 10,
+        cpuSeconds: 11,
+        routines: 3,
+      },
+      limitsOverrides: {
+        smsCount: 32,
+        cpuSeconds: 34,
+        routines: 21,
+      },
+      projectId: 'project-id',
+      createdAt: curDate,
+      updatedAt: curDate,
+    };
+
+    const projectPlan = new ProjectPlan(params);
+
+    expect(projectPlan.clean()).to.eql(
+      omit(
+        {
+          ...params,
+          limits: {
+            smsCount: 32,
+            cpuSeconds: 34,
+            routines: 21,
+          },
+        },
+        ['subscription.subscriptionId', 'subscription.subscriptionItemId', 'payment.customerId']
+      )
+    );
+  });
+
+  it('reads and writes to cache', () => {
+    const params = {
+      id: 'pp-id',
+      planId: 'plan-id',
+      status: PLAN_STATUS.ACTIVE,
+      payment: {
+        customerId: 'customer-id',
+        delinquent: false,
+        last4: '9023',
+        email: 'goo@bar.com',
+        expiry: '12/12',
+        lastSyncAt: curDate,
+      },
+      subscription: {
+        subscriptionId: 'sub-id',
+        subscriptionItemId: 'sub-item-id',
+        nextBillDate: curDate,
+        discount: {
+          id: 'discount-id',
+          name: 'discount-name',
+          amountOff: 0.1,
+          percentOff: 0.9,
+          start: curDate,
+          end: curDate,
+        },
+        lastSyncAt: curDate,
+      },
+      limits: {
+        smsCount: 10,
+        cpuSeconds: 11,
+        routines: 3,
+      },
+      limitsOverrides: {
+        smsCount: 32,
+        cpuSeconds: 34,
+        routines: 21,
+      },
+      projectId: 'project-id',
+      createdAt: curDate,
+      updatedAt: curDate,
+    };
+
+    const projectPlan = new ProjectPlan(params);
+
+    expect(ProjectPlan.parseFromCache(ProjectPlan.stringifyForCache(projectPlan))).to.eql(projectPlan);
   });
 });

@@ -2,24 +2,26 @@ import { IsInt, IsOptional, Min } from 'class-validator';
 
 import { ValidatedBase } from '../../validatedBase';
 
-export interface PlanLimitsInterface {
+export interface LimitsInterface {
   smsCount: number;
   cpuSeconds: number;
+  routines: number;
 }
 
 /**
  * @class
  */
-export class PlanLimits extends ValidatedBase implements PlanLimitsInterface {
+export class Limits extends ValidatedBase implements LimitsInterface {
   /**
-   * @param {PlanLimitsInterface} params
+   * @param {LimitsInterface} params
    * @param {boolean} validate=true
    */
-  constructor(params: PlanLimitsInterface, validate = true) {
+  constructor(params: LimitsInterface, validate = true) {
     super();
 
     this.cpuSeconds = params.cpuSeconds;
     this.smsCount = params.smsCount;
+    this.routines = params.routines;
 
     if (validate) {
       this.validate();
@@ -33,11 +35,16 @@ export class PlanLimits extends ValidatedBase implements PlanLimitsInterface {
   @IsInt()
   @Min(0)
   smsCount: number;
+
+  @IsInt()
+  @Min(0)
+  routines: number;
 }
 
 export interface PlanLimitsOverridesInterface {
   smsCount: number | null;
   cpuSeconds: number | null;
+  routines: number | null;
 }
 
 /**
@@ -53,6 +60,7 @@ export class PlanLimitsOverrides extends ValidatedBase implements PlanLimitsOver
 
     this.cpuSeconds = params.cpuSeconds || null;
     this.smsCount = params.smsCount || null;
+    this.routines = params.routines || null;
 
     if (validate) {
       this.validate();
@@ -68,4 +76,9 @@ export class PlanLimitsOverrides extends ValidatedBase implements PlanLimitsOver
   @IsInt()
   @Min(0)
   smsCount: number | null;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  routines: number | null;
 }
