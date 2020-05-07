@@ -37,7 +37,7 @@ export interface BucketStatsInterface {
   total: number;
 }
 
-export type BucketStatsConstructorInterface = Omit<BucketStatsInterface, 'availability'>;
+export type BucketStatsConstructorInterface = Omit<BucketStatsInterface, 'availability' | 'total'>;
 
 /**
  * @class
@@ -50,10 +50,10 @@ export class BucketStats extends ValidatedBase implements BucketStatsInterface {
   constructor(params: BucketStatsConstructorInterface, validate = true) {
     super();
 
-    this.availability = params.total > 0 ? params.passes / params.total : 0;
     this.failures = params.failures;
     this.passes = params.passes;
-    this.total = params.total;
+    this.total = this.failures + this.passes;
+    this.availability = this.total > 0 ? params.passes / this.total : 0;
 
     if (validate) {
       this.validate();
@@ -247,12 +247,10 @@ export class Bucket extends ValidatedBase implements BucketInterface {
       runs: {
         failures: status === RUN_STATUS.FAILED ? 1 : 0,
         passes: status === RUN_STATUS.PASSED ? 1 : 0,
-        total: 1,
       },
       tests: {
         failures: stats?.failures || 0,
         passes: stats?.passes || 0,
-        total: (stats?.failures || 0) + (stats?.passes || 0) + (stats?.pending || 0),
       },
       createdAt: curDate,
       updatedAt: curDate,

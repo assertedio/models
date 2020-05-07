@@ -38,11 +38,10 @@ describe('bucket unit test', () => {
     const params: BucketStatsConstructorInterface = {
       failures: 0,
       passes: 0,
-      total: 0,
     };
 
     const bucketStats = new BucketStats(params);
-    expect(bucketStats).to.eql({ ...params, availability: 0 });
+    expect(bucketStats).to.eql({ ...params, total: 0, availability: 0 });
   });
 
   it('create bucket', () => {
