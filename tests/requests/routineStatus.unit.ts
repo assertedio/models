@@ -62,7 +62,6 @@ describe('routine status unit', () => {
     const routine = new Routine(routineParams);
 
     const timelineParams: TimelineEventConstructorInterface = {
-      id: 'foo-id',
       start: curDate,
       end: curDate,
       projectId: 'project-id',
@@ -131,7 +130,7 @@ describe('routine status unit', () => {
         results: [],
       },
       status: {
-        id: 'foo-id',
+        id: 'te-Z1p3VEg',
         start: curDate,
         end: curDate,
         projectId: 'project-id',
@@ -142,7 +141,7 @@ describe('routine status unit', () => {
         updatedAt: curDate,
       },
       downtime: {
-        id: 'foo-id',
+        id: 'te-Z1p3VEg',
         start: curDate,
         end: curDate,
         projectId: 'project-id',
@@ -216,7 +215,6 @@ describe('routine status unit', () => {
   it('set overall status', () => {
     const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
     const timelineParams: TimelineEventConstructorInterface = {
-      id: 'foo-id',
       start: curDate,
       end: curDate,
       projectId: 'project-id',

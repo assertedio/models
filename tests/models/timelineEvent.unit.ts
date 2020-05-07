@@ -8,7 +8,6 @@ describe('timeline event unit tests', () => {
     const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z');
 
     const params: TimelineEventConstructorInterface = {
-      id: 'foo-id',
       start: curDate.toJSDate(),
       end: curDate.plus({ day: 1 }).toJSDate(),
       projectId: 'project-id',
@@ -21,7 +20,7 @@ describe('timeline event unit tests', () => {
     const timelineEvent = new TimelineEvent(params);
 
     const expected = {
-      id: 'foo-id',
+      id: 'te-Z1p3VEg',
       start: new Date('2018-01-01T00:00:00.000Z'),
       end: new Date('2018-01-02T00:00:00.000Z'),
       projectId: 'project-id',

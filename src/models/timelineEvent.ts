@@ -1,5 +1,5 @@
 import { IsDate, IsEnum, IsInt, IsString, Min } from 'class-validator';
-import { ulid } from 'ulid';
+import shorthash from 'shorthash';
 
 import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
@@ -24,7 +24,8 @@ export interface TimelineEventInterface {
   status: TIMELINE_EVENT_STATUS;
 }
 
-export interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'start' | 'end' | 'durationMs' | 'createdAt' | 'updatedAt'> {
+export interface TimelineEventConstructorInterface
+  extends Omit<TimelineEventInterface, 'id' | 'start' | 'end' | 'durationMs' | 'createdAt' | 'updatedAt'> {
   start: Date | string;
   end: Date | string;
   createdAt: Date | string;
@@ -46,7 +47,6 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
   constructor(params: TimelineEventConstructorInterface, validate = true) {
     super();
 
-    this.id = params.id;
     this.start = toDate(params.start);
     this.end = toDate(params.end);
     this.projectId = params.projectId;
@@ -55,6 +55,8 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
     this.status = params.status;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
+
+    this.id = TimelineEvent.generateId(params.routineId, this.start);
 
     if (validate) {
       this.validate();
@@ -91,9 +93,11 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
 
   /**
    * Generate ID for model
+   * @param {string} routineId
+   * @param {Date} start
    * @returns {string}
    */
-  static generateId(): string {
-    return TimelineEvent.CONSTANTS.ID_PREFIX + ulid();
+  static generateId(routineId: string, start: Date): string {
+    return TimelineEvent.CONSTANTS.ID_PREFIX + shorthash.unique(routineId + start.valueOf());
   }
 }
