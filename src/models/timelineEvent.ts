@@ -18,7 +18,6 @@ export interface TimelineEventInterface {
   end: Date;
   createdAt: Date;
   updatedAt: Date;
-  recordCount: number;
   routineId: string;
   projectId: string;
   durationMs: number;
@@ -52,7 +51,6 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
     this.end = toDate(params.end);
     this.projectId = params.projectId;
     this.routineId = params.routineId;
-    this.recordCount = params.recordCount;
     this.durationMs = this.end.valueOf() - this.start.valueOf();
     this.status = params.status;
     this.createdAt = toDate(params.createdAt);
@@ -71,10 +69,6 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
 
   @IsDate()
   end: Date;
-
-  @Min(0)
-  @IsInt()
-  recordCount: number;
 
   @Min(0)
   @IsInt()
