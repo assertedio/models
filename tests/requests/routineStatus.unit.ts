@@ -62,15 +62,11 @@ describe('routine status unit', () => {
     const routine = new Routine(routineParams);
 
     const timelineParams: TimelineEventConstructorInterface = {
-      id: 'foo-id',
       start: curDate,
       end: curDate,
       projectId: 'project-id',
       routineId: 'routine-id',
-      recordCount: 2,
       status: TIMELINE_EVENT_STATUS.UP,
-      createdAt: curDate,
-      updatedAt: curDate,
     };
 
     const timelineEvent = new TimelineEvent(timelineParams);
@@ -132,44 +128,38 @@ describe('routine status unit', () => {
         results: [],
       },
       status: {
-        id: 'foo-id',
+        id: 'te-Z1p3VEg',
         start: curDate,
         end: curDate,
         projectId: 'project-id',
         routineId: 'routine-id',
-        recordCount: 2,
         durationMs: 0,
         status: 'up',
-        createdAt: curDate,
-        updatedAt: curDate,
       },
       downtime: {
-        id: 'foo-id',
+        id: 'te-Z1p3VEg',
         start: curDate,
         end: curDate,
         projectId: 'project-id',
         routineId: 'routine-id',
-        recordCount: 2,
         durationMs: 0,
         status: 'up',
-        createdAt: curDate,
-        updatedAt: curDate,
       },
       uptimes: {
         day: {
           window: 'week',
           routineId: 'rout-id',
           tests: {
-            availability: 1,
+            availability: 0.5,
             failures: 1,
             passes: 1,
-            total: 1,
+            total: 2,
           },
           runs: {
-            availability: 1,
+            availability: 0.5,
             failures: 1,
             passes: 1,
-            total: 1,
+            total: 2,
           },
           start: curDate,
           end: curDate,
@@ -178,16 +168,16 @@ describe('routine status unit', () => {
           window: 'week',
           routineId: 'rout-id',
           tests: {
-            availability: 1,
+            availability: 0.5,
             failures: 1,
             passes: 1,
-            total: 1,
+            total: 2,
           },
           runs: {
-            availability: 1,
+            availability: 0.5,
             failures: 1,
             passes: 1,
-            total: 1,
+            total: 2,
           },
           start: curDate,
           end: curDate,
@@ -196,16 +186,16 @@ describe('routine status unit', () => {
           window: 'week',
           routineId: 'rout-id',
           tests: {
-            availability: 1,
+            availability: 0.5,
             failures: 1,
             passes: 1,
-            total: 1,
+            total: 2,
           },
           runs: {
-            availability: 1,
+            availability: 0.5,
             failures: 1,
             passes: 1,
-            total: 1,
+            total: 2,
           },
           start: curDate,
           end: curDate,
@@ -219,15 +209,11 @@ describe('routine status unit', () => {
   it('set overall status', () => {
     const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
     const timelineParams: TimelineEventConstructorInterface = {
-      id: 'foo-id',
       start: curDate,
       end: curDate,
       projectId: 'project-id',
       routineId: 'routine-id',
-      recordCount: 2,
       status: TIMELINE_EVENT_STATUS.UP,
-      createdAt: curDate,
-      updatedAt: curDate,
     };
 
     const timelineEvent = new TimelineEvent(timelineParams);

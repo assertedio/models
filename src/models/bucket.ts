@@ -9,9 +9,8 @@ import { CompletedRunRecordInterface, RUN_STATUS } from './runRecord';
 export enum BUCKET_SIZE {
   MIN_5 = 'min5',
   HOUR = 'hour',
+  HOUR_6 = 'hour6',
   DAY = 'day',
-  WEEK = 'week',
-  MONTH = 'month',
 }
 
 export enum BUCKET_WINDOW {
@@ -19,15 +18,13 @@ export enum BUCKET_WINDOW {
   WEEK = 'week',
   MONTH = 'month',
   MONTH_3 = 'month3',
-  YEAR = 'year',
 }
 
 export const DEFAULT_BUCKET_WINDOW_TO_SIZE = {
   [BUCKET_WINDOW.DAY]: BUCKET_SIZE.MIN_5, // 24 * 12 = 288
-  [BUCKET_WINDOW.WEEK]: BUCKET_SIZE.MIN_5, // 7 * 24 * 12 = 2016
+  [BUCKET_WINDOW.WEEK]: BUCKET_SIZE.HOUR, // 7 * 24 = 168
   [BUCKET_WINDOW.MONTH]: BUCKET_SIZE.HOUR, // 30 * 24 = 720
-  [BUCKET_WINDOW.MONTH_3]: BUCKET_SIZE.HOUR, // 3 * 30 * 24 = 2160
-  [BUCKET_WINDOW.YEAR]: BUCKET_SIZE.DAY, // 365
+  [BUCKET_WINDOW.MONTH_3]: BUCKET_SIZE.HOUR_6, // 3 * 30 * 4 = 360
 };
 
 export interface BucketStatsInterface {
@@ -37,7 +34,7 @@ export interface BucketStatsInterface {
   total: number;
 }
 
-export type BucketStatsConstructorInterface = Omit<BucketStatsInterface, 'availability'>;
+export type BucketStatsConstructorInterface = Omit<BucketStatsInterface, 'availability' | 'total'>;
 
 /**
  * @class
@@ -50,10 +47,10 @@ export class BucketStats extends ValidatedBase implements BucketStatsInterface {
   constructor(params: BucketStatsConstructorInterface, validate = true) {
     super();
 
-    this.availability = params.total > 0 ? params.passes / params.total : 0;
     this.failures = params.failures;
     this.passes = params.passes;
-    this.total = params.total;
+    this.total = this.failures + this.passes;
+    this.availability = this.total > 0 ? params.passes / this.total : 0;
 
     if (validate) {
       this.validate();
@@ -86,17 +83,13 @@ export interface BucketInterface {
   projectId: string;
   start: Date;
   end: Date;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
-export interface BucketConstructorInterface extends Omit<BucketInterface, 'tests' | 'runs' | 'start' | 'end' | 'createdAt' | 'updatedAt'> {
+export interface BucketConstructorInterface extends Omit<BucketInterface, 'tests' | 'runs' | 'start' | 'end' | 'id'> {
   tests: BucketStatsConstructorInterface;
   runs: BucketStatsConstructorInterface;
   start: Date | string;
   end: Date | string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
 }
 
 /**
@@ -114,7 +107,6 @@ export class Bucket extends ValidatedBase implements BucketInterface {
   constructor(params: BucketConstructorInterface, validate = true) {
     super();
 
-    this.id = params.id;
     this.size = params.size;
     this.projectId = params.projectId;
     this.routineId = params.routineId;
@@ -122,8 +114,8 @@ export class Bucket extends ValidatedBase implements BucketInterface {
     this.runs = new BucketStats(params.runs, false);
     this.start = toDate(params.start);
     this.end = toDate(params.end);
-    this.createdAt = toDate(params.createdAt);
-    this.updatedAt = toDate(params.updatedAt);
+
+    this.id = Bucket.generateId(this.routineId, this.size, this.end);
 
     if (validate) {
       this.validate();
@@ -156,12 +148,6 @@ export class Bucket extends ValidatedBase implements BucketInterface {
   @IsInstance(BucketStats)
   tests: BucketStatsInterface;
 
-  @IsDate()
-  createdAt: Date;
-
-  @IsDate()
-  updatedAt: Date;
-
   /**
    * Get id of bucket
    * @param {string} routineId
@@ -182,9 +168,22 @@ export class Bucket extends ValidatedBase implements BucketInterface {
    */
   static getStart(size: BUCKET_SIZE, date: Date): DateTime {
     const dateTime = DateTime.fromJSDate(date).toUTC();
-    // eslint-disable-next-line no-magic-numbers
-    const minute = Math.floor(dateTime.minute / 5) * 5;
-    return size === BUCKET_SIZE.MIN_5 ? dateTime.set({ minute, second: 0, millisecond: 0 }) : dateTime.startOf(size);
+
+    switch (size) {
+      case BUCKET_SIZE.MIN_5: {
+        // eslint-disable-next-line no-magic-numbers
+        const minute = Math.floor(dateTime.minute / 5) * 5;
+        return dateTime.set({ minute, second: 0, millisecond: 0 });
+      }
+      case BUCKET_SIZE.HOUR_6: {
+        // eslint-disable-next-line no-magic-numbers
+        const hour = Math.floor(dateTime.hour / 6) * 6;
+        return dateTime.set({ hour, minute: 0, second: 0, millisecond: 0 });
+      }
+      default: {
+        return dateTime.startOf(size);
+      }
+    }
   }
 
   /**
@@ -195,50 +194,34 @@ export class Bucket extends ValidatedBase implements BucketInterface {
    */
   static getEnd(size: BUCKET_SIZE, date: Date): DateTime {
     const dateTime = DateTime.fromJSDate(date).toUTC();
-    // eslint-disable-next-line no-magic-numbers
-    const minute = (Math.floor(dateTime.minute / 5) + 1) * 5;
-    return size === BUCKET_SIZE.MIN_5
-      ? dateTime.set({ minute, second: 0, millisecond: 0 }).minus({ second: 5 }).endOf('minute')
-      : dateTime.endOf(size);
-  }
 
-  /**
-   * Update bucket
-   * @param {CompletedRunRecordInterface} completedRunRecord
-   * @returns {Bucket}
-   */
-  update(completedRunRecord: CompletedRunRecordInterface): Bucket {
-    const { completedAt, routineId, status, stats } = completedRunRecord;
-
-    const id = Bucket.generateId(routineId, this.size, completedAt);
-
-    if (id !== this.id) {
-      throw new Error('completedRun does not match bucket id');
+    switch (size) {
+      case BUCKET_SIZE.MIN_5: {
+        // eslint-disable-next-line no-magic-numbers
+        const minute = (Math.floor(dateTime.minute / 5) + 1) * 5;
+        return dateTime.set({ minute, second: 0, millisecond: 0 }).minus({ second: 5 }).endOf('minute');
+      }
+      case BUCKET_SIZE.HOUR_6: {
+        // eslint-disable-next-line no-magic-numbers
+        const hour = (Math.floor(dateTime.hour / 6) + 1) * 6;
+        return dateTime.set({ hour, minute: 0, second: 0, millisecond: 0 }).minus({ minute: 5 }).endOf('hour');
+      }
+      default: {
+        return dateTime.endOf(size);
+      }
     }
-
-    this.runs.failures += status === RUN_STATUS.FAILED ? 1 : 0;
-    this.runs.passes += status === RUN_STATUS.PASSED ? 1 : 0;
-    this.runs.total += 1;
-
-    this.tests.failures += stats?.failures || 0;
-    this.tests.passes += stats?.passes || 0;
-    this.tests.total += (stats?.failures || 0) + (stats?.passes || 0) + (stats?.pending || 0);
-
-    return this;
   }
 
   /**
    * Create bucket for completed run record
    * @param {CompletedRunRecordInterface} completedRunRecord
    * @param {BUCKET_SIZE} size
-   * @param {Date} curDate
    * @returns {Bucket}
    */
-  static create(completedRunRecord: CompletedRunRecordInterface, size: BUCKET_SIZE, curDate = DateTime.utc().toJSDate()): Bucket {
+  static create(completedRunRecord: CompletedRunRecordInterface, size: BUCKET_SIZE): Bucket {
     const { completedAt, projectId, routineId, status, stats } = completedRunRecord;
 
     return new Bucket({
-      id: Bucket.generateId(routineId, size, completedAt),
       size,
       projectId,
       routineId,
@@ -247,15 +230,11 @@ export class Bucket extends ValidatedBase implements BucketInterface {
       runs: {
         failures: status === RUN_STATUS.FAILED ? 1 : 0,
         passes: status === RUN_STATUS.PASSED ? 1 : 0,
-        total: 1,
       },
       tests: {
         failures: stats?.failures || 0,
         passes: stats?.passes || 0,
-        total: (stats?.failures || 0) + (stats?.passes || 0) + (stats?.pending || 0),
       },
-      createdAt: curDate,
-      updatedAt: curDate,
     });
   }
 }

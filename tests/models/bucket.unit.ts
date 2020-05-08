@@ -20,6 +20,13 @@ describe('bucket unit test', () => {
     expect(Bucket.getStart(BUCKET_SIZE.HOUR, DateTime.fromISO('2018-01-01T01:01:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T01:00:00.000Z');
   });
 
+  it('get start - 6 hour', () => {
+    expect(Bucket.getStart(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T00:03:03.010Z').toJSDate()).toISO()).to.eql('2018-01-01T00:00:00.000Z');
+    expect(Bucket.getStart(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T07:06:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T06:00:00.000Z');
+    expect(Bucket.getStart(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T11:59:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T06:00:00.000Z');
+    expect(Bucket.getStart(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T19:10:03.001Z').toJSDate()).toISO()).to.eql('2018-01-01T18:00:00.000Z');
+  });
+
   it('get end - 5 min', () => {
     expect(Bucket.getEnd(BUCKET_SIZE.MIN_5, DateTime.fromISO('2018-01-01T00:03:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T00:04:59.999Z');
     expect(Bucket.getEnd(BUCKET_SIZE.MIN_5, DateTime.fromISO('2018-01-01T00:06:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T00:09:59.999Z');
@@ -34,19 +41,24 @@ describe('bucket unit test', () => {
     expect(Bucket.getEnd(BUCKET_SIZE.HOUR, DateTime.fromISO('2018-01-01T01:05:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T01:59:59.999Z');
   });
 
+  it('get end - 6 hour', () => {
+    expect(Bucket.getEnd(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T00:03:03.010Z').toJSDate()).toISO()).to.eql('2018-01-01T05:59:59.999Z');
+    expect(Bucket.getEnd(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T07:06:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T11:59:59.999Z');
+    expect(Bucket.getEnd(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T11:59:03.000Z').toJSDate()).toISO()).to.eql('2018-01-01T11:59:59.999Z');
+    expect(Bucket.getEnd(BUCKET_SIZE.HOUR_6, DateTime.fromISO('2018-01-01T19:10:03.001Z').toJSDate()).toISO()).to.eql('2018-01-01T23:59:59.999Z');
+  });
+
   it('create empty bucket stats', () => {
     const params: BucketStatsConstructorInterface = {
       failures: 0,
       passes: 0,
-      total: 0,
     };
 
     const bucketStats = new BucketStats(params);
-    expect(bucketStats).to.eql({ ...params, availability: 0 });
+    expect(bucketStats).to.eql({ ...params, total: 0, availability: 0 });
   });
 
   it('create bucket', () => {
-    const curDate = DateTime.fromISO('2019-01-01T00:00:00.000Z').toJSDate();
     const params = {
       id: 'rs-run-id',
       status: RUN_STATUS.PASSED,
@@ -76,7 +88,7 @@ describe('bucket unit test', () => {
 
     const completedRecord = new CompletedRunRecord(params);
 
-    const bucket = Bucket.create(completedRecord, BUCKET_SIZE.MIN_5, curDate);
+    const bucket = Bucket.create(completedRecord, BUCKET_SIZE.MIN_5);
 
     expect(bucket).to.eql({
       id: 'bk-1S4POA',
@@ -97,8 +109,6 @@ describe('bucket unit test', () => {
       },
       start: new Date('2018-01-01T00:00:00.000Z'),
       end: new Date('2018-01-01T00:04:59.999Z'),
-      createdAt: curDate,
-      updatedAt: curDate,
     });
   });
 });
