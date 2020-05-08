@@ -16,20 +16,15 @@ export interface TimelineEventInterface {
   id: string;
   start: Date;
   end: Date;
-  createdAt: Date;
-  updatedAt: Date;
   routineId: string;
   projectId: string;
   durationMs: number;
   status: TIMELINE_EVENT_STATUS;
 }
 
-export interface TimelineEventConstructorInterface
-  extends Omit<TimelineEventInterface, 'id' | 'start' | 'end' | 'durationMs' | 'createdAt' | 'updatedAt'> {
+export interface TimelineEventConstructorInterface extends Omit<TimelineEventInterface, 'id' | 'start' | 'end' | 'durationMs'> {
   start: Date | string;
   end: Date | string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
 }
 
 /**
@@ -53,8 +48,6 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
     this.routineId = params.routineId;
     this.durationMs = this.end.valueOf() - this.start.valueOf();
     this.status = params.status;
-    this.createdAt = toDate(params.createdAt);
-    this.updatedAt = toDate(params.updatedAt);
 
     this.id = TimelineEvent.generateId(params.routineId, this.start);
 
@@ -84,12 +77,6 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
 
   @IsEnum(TIMELINE_EVENT_STATUS)
   status: TIMELINE_EVENT_STATUS;
-
-  @IsDate()
-  createdAt: Date;
-
-  @IsDate()
-  updatedAt: Date;
 
   /**
    * Generate ID for model

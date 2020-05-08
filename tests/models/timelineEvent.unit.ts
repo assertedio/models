@@ -13,8 +13,6 @@ describe('timeline event unit tests', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       status: TIMELINE_EVENT_STATUS.UP,
-      createdAt: curDate.toJSDate(),
-      updatedAt: curDate.toJSDate(),
     };
 
     const timelineEvent = new TimelineEvent(params);
@@ -27,8 +25,6 @@ describe('timeline event unit tests', () => {
       routineId: 'routine-id',
       durationMs: 86400000,
       status: 'up',
-      createdAt: new Date('2018-01-01T00:00:00.000Z'),
-      updatedAt: new Date('2018-01-01T00:00:00.000Z'),
     };
 
     expect(timelineEvent).to.eql(expected);

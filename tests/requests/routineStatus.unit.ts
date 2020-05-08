@@ -67,8 +67,6 @@ describe('routine status unit', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       status: TIMELINE_EVENT_STATUS.UP,
-      createdAt: curDate,
-      updatedAt: curDate,
     };
 
     const timelineEvent = new TimelineEvent(timelineParams);
@@ -137,8 +135,6 @@ describe('routine status unit', () => {
         routineId: 'routine-id',
         durationMs: 0,
         status: 'up',
-        createdAt: curDate,
-        updatedAt: curDate,
       },
       downtime: {
         id: 'te-Z1p3VEg',
@@ -148,8 +144,6 @@ describe('routine status unit', () => {
         routineId: 'routine-id',
         durationMs: 0,
         status: 'up',
-        createdAt: curDate,
-        updatedAt: curDate,
       },
       uptimes: {
         day: {
@@ -220,8 +214,6 @@ describe('routine status unit', () => {
       projectId: 'project-id',
       routineId: 'routine-id',
       status: TIMELINE_EVENT_STATUS.UP,
-      createdAt: curDate,
-      updatedAt: curDate,
     };
 
     const timelineEvent = new TimelineEvent(timelineParams);
