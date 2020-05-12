@@ -6,6 +6,7 @@ import { DeepPartial } from 'ts-essentials';
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import {
   TEST_EVENT_TYPES,
+  TEST_RESULT_STATUS,
   TestData,
   TestDataInterface,
   TestEvent,
@@ -63,6 +64,7 @@ const CONSTANTS = {
     TEST_EVENT_TYPES.EVENT_TEST_FAIL,
     TEST_EVENT_TYPES.EVENT_TEST_PENDING,
   ],
+  TEST_CASE_EVENT_TYPES: [TEST_EVENT_TYPES.EVENT_TEST_BEGIN, TEST_EVENT_TYPES.EVENT_TEST_PASS, TEST_EVENT_TYPES.EVENT_TEST_FAIL],
 };
 
 /**
@@ -222,13 +224,18 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
         const { id, root } = event.data;
         if (!id || root) return result;
 
+        // Only mark test cases as "incomplete" if they never have a result
+        const data = CONSTANTS.TEST_CASE_EVENT_TYPES.includes(event.data.type)
+          ? { ...event.data, result: event.data.result || TEST_RESULT_STATUS.INCOMPLETE }
+          : event.data;
+
         if (!result[id]) {
           result[id] = {
             timestamp: event.timestamp,
-            data: event.data,
+            data,
           };
         } else {
-          result[id].data = event.data;
+          result[id].data = data;
           result[id].timestamp = event.timestamp;
         }
 
@@ -264,10 +271,18 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
     patch.results = RunRecord.getResults(testResult.events || []);
 
+    const incompleteCount = patch.results.filter(({ result }) => result === TEST_RESULT_STATUS.INCOMPLETE).length;
+
+    const stats =
+      incompleteCount > 0
+        ? { ...lastEvent?.stats, tests: (lastEvent?.stats?.tests || 0) + incompleteCount, incomplete: incompleteCount }
+        : lastEvent?.stats;
+
+    patch.stats = stats ? new TestStats(stats as TestStatsConstructorInterface) : null;
+
     patch.console = testResult.console;
     patch.runDurationMs = testResult.runDurationMs;
     patch.testDurationMs = lastEvent?.elapsedMs || null;
-    patch.stats = lastEvent?.stats || null;
     patch.completedAt = testResult.createdAt;
     patch.timeoutType = testResult.timeoutType || null;
 

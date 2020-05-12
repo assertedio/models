@@ -1,0 +1,233 @@
+{
+  "runId": "run-idb3079634-4d0d-4eef-8545-215de9f912de",
+  "type": "manual",
+  "console": null,
+  "error": null,
+  "runDurationMs": 707,
+  "events": [
+    {
+      "data": {
+        "id": null,
+        "type": "start",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": false,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 0,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.769Z",
+      "elapsedMs": 25
+    },
+    {
+      "data": {
+        "id": "cka413th6000035s67qhxfcxr",
+        "type": "suite",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": true,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 0,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.771Z",
+      "elapsedMs": 27
+    },
+    {
+      "data": {
+        "id": "cka413th8000135s67pzq31za",
+        "type": "suite",
+        "duration": null,
+        "title": "timeout test",
+        "fullTitle": "timeout test",
+        "fullTitlePath": [
+          "timeout test"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/internalTimeoutPackage/internal-timeout.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.772Z",
+      "elapsedMs": 28
+    },
+    {
+      "data": {
+        "id": "cka413th9000235s64yv27gv8",
+        "type": "test",
+        "duration": null,
+        "title": "testy",
+        "fullTitle": "timeout test -> testy",
+        "fullTitlePath": [
+          "timeout test",
+          "testy"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/internalTimeoutPackage/internal-timeout.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.773Z",
+      "elapsedMs": 29
+    },
+    {
+      "data": {
+        "id": "cka413th9000235s64yv27gv8",
+        "type": "fail",
+        "duration": 52,
+        "title": "testy",
+        "fullTitle": "timeout test -> testy",
+        "fullTitlePath": [
+          "timeout test",
+          "testy"
+        ],
+        "result": "failed",
+        "root": false,
+        "file": "/internalTimeoutPackage/internal-timeout.asrtd.js",
+        "error": {
+          "stack": "Error: Timeout of 50ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/tmp/asserted-run-idb3079634-4d0d-4eef-8545-215de9f912de-69sLNu/internalTimeoutPackage/internal-timeout.asrtd.js)\n    at listOnTimeout (internal/timers.js:549:17)\n    at processTimers (internal/timers.js:492:7)",
+          "message": "Error: Timeout of 50ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (/tmp/asserted-run-idb3079634-4d0d-4eef-8545-215de9f912de-69sLNu/internalTimeoutPackage/internal-timeout.asrtd.js)"
+        },
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.826Z",
+      "elapsedMs": 82
+    },
+    {
+      "data": {
+        "id": "cka413th8000135s67pzq31za",
+        "type": "suite end",
+        "duration": null,
+        "title": "timeout test",
+        "fullTitle": "timeout test",
+        "fullTitlePath": [
+          "timeout test"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/internalTimeoutPackage/internal-timeout.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.827Z",
+      "elapsedMs": 83
+    },
+    {
+      "data": {
+        "id": "cka413th6000035s67qhxfcxr",
+        "type": "suite end",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": true,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-05-12T14:47:07.744Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:47:07.828Z",
+      "elapsedMs": 84
+    },
+    {
+      "data": {
+        "id": null,
+        "type": "end",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": false,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 1,
+        "passes": 0,
+        "pending": 0,
+        "failures": 1,
+        "start": "2020-05-12T14:47:07.744Z",
+        "end": "2020-05-12T14:47:07.828Z",
+        "duration": 84
+      },
+      "timestamp": "2020-05-12T14:47:07.828Z",
+      "elapsedMs": 84
+    }
+  ],
+  "timeoutType": null,
+  "createdAt": "2020-05-12T14:47:07.148Z"
+}

@@ -1,0 +1,120 @@
+{
+  "runId": "run-id049d6449-9fa8-4e11-8d2e-2e5739769e45",
+  "type": "manual",
+  "console": "stderr: Overall timeout met. Throwing exception.\nRoutine timed out\n\nerror: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options 'outputPath=/tmp/asserted-run-id049d6449-9fa8-4e11-8d2e-2e5739769e45-mZvHR6/result.ldjson,overallTimeoutMs=1000,exitOnTimeout=true' --color false --ui bdd --bail false --timeout 1000 '/tmp/asserted-run-id049d6449-9fa8-4e11-8d2e-2e5739769e45-ZTVm9m/**/*.asrtd.js'\nOverall timeout met. Throwing exception.\nRoutine timed out\n",
+  "error": null,
+  "runDurationMs": 1763,
+  "events": [
+    {
+      "data": {
+        "id": null,
+        "type": "start",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": false,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 0,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:20:16.942Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:20:16.969Z",
+      "elapsedMs": 27
+    },
+    {
+      "data": {
+        "id": "cka405akq00002hs6deu2adxc",
+        "type": "suite",
+        "duration": null,
+        "title": null,
+        "fullTitle": null,
+        "fullTitlePath": [],
+        "result": null,
+        "root": true,
+        "file": null,
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 0,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:20:16.942Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:20:16.972Z",
+      "elapsedMs": 30
+    },
+    {
+      "data": {
+        "id": "cka405aks00012hs6djyc42xz",
+        "type": "suite",
+        "duration": null,
+        "title": "timeout test",
+        "fullTitle": "timeout test",
+        "fullTitlePath": [
+          "timeout test"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/timeoutPackage/timeout.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:20:16.942Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:20:16.973Z",
+      "elapsedMs": 31
+    },
+    {
+      "data": {
+        "id": "cka405akt00022hs6243c3mcx",
+        "type": "test",
+        "duration": null,
+        "title": "testy",
+        "fullTitle": "timeout test -> testy",
+        "fullTitlePath": [
+          "timeout test",
+          "testy"
+        ],
+        "result": null,
+        "root": false,
+        "file": "/timeoutPackage/timeout.asrtd.js",
+        "error": null,
+        "timedOut": false
+      },
+      "stats": {
+        "suites": 1,
+        "tests": 0,
+        "passes": 0,
+        "pending": 0,
+        "failures": 0,
+        "start": "2020-05-12T14:20:16.942Z",
+        "duration": null
+      },
+      "timestamp": "2020-05-12T14:20:16.973Z",
+      "elapsedMs": 31
+    }
+  ],
+  "timeoutType": "reporter",
+  "createdAt": "2020-05-12T14:20:16.277Z"
+}

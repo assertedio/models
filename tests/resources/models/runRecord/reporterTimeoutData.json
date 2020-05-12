@@ -1,0 +1,18 @@
+[
+  {
+    "id": "cka405akt00022hs6243c3mcx",
+    "type": "test",
+    "duration": null,
+    "title": "testy",
+    "fullTitle": "timeout test -> testy",
+    "fullTitlePath": [
+      "timeout test",
+      "testy"
+    ],
+    "result": "incomplete",
+    "root": false,
+    "file": "/timeoutPackage/timeout.asrtd.js",
+    "error": null,
+    "timedOut": false
+  }
+]

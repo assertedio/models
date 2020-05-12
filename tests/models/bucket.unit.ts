@@ -78,6 +78,7 @@ describe('bucket unit test', () => {
         end: undefined,
         suites: 3,
         tests: 5,
+        incomplete: 0,
         passes: 3,
         pending: 0,
         failures: 2,
