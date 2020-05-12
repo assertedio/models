@@ -89,6 +89,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
 
   /**
    * Create instance of class
+   *
    * @param {CreateTestResultInterface} params
    * @param {Date} curDate
    * @returns {TestResult}
@@ -102,6 +103,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
    * @returns {TestResult}
    */

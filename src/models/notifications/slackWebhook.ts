@@ -34,6 +34,7 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
 
   /**
    * Is this model ID
+   *
    * @param {string} input
    * @returns {boolean}
    */
@@ -99,6 +100,7 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
 
   /**
    * Generate ID
+   *
    * @param {string} routineId
    * @param {string} slackWebhook
    * @returns {string}
@@ -109,6 +111,7 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
 
   /**
    * Create instance of model
+   *
    * @param {string} routineId
    * @param {string} projectId
    * @param {string} name

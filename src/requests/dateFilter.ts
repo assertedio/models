@@ -66,6 +66,7 @@ export class DateFilter extends ValidatedBase implements DateFilterInterface {
 
   /**
    * Convert to DateTime versions
+   *
    * @returns {DateTimeFilterInterface}
    */
   toDateTime(): DateTimeFilterInterface {

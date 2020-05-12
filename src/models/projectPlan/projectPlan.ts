@@ -67,7 +67,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * @param {ProjectPlanInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: ProjectPlanInterface, validate = true) {
     super();
@@ -134,6 +134,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * Clean out sensitive items
+   *
    * @returns {object}
    */
   clean(): object {
@@ -142,6 +143,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * Generate id
+   *
    * @param {string} projectId
    * @returns {string}
    */
@@ -151,6 +153,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * Get data to be pushed to the db
+   *
    * @param {DeepPartial<Plan>} instance
    * @returns {object}
    */
@@ -160,6 +163,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * Stringify object
+   *
    * @param {Plan} instance
    * @returns {string}
    */
@@ -169,6 +173,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
    * @returns {Plan}
    */
@@ -178,6 +183,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   /**
    * Parse from cache
+   *
    * @param {string} stringified
    * @returns {Plan}
    */

@@ -45,7 +45,7 @@ export interface TestStatsConstructorInterface extends Omit<TestStatsInterface, 
 export class TestStats extends ValidatedBase implements TestStatsInterface {
   /**
    * @param {TestStatsInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TestStatsConstructorInterface, validate = true) {
     super();
@@ -174,7 +174,7 @@ export interface TestDataInterface {
 export class TestData extends ValidatedBase implements TestDataInterface {
   /**
    * @param {TestDataInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TestDataInterface, validate = true) {
     super();
@@ -257,7 +257,7 @@ export interface TestEventConstructorInterface extends Omit<TestEventInterface, 
 export class TestEvent extends ValidatedBase implements TestEventInterface {
   /**
    * @param {TestEventInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TestEventConstructorInterface, validate = true) {
     super();

@@ -12,7 +12,9 @@
     "result": "incomplete",
     "root": false,
     "file": "/timeoutPackage/timeout.asrtd.js",
-    "error": null,
+    "error": {
+      "message": "Routine timeout reached"
+    },
     "timedOut": false
   }
 ]

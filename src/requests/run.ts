@@ -81,6 +81,7 @@ export class Run extends ValidatedBase implements RunInterface {
 
   /**
    * Generate ID for model
+   *
    * @returns {string}
    */
   static generateId(): string {
@@ -89,8 +90,9 @@ export class Run extends ValidatedBase implements RunInterface {
 
   /**
    * Create model instance
+   *
    * @param {CreateRunInterface} params
-   * @param {Date} curDate=now
+   * @param {Date} [curDate=now]
    * @returns {Run}
    */
   static create(params: CreateRunInterface, curDate = DateTime.utc().toJSDate()): Run {

@@ -530,7 +530,9 @@ describe('runRecord unit tests', () => {
           result: 'incomplete',
           root: false,
           file: '/timeoutPackage/timeout.asrtd.js',
-          error: null,
+          error: {
+            message: 'Routine timeout reached',
+          },
           timedOut: false,
         },
       ],
@@ -718,6 +720,7 @@ describe('completed runRecord', () => {
     const params = {
       id: 'rs-ck8izosze008lrgfd2bsmhbrb',
       projectId: 'p-WQmmjAF2P',
+      // eslint-disable-next-line no-secrets/no-secrets
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
 
@@ -727,6 +730,7 @@ describe('completed runRecord', () => {
       testDurationMs: null,
       type: 'scheduled',
       console:
+        // eslint-disable-next-line no-secrets/no-secrets
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
       failType: 'error',
@@ -741,6 +745,7 @@ describe('completed runRecord', () => {
     const expected = {
       id: 'rs-ck8izosze008lrgfd2bsmhbrb',
       projectId: 'p-WQmmjAF2P',
+      // eslint-disable-next-line no-secrets/no-secrets
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
       error: null,
@@ -750,6 +755,7 @@ describe('completed runRecord', () => {
       type: 'scheduled',
       results: [],
       console:
+        // eslint-disable-next-line no-secrets/no-secrets
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
       failType: 'error',
@@ -762,19 +768,19 @@ describe('completed runRecord', () => {
 
   it('extract test data from events - passing', async () => {
     const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'passingTestResult.json')));
-    const data = RunRecord.getResults(testResult.events);
+    const data = RunRecord.getResults(testResult.events, null);
     expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'passingTestData.json')));
   });
 
   it('extract test data from events - reporter timeout', async () => {
     const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'reporterTimeoutResult.json')));
-    const data = RunRecord.getResults(testResult.events);
+    const data = RunRecord.getResults(testResult.events, RUN_TIMEOUT_TYPE.REPORTER);
     expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'reporterTimeoutData.json')));
   });
 
   it('extract test data from events - internal timeout', async () => {
     const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'internalTimeoutResult.json')));
-    const data = RunRecord.getResults(testResult.events);
+    const data = RunRecord.getResults(testResult.events, null);
     expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'internalTimeoutData.json')));
   });
 });

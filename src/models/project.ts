@@ -65,6 +65,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
   /**
    * Clean name string
+   *
    * @param {string} input
    * @returns {string}
    */
@@ -74,6 +75,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
   /**
    * Create instance of model
+   *
    * @param {CreateProjectInterface} params
    * @param {Date} [curDate=new Date()]
    * @returns {Project}
@@ -90,6 +92,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
   /**
    * Get data to be pushed to the db
+   *
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
@@ -99,6 +102,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
   /**
    * Stringify object
+   *
    * @param {Project} instance
    * @returns {string}
    */
@@ -108,6 +112,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
    * @returns {Project}
    */
@@ -122,6 +127,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
 
   /**
    * Parse from cache
+   *
    * @param {string} stringified
    * @returns {Project}
    */

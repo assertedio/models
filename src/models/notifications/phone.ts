@@ -39,6 +39,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
 
   /**
    * Is this model ID
+   *
    * @param {string} input
    * @returns {boolean}
    */
@@ -106,6 +107,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
 
   /**
    * Generate ID
+   *
    * @param {string} routineId
    * @param {string} phone
    * @param {PHONE_NOTIFY_TYPE} notifyType
@@ -118,6 +120,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
   /* eslint-disable max-params */
   /**
    * Create instance of model
+   *
    * @param {string} routineId
    * @param {string} projectId
    * @param {string} name

@@ -24,6 +24,7 @@ const CONSTANTS = {
   ID_PREFIX: 'tk-',
   HASH_ENCODING: 'hex',
   HASH_TYPE: 'sha256',
+  // eslint-disable-next-line no-secrets/no-secrets
   ALPHABET: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
 };
 
@@ -36,7 +37,7 @@ const nanoid = customAlphabet(CONSTANTS.ALPHABET, 21);
 export class Token extends ValidatedBase implements TokenInterface {
   /**
    * @param {TokenInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TokenInterface, validate = true) {
     super();
@@ -74,6 +75,7 @@ export class Token extends ValidatedBase implements TokenInterface {
 
   /**
    * Create ID from apiKey
+   *
    * @param {string} apiKey
    * @returns {string}
    */
@@ -84,8 +86,9 @@ export class Token extends ValidatedBase implements TokenInterface {
 
   /**
    * Create instance of class
+   *
    * @param {CreateTokenInterface} params
-   * @param {Date} curDate=now()
+   * @param {Date} [curDate=now()]
    * @returns {{ apiKey: string, token: Token }}
    */
   static create(params: CreateTokenInterface, curDate = DateTime.utc().toJSDate()): { apiKey: string; token: Token } {
@@ -108,6 +111,7 @@ export class Token extends ValidatedBase implements TokenInterface {
 
   /**
    * Get data to be pushed to the db
+   *
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
@@ -117,6 +121,7 @@ export class Token extends ValidatedBase implements TokenInterface {
 
   /**
    * Stringify object
+   *
    * @param {Project} instance
    * @returns {string}
    */
@@ -126,6 +131,7 @@ export class Token extends ValidatedBase implements TokenInterface {
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
    * @returns {Project}
    */
@@ -141,6 +147,7 @@ export class Token extends ValidatedBase implements TokenInterface {
 
   /**
    * Parse from cache
+   *
    * @param {string} stringified
    * @returns {Project}
    */

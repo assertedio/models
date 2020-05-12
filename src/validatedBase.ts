@@ -28,6 +28,7 @@ const DEFAULT_VALIDATION_OPTIONS = {
 export class ValidatedBase {
   /**
    * Perform async validation
+   *
    * @param {ValidatorOptions} [options]
    * @returns {Promise<void>}
    */
@@ -43,8 +44,9 @@ export class ValidatedBase {
 
   /**
    * Perform sync validation
+   *
    * @param {ValidatorOptions} [options]
-   * @returns {Promise<void>}
+   * @returns {void}
    */
   validate(options?: ValidatorOptions): void {
     options = { ...options, ...DEFAULT_VALIDATION_OPTIONS };
@@ -58,6 +60,7 @@ export class ValidatedBase {
 
   /**
    * Convert model to json
+   *
    * @param {string[]} [omitProperties=[]]
    * @returns {{}}
    */

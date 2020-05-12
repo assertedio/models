@@ -30,6 +30,7 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
 
   /**
    * Is this model ID
+   *
    * @param {string} input
    * @returns {boolean}
    */
@@ -92,6 +93,7 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
 
   /**
    * Generate ID
+   *
    * @param {string} routineId
    * @param {string} email
    * @returns {string}
@@ -102,6 +104,7 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
 
   /**
    * Create instance of model
+   *
    * @param {string} routineId
    * @param {string} projectId
    * @param {string} name

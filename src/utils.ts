@@ -26,6 +26,7 @@ export const toDate = (input: Date | string | FirestoreTimestamp | DateTime | nu
 
 /**
  * Strip unsupported characters
+ *
  * @param {string} input
  * @returns {string}
  */
@@ -35,6 +36,7 @@ export const cleanString = (input: string): string => {
 
 /**
  * Enum error message
+ *
  * @param {{}} entity
  * @returns {string | undefined}
  */

@@ -62,6 +62,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
 
   /**
    * Create instance
+   *
    * @param {CreateInviteInterface} params
    * @param {Date} [curDate]
    * @returns {Invite}
@@ -78,6 +79,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
 
   /**
    * Generate ID based on orgId and integration name
+   *
    * @param {object} params
    * @param {string} params.projectId
    * @returns {string}
@@ -88,6 +90,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
 
   /**
    * Get data to be pushed to the db
+   *
    * @param {DeepPartial<Invite>} instance
    * @returns {object}
    */
@@ -97,6 +100,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
 
   /**
    * Stringify object
+   *
    * @param {Invite} instance
    * @returns {string}
    */
@@ -106,6 +110,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
    * @returns {Invite}
    */
@@ -120,6 +125,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
 
   /**
    * Parse from cache
+   *
    * @param {string} stringified
    * @returns {Invite}
    */

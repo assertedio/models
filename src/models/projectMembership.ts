@@ -33,7 +33,7 @@ const CONSTANTS = {
 export class ProjectMembership extends ValidatedBase implements ProjectMembershipInterface {
   /**
    * @param {ProjectMembershipInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: ProjectMembershipInterface, validate = true) {
     super();
@@ -70,6 +70,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
 
   /**
    * Create instance
+   *
    * @param {CreateProjectMembership} params
    * @param {Date} [curDate]
    * @returns {ProjectMembership}
@@ -86,6 +87,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
 
   /**
    * Generate ID for membership
+   *
    * @param {string} userId
    * @param {string} projectId
    * @returns {string}
@@ -96,6 +98,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
 
   /**
    * Get data to be pushed to the db
+   *
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
@@ -105,6 +108,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
 
   /**
    * Stringify object
+   *
    * @param {Project} instance
    * @returns {string}
    */
@@ -114,6 +118,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
    * @returns {Project}
    */
@@ -128,6 +133,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
 
   /**
    * Parse from cache
+   *
    * @param {string} stringified
    * @returns {Project}
    */
