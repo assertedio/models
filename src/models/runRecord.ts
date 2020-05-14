@@ -6,8 +6,10 @@ import { DeepPartial } from 'ts-essentials';
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import {
   TEST_EVENT_TYPES,
+  TEST_RESULT_STATUS,
   TestData,
   TestDataInterface,
+  TestErrorInterface,
   TestEvent,
   TestEventInterface,
   TestStats,
@@ -63,6 +65,7 @@ const CONSTANTS = {
     TEST_EVENT_TYPES.EVENT_TEST_FAIL,
     TEST_EVENT_TYPES.EVENT_TEST_PENDING,
   ],
+  TEST_CASE_EVENT_TYPES: [TEST_EVENT_TYPES.EVENT_TEST_BEGIN, TEST_EVENT_TYPES.EVENT_TEST_PASS, TEST_EVENT_TYPES.EVENT_TEST_FAIL],
 };
 
 /**
@@ -165,6 +168,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   /**
    * Generate ID for model
+   *
    * @param {string} runId
    * @returns {string}
    */
@@ -174,11 +178,12 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   /**
    * Create model instance
+   *
    * @param {Run} runRequest
    * @param {string} projectId
    * @param {string} routineId
    * @param {Date} curDate
-   * @returns {Result}
+   * @returns {RunRecord}
    */
   static create(runRequest: RunInterface, projectId: string, routineId: string, curDate = DateTime.utc().toJSDate()): RunRecord {
     return new RunRecord({
@@ -203,13 +208,41 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   }
 
   /**
+   * Insert an error message for incomplete records that don't have an error
+   *
+   * @param {TestDataInterface} testData
+   * @param {RUN_TIMEOUT_TYPE | null} timeoutType
+   * @returns {TestErrorInterface | null}
+   */
+  static getIncompleteError(testData: TestDataInterface, timeoutType: RUN_TIMEOUT_TYPE | null): TestErrorInterface | null {
+    if (testData.result !== TEST_RESULT_STATUS.INCOMPLETE || testData.error) return testData.error;
+
+    switch (timeoutType) {
+      case RUN_TIMEOUT_TYPE.REPORTER: {
+        return { message: 'Routine timeout reached' };
+      }
+      case RUN_TIMEOUT_TYPE.EXEC: {
+        return { message: 'Execution timeout reached' };
+      }
+      case RUN_TIMEOUT_TYPE.JOB: {
+        return { message: 'Timeout waiting for job to complete' };
+      }
+      default: {
+        return { message: 'Test is incomplete for unknown reasons' };
+      }
+    }
+  }
+
+  /**
    * - Assume that all IDs come in pairs (start and end of event)
    * - Data and timestamp from the second are used if found
    * - If there is no second event, that will indicate an incomplete event, visible by the missing duration
+   *
    * @param {TestEventInterface[]} events
+   * @param {RUN_TIMEOUT_TYPE | null} timeoutType
    * @returns {TestDataInterface[]}
    */
-  static getResults(events: TestEventInterface[] = []): TestDataInterface[] {
+  static getResults(events: TestEventInterface[] = [], timeoutType: RUN_TIMEOUT_TYPE | null): TestDataInterface[] {
     const dataMap = events
       .map((event) => {
         if (!(event instanceof TestEvent)) return new TestEvent(event);
@@ -222,13 +255,18 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
         const { id, root } = event.data;
         if (!id || root) return result;
 
+        // Only mark test cases as "incomplete" if they never have a result
+        const data = CONSTANTS.TEST_CASE_EVENT_TYPES.includes(event.data.type)
+          ? { ...event.data, result: event.data.result || TEST_RESULT_STATUS.INCOMPLETE }
+          : event.data;
+
         if (!result[id]) {
           result[id] = {
             timestamp: event.timestamp,
-            data: event.data,
+            data,
           };
         } else {
-          result[id].data = event.data;
+          result[id].data = data;
           result[id].timestamp = event.timestamp;
         }
 
@@ -238,11 +276,17 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
     const sortedData = Object.values(dataMap).sort(
       ({ timestamp: firstTime }, { timestamp: secondTime }) => firstTime.valueOf() - secondTime.valueOf()
     );
-    return sortedData.map(({ data }) => data);
+    return sortedData
+      .map(({ data }) => data)
+      .map((data) => ({
+        ...data,
+        error: RunRecord.getIncompleteError(data, timeoutType),
+      }));
   }
 
   /**
    * Get patch from test result
+   *
    * @param {TestResultInterface} testResult
    * @returns {Partial<RunRecord>}
    */
@@ -262,12 +306,20 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
     const lastEvent = last(testResult.events || []);
 
-    patch.results = RunRecord.getResults(testResult.events || []);
+    patch.results = RunRecord.getResults(testResult.events || [], testResult.timeoutType);
+
+    const incompleteCount = patch.results.filter(({ result }) => result === TEST_RESULT_STATUS.INCOMPLETE).length;
+
+    const stats =
+      incompleteCount > 0
+        ? { ...lastEvent?.stats, tests: (lastEvent?.stats?.tests || 0) + incompleteCount, incomplete: incompleteCount }
+        : lastEvent?.stats;
+
+    patch.stats = stats ? new TestStats(stats as TestStatsConstructorInterface) : null;
 
     patch.console = testResult.console;
     patch.runDurationMs = testResult.runDurationMs;
     patch.testDurationMs = lastEvent?.elapsedMs || null;
-    patch.stats = lastEvent?.stats || null;
     patch.completedAt = testResult.createdAt;
     patch.timeoutType = testResult.timeoutType || null;
 
@@ -295,7 +347,8 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   /**
    * Get data to be pushed to the db
-   * @param {DeepPartial<Result>} instance
+   *
+   * @param {DeepPartial<RunRecord>} instance
    * @returns {object}
    */
   static forDb(instance: DeepPartial<RunRecord>): object {
@@ -304,7 +357,8 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   /**
    * Stringify object
-   * @param {Result} instance
+   *
+   * @param {RunRecord} instance
    * @returns {string}
    */
   static stringifyForCache(instance: RunRecord): string {
@@ -313,8 +367,9 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   /**
    * Convert from JSON to instance
+   *
    * @param {object} object
-   * @returns {Result}
+   * @returns {RunRecord}
    */
   static fromJson(object): RunRecord {
     const { createdAt, updatedAt, completedAt, ...rest } = object;
@@ -328,8 +383,9 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
   /**
    * Parse from cache
+   *
    * @param {string} stringified
-   * @returns {Result}
+   * @returns {RunRecord}
    */
   static parseFromCache(stringified: string): RunRecord {
     return RunRecord.fromJson(JSON.parse(stringified));

@@ -54,6 +54,7 @@ export class RoutineStatus extends ValidatedBase implements RoutineStatusInterfa
 
   /**
    * Get overall status
+   *
    * @param {RoutineInterface} routine
    * @param {TimelineEventConstructorInterface} status
    * @returns {OVERALL_ROUTINE_STATUS}
@@ -70,6 +71,7 @@ export class RoutineStatus extends ValidatedBase implements RoutineStatusInterfa
 
   /**
    * Create instance
+   *
    * @param {RoutineInterface} routine
    * @param {RoutineStatusConstructorInterface} params
    * @returns {RoutineStatus}

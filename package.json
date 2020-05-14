@@ -1,7 +1,7 @@
 {
   "name": "@asserted/models",
   "description": "Shared asserted models",
-  "version": "8.1.0",
+  "version": "8.2.0",
   "author": "Eric Hacke",
   "bugs": {
     "url": "https://github.com/assertedio/models/issues"
@@ -19,7 +19,7 @@
     "libphonenumber-js": "^1.7.51",
     "lodash": "^4.17.15",
     "luxon": "^1.24.1",
-    "nanoid": "^3.1.5",
+    "nanoid": "^3.1.7",
     "shorthash": "0.0.2",
     "shortid": "^2.2.15",
     "ts-essentials": "^6.0.4",
@@ -28,9 +28,9 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "@ehacke/commitlint-config": "^1.0.2",
-    "@ehacke/eslint-config": "^1.0.0",
-    "@ehacke/prettier-config": "^1.0.1",
+    "@ehacke/commitlint-config": "^1.0.3",
+    "@ehacke/eslint-config": "^1.0.4",
+    "@ehacke/prettier-config": "^1.0.2",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/expect": "^24.3.0",
     "@types/fs-extra": "^8.1.0",
@@ -47,7 +47,7 @@
     "commitlint": "^8.3.5",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-simple-import-sort": "^5.0.3",
     "fixpack": "^3.0.5",

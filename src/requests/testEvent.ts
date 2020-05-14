@@ -27,6 +27,7 @@ export interface TestStatsInterface {
   tests: number;
   passes: number;
   pending: number;
+  incomplete: number;
   failures: number;
   start?: Date;
   end?: Date;
@@ -44,16 +45,17 @@ export interface TestStatsConstructorInterface extends Omit<TestStatsInterface, 
 export class TestStats extends ValidatedBase implements TestStatsInterface {
   /**
    * @param {TestStatsInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TestStatsConstructorInterface, validate = true) {
     super();
 
-    this.suites = params.suites;
-    this.tests = params.tests;
-    this.passes = params.passes;
-    this.pending = params.pending;
-    this.failures = params.failures;
+    this.suites = params.suites || 0;
+    this.tests = params.tests || 0;
+    this.passes = params.passes || 0;
+    this.pending = params.pending || 0;
+    this.failures = params.failures || 0;
+    this.incomplete = params.incomplete || 0;
     this.start = params.start ? toDate(params.start) : undefined;
     this.end = params.end ? toDate(params.end) : undefined;
     this.duration = isNumber(params.duration) ? params.duration : null;
@@ -83,6 +85,9 @@ export class TestStats extends ValidatedBase implements TestStatsInterface {
 
   @IsNumber()
   pending: number;
+
+  @IsNumber()
+  incomplete: number;
 
   @IsNumber()
   suites: number;
@@ -146,6 +151,7 @@ export enum TEST_RESULT_STATUS {
   PASSED = 'passed',
   FAILED = 'failed',
   PENDING = 'pending',
+  INCOMPLETE = 'incomplete',
 }
 
 export interface TestDataInterface {
@@ -168,7 +174,7 @@ export interface TestDataInterface {
 export class TestData extends ValidatedBase implements TestDataInterface {
   /**
    * @param {TestDataInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TestDataInterface, validate = true) {
     super();
@@ -251,7 +257,7 @@ export interface TestEventConstructorInterface extends Omit<TestEventInterface, 
 export class TestEvent extends ValidatedBase implements TestEventInterface {
   /**
    * @param {TestEventInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: TestEventConstructorInterface, validate = true) {
     super();

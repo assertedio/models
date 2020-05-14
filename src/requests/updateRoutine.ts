@@ -56,6 +56,7 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
 
   /**
    * Create instance of update
+   *
    * @param {RoutineInterface} routine
    * @param {string} pkg
    * @returns {UpdateRoutine}

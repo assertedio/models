@@ -135,6 +135,7 @@ const ROUTINE_CONSTANTS = {
 
 /**
  * This version can be read/write from disk, does not include ephemeral details
+ *
  * @class
  */
 export class RoutineConfig extends ValidatedBase implements RoutineConfigInterface {

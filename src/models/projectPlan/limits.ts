@@ -14,7 +14,7 @@ export interface LimitsInterface {
 export class Limits extends ValidatedBase implements LimitsInterface {
   /**
    * @param {LimitsInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: LimitsInterface, validate = true) {
     super();
@@ -53,7 +53,7 @@ export interface PlanLimitsOverridesInterface {
 export class PlanLimitsOverrides extends ValidatedBase implements PlanLimitsOverridesInterface {
   /**
    * @param {PlanLimitsOverridesInterface} params
-   * @param {boolean} validate=true
+   * @param {boolean} [validate=true]
    */
   constructor(params: PlanLimitsOverridesInterface, validate = true) {
     super();

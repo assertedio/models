@@ -23,6 +23,7 @@ describe('testEvent unit tests', () => {
         suites: 1,
         tests: 1,
         passes: 1,
+        incomplete: 0,
         pending: 0,
         failures: 0,
         start: new Date('2018-01-01T00:00:00.000Z'),

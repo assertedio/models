@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import fs from 'fs-extra';
+import { omit } from 'lodash';
 import { DateTime } from 'luxon';
 import path from 'path';
 
@@ -69,6 +70,7 @@ describe('runRecord unit tests', () => {
         suites: 3,
         tests: 5,
         passes: 3,
+        incomplete: 0,
         pending: 0,
         failures: 2,
         start: new Date('2020-03-16T01:33:23.753Z'),
@@ -95,6 +97,7 @@ describe('runRecord unit tests', () => {
         passes: 3,
         pending: 0,
         failures: 2,
+        incomplete: 0,
         start: new Date('2020-03-16T01:33:23.753Z'),
       },
       runDurationMs: 0,
@@ -145,6 +148,7 @@ describe('runRecord unit tests', () => {
             tests: 7,
             passes: 5,
             pending: 0,
+            incomplete: 0,
             failures: 2,
             start: curDate,
             end: curDate,
@@ -174,6 +178,7 @@ describe('runRecord unit tests', () => {
             tests: 7,
             passes: 5,
             pending: 0,
+            incomplete: 0,
             failures: 2,
             start: curDate,
             end: curDate,
@@ -194,10 +199,11 @@ describe('runRecord unit tests', () => {
       testDurationMs: 75,
       stats: {
         suites: 4,
-        tests: 7,
+        tests: 8,
         passes: 5,
         pending: 0,
         failures: 2,
+        incomplete: 1,
         start: curDate,
         end: curDate,
         duration: 75,
@@ -217,7 +223,7 @@ describe('runRecord unit tests', () => {
           file: null,
           fullTitle: 'full title',
           fullTitlePath: [],
-          result: null,
+          result: 'incomplete',
           root: false,
           timedOut: false,
           title: null,
@@ -260,6 +266,7 @@ describe('runRecord unit tests', () => {
             suites: 4,
             tests: 7,
             passes: 5,
+            incomplete: 0,
             pending: 0,
             failures: 0,
             start: curDate,
@@ -286,6 +293,7 @@ describe('runRecord unit tests', () => {
         passes: 5,
         pending: 0,
         failures: 0,
+        incomplete: 0,
         start: curDate,
         end: curDate,
         duration: 75,
@@ -328,6 +336,7 @@ describe('runRecord unit tests', () => {
             tests: 7,
             passes: 5,
             pending: 0,
+            incomplete: 0,
             failures: 0,
             start: curDate,
             end: curDate,
@@ -353,6 +362,7 @@ describe('runRecord unit tests', () => {
         passes: 5,
         pending: 0,
         failures: 0,
+        incomplete: 0,
         start: curDate,
         end: curDate,
         duration: 75,
@@ -394,6 +404,7 @@ describe('runRecord unit tests', () => {
             suites: 4,
             tests: 7,
             passes: 5,
+            incomplete: 0,
             pending: 0,
             failures: 0,
             start: curDate,
@@ -419,6 +430,7 @@ describe('runRecord unit tests', () => {
         tests: 7,
         passes: 5,
         pending: 0,
+        incomplete: 0,
         failures: 0,
         start: curDate,
         end: curDate,
@@ -462,6 +474,7 @@ describe('runRecord unit tests', () => {
             tests: 7,
             passes: 5,
             pending: 0,
+            incomplete: 0,
             failures: 0,
             start: curDate,
             end: curDate,
@@ -487,6 +500,7 @@ describe('runRecord unit tests', () => {
         tests: 7,
         passes: 5,
         pending: 0,
+        incomplete: 0,
         failures: 0,
         start: curDate,
         end: curDate,
@@ -498,6 +512,47 @@ describe('runRecord unit tests', () => {
       failType: 'error',
     };
     expect(expected).to.eql(patch);
+  });
+
+  it('get patch for incomplete run', async () => {
+    const testResult: TestResultInterface = await fs.readJson(path.join(RESOURCE_PATH, 'reporterTimeoutResult.json'));
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+    expect(JSON.parse(JSON.stringify(omit(patch, 'console')))).to.eql({
+      results: [
+        {
+          id: 'cka405akt00022hs6243c3mcx',
+          type: 'test',
+          duration: null,
+          title: 'testy',
+          fullTitle: 'timeout test -> testy',
+          fullTitlePath: ['timeout test', 'testy'],
+          result: 'incomplete',
+          root: false,
+          file: '/timeoutPackage/timeout.asrtd.js',
+          error: {
+            message: 'Routine timeout reached',
+          },
+          timedOut: false,
+        },
+      ],
+      stats: {
+        suites: 1,
+        tests: 1,
+        passes: 0,
+        pending: 0,
+        failures: 0,
+        incomplete: 1,
+        start: '2020-05-12T14:20:16.942Z',
+        duration: null,
+      },
+      runDurationMs: 1763,
+      testDurationMs: 31,
+      completedAt: '2020-05-12T14:20:16.277Z',
+      timeoutType: 'reporter',
+      status: 'failed',
+      failType: 'timeout',
+    });
   });
 });
 
@@ -524,6 +579,7 @@ describe('completed runRecord', () => {
         suites: 3,
         tests: 5,
         passes: 3,
+        incomplete: 0,
         pending: 0,
         failures: 2,
         start: curDate,
@@ -549,6 +605,7 @@ describe('completed runRecord', () => {
             suites: 3,
             tests: 5,
             passes: 3,
+            incomplete: 0,
             pending: 0,
             failures: 2,
             start: new Date('2020-03-16T01:33:23.753Z'),
@@ -575,6 +632,7 @@ describe('completed runRecord', () => {
         suites: 3,
         tests: 5,
         passes: 3,
+        incomplete: 0,
         pending: 0,
         failures: 2,
         start: curDate,
@@ -616,6 +674,7 @@ describe('completed runRecord', () => {
         suites: 3,
         tests: 5,
         passes: 3,
+        incomplete: 0,
         pending: 0,
         failures: 2,
         start: '2018-01-01T00:00:00.000Z',
@@ -637,6 +696,7 @@ describe('completed runRecord', () => {
         suites: 3,
         tests: 5,
         passes: 3,
+        incomplete: 0,
         pending: 0,
         failures: 2,
         start: curDate,
@@ -660,6 +720,7 @@ describe('completed runRecord', () => {
     const params = {
       id: 'rs-ck8izosze008lrgfd2bsmhbrb',
       projectId: 'p-WQmmjAF2P',
+      // eslint-disable-next-line no-secrets/no-secrets
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
 
@@ -669,6 +730,7 @@ describe('completed runRecord', () => {
       testDurationMs: null,
       type: 'scheduled',
       console:
+        // eslint-disable-next-line no-secrets/no-secrets
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
       failType: 'error',
@@ -683,6 +745,7 @@ describe('completed runRecord', () => {
     const expected = {
       id: 'rs-ck8izosze008lrgfd2bsmhbrb',
       projectId: 'p-WQmmjAF2P',
+      // eslint-disable-next-line no-secrets/no-secrets
       runId: 'rn-ck8izosze008lrgfd2bsmhbrb',
       routineId: 'rt-ck8fzymvl0000lcfd63kafqi4',
       error: null,
@@ -692,6 +755,7 @@ describe('completed runRecord', () => {
       type: 'scheduled',
       results: [],
       console:
+        // eslint-disable-next-line no-secrets/no-secrets
         "error: Error: Command failed: ./node_modules/mocha/bin/mocha --exit --reporter mocha-ldjson --reporter-options outputPath=/tmp/result.ldjson,overallTimeoutMs=2000 --color=false --ui=bdd --bail=false /tmp/asserted-rn-ck8izosze008lrgfd2bsmhbrb-tPl5KE/**/*.asrtd.js; echo 'Done'\n\n    at ChildProcess.exithandler (child_process.js:294:12)\n    at ChildProcess.emit (events.js:198:13)\n    at ChildProcess.EventEmitter.emit (domain.js:466:23)\n    at maybeClose (internal/child_process.js:982:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)",
       status: 'failed',
       failType: 'error',
@@ -702,9 +766,21 @@ describe('completed runRecord', () => {
     expect(result).to.eql(expected);
   });
 
-  it('extract test data from events', async () => {
+  it('extract test data from events - passing', async () => {
     const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'passingTestResult.json')));
-    const data = RunRecord.getResults(testResult.events);
+    const data = RunRecord.getResults(testResult.events, null);
     expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'passingTestData.json')));
+  });
+
+  it('extract test data from events - reporter timeout', async () => {
+    const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'reporterTimeoutResult.json')));
+    const data = RunRecord.getResults(testResult.events, RUN_TIMEOUT_TYPE.REPORTER);
+    expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'reporterTimeoutData.json')));
+  });
+
+  it('extract test data from events - internal timeout', async () => {
+    const testResult = new TestResult(await fs.readJson(path.join(RESOURCE_PATH, 'internalTimeoutResult.json')));
+    const data = RunRecord.getResults(testResult.events, null);
+    expect(JSON.parse(JSON.stringify(data))).to.eql(await fs.readJson(path.join(RESOURCE_PATH, 'internalTimeoutData.json')));
   });
 });

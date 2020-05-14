@@ -150,6 +150,7 @@ export class Bucket extends ValidatedBase implements BucketInterface {
 
   /**
    * Get id of bucket
+   *
    * @param {string} routineId
    * @param {BUCKET_SIZE} size
    * @param {Date} completedAt
@@ -162,6 +163,7 @@ export class Bucket extends ValidatedBase implements BucketInterface {
 
   /**
    * Get start date of bucket
+   *
    * @param {BUCKET_SIZE} size
    * @param {Date} date
    * @returns {DateTime}
@@ -188,6 +190,7 @@ export class Bucket extends ValidatedBase implements BucketInterface {
 
   /**
    * Get end date of bucket
+   *
    * @param {BUCKET_SIZE} size
    * @param {Date} date
    * @returns {DateTime}
@@ -214,6 +217,7 @@ export class Bucket extends ValidatedBase implements BucketInterface {
 
   /**
    * Create bucket for completed run record
+   *
    * @param {CompletedRunRecordInterface} completedRunRecord
    * @param {BUCKET_SIZE} size
    * @returns {Bucket}

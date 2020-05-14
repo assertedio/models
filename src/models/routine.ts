@@ -45,6 +45,7 @@ export class Routine extends RoutineConfig {
 
   /**
    * Routine is active
+   *
    * @returns {boolean}
    */
   isActive(): boolean {
@@ -53,6 +54,7 @@ export class Routine extends RoutineConfig {
 
   /**
    * Convert to simpler config instance
+   *
    * @returns {RoutineConfig}
    */
   toRoutineConfig(): RoutineConfig {

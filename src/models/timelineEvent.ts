@@ -80,6 +80,7 @@ export class TimelineEvent extends ValidatedBase implements TimelineEventInterfa
 
   /**
    * Generate ID for model
+   *
    * @param {string} routineId
    * @param {Date} start
    * @returns {string}
