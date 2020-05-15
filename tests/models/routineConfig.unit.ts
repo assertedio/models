@@ -16,6 +16,7 @@ describe('routine config unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: 'v1',
       interval: {
         unit: 'min',
         value: 5,
@@ -49,6 +50,7 @@ describe('routine config unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: 'v1',
       interval: {
         unit: 'min',
         value: 1,
@@ -94,6 +96,7 @@ describe('routine config unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: 'v1',
       interval: {
         unit: 'min',
         value: 5,
@@ -116,6 +119,7 @@ describe('routine config unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: 'v1',
       interval: {
         unit: 'hr',
         value: 10,
@@ -136,6 +140,7 @@ describe('routine config unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: 'v1',
       interval: {
         unit: 'hr',
         value: 10,

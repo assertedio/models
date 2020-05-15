@@ -106,6 +106,10 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   ui: MOCHA_UI;
 }
 
+export enum DEPENDENCIES_VERSIONS {
+  V1 = 'v1',
+}
+
 export interface RoutineConfigInterface {
   id: string;
   projectId: string;
@@ -114,6 +118,7 @@ export interface RoutineConfigInterface {
   interval: IntervalInterface;
   mocha: MochaInterface;
   timeoutSec: number;
+  dependencies: DEPENDENCIES_VERSIONS;
 }
 
 export interface RoutineConfigConstructorInterface extends DeepPartial<RoutineConfigInterface> {
@@ -131,6 +136,7 @@ const ROUTINE_CONSTANTS = {
   DEFAULT_TIMEOUT_SEC: 1,
   MAX_TIMEOUT_SEC,
   MAX_TIMEOUT_ERROR: `Max timeout is ${MAX_TIMEOUT_MIN} minutes, or ${MAX_TIMEOUT_SEC} seconds`,
+  LATEST_DEPENDENCIES_VERSION: DEPENDENCIES_VERSIONS.V1,
 };
 
 /**
@@ -155,6 +161,7 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
     this.interval = new Interval(params?.interval, false);
     this.mocha = new Mocha({ ...params?.mocha }, false);
     this.timeoutSec = params.timeoutSec || ROUTINE_CONSTANTS.DEFAULT_TIMEOUT_SEC;
+    this.dependencies = params.dependencies || ROUTINE_CONSTANTS.LATEST_DEPENDENCIES_VERSION;
 
     if (validate) {
       this.validate();
@@ -187,4 +194,7 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
 
   @IsString()
   projectId: string;
+
+  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
+  dependencies: DEPENDENCIES_VERSIONS;
 }

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { CompletedRunRecord, Routine, RUN_STATUS } from '../../src/models';
+import { CompletedRunRecord, DEPENDENCIES_VERSIONS, Routine, RUN_STATUS } from '../../src/models';
 import { TIMELINE_EVENT_STATUS, TimelineEvent, TimelineEventConstructorInterface } from '../../src/models/timelineEvent';
 import { RoutineStatus, RoutineStatusConstructorInterface, RUN_TYPE } from '../../src/requests';
 
@@ -43,6 +43,7 @@ describe('routine status unit', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       interval: {
         unit: 'hr' as any,
         value: 10,
@@ -87,7 +88,7 @@ describe('routine status unit', () => {
       runs: stats,
     };
 
-    const params: Omit<RoutineStatusConstructorInterface, 'overallStatus'> = {
+    const params: Omit<RoutineStatusConstructorInterface, 'overallStatus' | 'nextRunAt'> = {
       record: completeRunRecord,
       status: timelineEvent,
       downtime: timelineEvent,
@@ -102,6 +103,7 @@ describe('routine status unit', () => {
 
     const expected = {
       overallStatus: 'notPushed',
+      nextRunAt: null,
       record: {
         id: 'rs-run-id',
         projectId: 'project-id',

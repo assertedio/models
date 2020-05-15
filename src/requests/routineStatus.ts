@@ -1,7 +1,8 @@
-import { IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { CompletedRunRecord, CompletedRunRecordConstructorInterface, CompletedRunRecordInterface, RoutineInterface } from '../models';
 import { TIMELINE_EVENT_STATUS, TimelineEvent, TimelineEventConstructorInterface, TimelineEventInterface } from '../models/timelineEvent';
+import { toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { Uptimes, UptimesConstructorInterface, UptimesInterface } from './uptime';
 
@@ -16,6 +17,7 @@ export type OVERALL_ROUTINE_STATUS = ROUTINE_CONFIG_STATUS | TIMELINE_EVENT_STAT
 
 export interface RoutineStatusInterface {
   overallStatus: OVERALL_ROUTINE_STATUS;
+  nextRunAt: Date | null;
   status: TimelineEventInterface | null;
   record: CompletedRunRecordInterface | null;
   uptimes: UptimesInterface;
@@ -24,6 +26,7 @@ export interface RoutineStatusInterface {
 
 export interface RoutineStatusConstructorInterface {
   overallStatus: OVERALL_ROUTINE_STATUS;
+  nextRunAt: Date | null;
   status: TimelineEventConstructorInterface | null;
   record: CompletedRunRecordConstructorInterface | null;
   uptimes: UptimesConstructorInterface;
@@ -42,6 +45,7 @@ export class RoutineStatus extends ValidatedBase implements RoutineStatusInterfa
     super();
 
     this.overallStatus = params.overallStatus;
+    this.nextRunAt = params.nextRunAt ? toDate(params.nextRunAt) : null;
     this.record = params.record ? new CompletedRunRecord(params.record, false) : null;
     this.status = params.status ? new TimelineEvent(params.status, false) : null;
     this.downtime = params.downtime ? new TimelineEvent(params.downtime, false) : null;
@@ -76,14 +80,17 @@ export class RoutineStatus extends ValidatedBase implements RoutineStatusInterfa
    * @param {RoutineStatusConstructorInterface} params
    * @returns {RoutineStatus}
    */
-  static create(routine: RoutineInterface, params: Omit<RoutineStatusConstructorInterface, 'overallStatus'>): RoutineStatus {
+  static create(routine: RoutineInterface, params: Omit<RoutineStatusConstructorInterface, 'overallStatus' | 'nextRunAt'>): RoutineStatus {
     const { status, record, uptimes, downtime } = params;
-
-    return new RoutineStatus({ overallStatus: RoutineStatus.getOverallStatus(routine, status), status, record, uptimes, downtime });
+    return new RoutineStatus({ overallStatus: RoutineStatus.getOverallStatus(routine, status), nextRunAt: null, status, record, uptimes, downtime });
   }
 
   @IsString()
   overallStatus: OVERALL_ROUTINE_STATUS;
+
+  @IsOptional()
+  @IsDate()
+  nextRunAt: Date | null;
 
   @IsOptional()
   @ValidateNested()
