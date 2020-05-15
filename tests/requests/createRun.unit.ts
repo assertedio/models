@@ -1,17 +1,20 @@
 import { expect } from 'chai';
 
+import { DEPENDENCIES_VERSIONS } from '../../src/models';
 import { CreateRun } from '../../src/requests';
 
 describe('createRun unit tests', () => {
   it('minimal create', () => {
     const params = {
       package: 'compressed-content',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
     };
 
     const createRun = new CreateRun(params);
 
     const expected = {
       package: 'compressed-content',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['**/*.asrtd.js'],
         ignore: [],
@@ -26,6 +29,7 @@ describe('createRun unit tests', () => {
   it('full create', () => {
     const params = {
       package: 'compressed-content',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['something.js', 'something-else.js'],
         ignore: ['athing.js'],
@@ -38,6 +42,7 @@ describe('createRun unit tests', () => {
 
     const expected = {
       package: 'compressed-content',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['something.js', 'something-else.js'],
         ignore: ['athing.js'],
@@ -50,12 +55,13 @@ describe('createRun unit tests', () => {
   });
 
   it('reject with missing package', () => {
-    expect(() => new CreateRun({ routineId: 'routine-id' } as any)).to.throw('package must be a string');
+    expect(() => new CreateRun({ routineId: 'routine-id', dependencies: DEPENDENCIES_VERSIONS.V1 } as any)).to.throw('package must be a string');
   });
 
   it('reject with bad files', () => {
     const params = {
       package: 'compressed-content',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       routineId: 'routine-id',
       mocha: {
         files: {},

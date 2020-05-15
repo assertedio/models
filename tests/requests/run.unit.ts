@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { omit } from 'lodash';
 import { DateTime } from 'luxon';
 
+import { DEPENDENCIES_VERSIONS } from '../../src/models';
 import { Run } from '../../src/requests/run';
 
 describe('run unit tests', () => {
@@ -10,6 +11,7 @@ describe('run unit tests', () => {
       package: 'pack-age',
       timeoutMs: 100,
       type: 'manual' as any,
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['foo.js'],
       } as any,
@@ -22,6 +24,7 @@ describe('run unit tests', () => {
       package: 'pack-age',
       timeoutMs: 100,
       type: 'manual',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['foo.js'],
         ignore: [],
@@ -39,6 +42,7 @@ describe('run unit tests', () => {
     const params = {
       id: 'foo-id',
       package: 'pack-age',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       timeoutMs: 100,
       type: 'manual' as any,
       mocha: {
@@ -53,6 +57,7 @@ describe('run unit tests', () => {
       package: 'pack-age',
       timeoutMs: 100,
       type: 'manual',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['foo.js'],
         ignore: [],
