@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { INTERVAL_UNITS } from '../../src/models';
+import { DEPENDENCIES_VERSIONS, INTERVAL_UNITS } from '../../src/models';
 import { CreateRoutine } from '../../src/requests';
 
 describe('createRoutine unit tests', () => {
@@ -16,6 +16,7 @@ describe('createRoutine unit tests', () => {
       interval: undefined,
       mocha: undefined,
       timeoutSec: undefined,
+      dependencies: undefined,
     };
 
     expect(createRoutine).to.eql(expected);
@@ -26,6 +27,7 @@ describe('createRoutine unit tests', () => {
       name: 'foo',
       projectId: 'foo-id',
       description: 'bar',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['bar.js'],
         ignore: ['foo.js'],
@@ -45,6 +47,7 @@ describe('createRoutine unit tests', () => {
       name: 'foo',
       projectId: 'foo-id',
       description: 'bar',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       interval: {
         unit: 'day',
         value: 10,
@@ -66,6 +69,7 @@ describe('createRoutine unit tests', () => {
       name: 'foo',
       projectId: 'foo-id',
       description: 'bar',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       mocha: {
         files: ['bar.js'],
         ignore: ['foo.js'],
