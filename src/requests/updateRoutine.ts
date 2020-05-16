@@ -1,6 +1,15 @@
-import { IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
+import { IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineConfig, RoutineConfigInterface } from '../models/routineConfig';
+import {
+  DEPENDENCIES_VERSIONS,
+  Interval,
+  IntervalInterface,
+  Mocha,
+  MochaInterface,
+  RoutineConfig,
+  RoutineConfigInterface,
+} from '../models/routineConfig';
+import { enumError } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'projectId'> {
@@ -24,6 +33,7 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
     this.mocha = new Mocha(params.mocha, false);
     this.package = params.package;
     this.timeoutSec = params.timeoutSec;
+    this.dependencies = params.dependencies;
 
     if (validate) {
       this.validate();
@@ -53,6 +63,9 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
   @Max(RoutineConfig.CONSTANTS.MAX_TIMEOUT_SEC, { message: RoutineConfig.CONSTANTS.MAX_TIMEOUT_ERROR })
   @IsInt()
   timeoutSec: number;
+
+  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
+  dependencies: DEPENDENCIES_VERSIONS;
 
   /**
    * Create instance of update

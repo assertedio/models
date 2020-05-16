@@ -1,8 +1,16 @@
-import { IsInstance, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
+import { IsEnum, IsInstance, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 import { isNumber } from 'lodash';
 
-import { Interval, IntervalInterface, Mocha, MochaInterface, RoutineConfig, RoutineConfigConstructorInterface } from '../models/routineConfig';
-import { cleanString } from '../utils';
+import {
+  DEPENDENCIES_VERSIONS,
+  Interval,
+  IntervalInterface,
+  Mocha,
+  MochaInterface,
+  RoutineConfig,
+  RoutineConfigConstructorInterface,
+} from '../models/routineConfig';
+import { cleanString, enumError } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 
 export type CreateRoutineInterface = Omit<RoutineConfigConstructorInterface, 'id'>;
@@ -24,6 +32,7 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
     this.interval = params?.interval ? new Interval(params.interval, false) : undefined;
     this.mocha = params?.mocha ? new Mocha(params.mocha, false) : undefined;
     this.timeoutSec = isNumber(params.timeoutSec) ? params.timeoutSec : undefined;
+    this.dependencies = params.dependencies;
 
     if (validate) {
       this.validate();
@@ -58,4 +67,8 @@ export class CreateRoutine extends ValidatedBase implements CreateRoutineInterfa
   @Max(RoutineConfig.CONSTANTS.MAX_TIMEOUT_SEC, { message: RoutineConfig.CONSTANTS.MAX_TIMEOUT_ERROR })
   @IsInt()
   timeoutSec?: number;
+
+  @IsOptional()
+  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
+  dependencies?: DEPENDENCIES_VERSIONS;
 }

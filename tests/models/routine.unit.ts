@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Routine } from '../../src/models';
+import { DEPENDENCIES_VERSIONS, Routine } from '../../src/models';
 
 const curDate = new Date('2018-01-01T00:00:00.000Z');
 
@@ -11,6 +11,7 @@ describe('routine unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
       interval: {
         unit: 'hr' as any,
         value: 10,
@@ -35,6 +36,7 @@ describe('routine unit tests', () => {
       projectId: 'project-id',
       name: '',
       description: '',
+      dependencies: 'v1',
       interval: {
         unit: 'hr',
         value: 10,

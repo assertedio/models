@@ -4,6 +4,7 @@ import { omit } from 'lodash';
 import { DateTime } from 'luxon';
 import path from 'path';
 
+import { DEPENDENCIES_VERSIONS } from '../../src/models';
 import { CompletedRunRecord, RUN_STATUS, RunRecord } from '../../src/models/runRecord';
 import { RUN_TIMEOUT_TYPE, TEST_EVENT_TYPES, TestResult, TestResultInterface } from '../../src/requests';
 import { Run, RUN_TYPE } from '../../src/requests/run';
@@ -17,6 +18,7 @@ describe('runRecord unit tests', () => {
       {
         package: 'pack-age',
         type: 'manual' as any,
+        dependencies: DEPENDENCIES_VERSIONS.V1,
         mocha: {
           files: ['foo.js'],
         } as any,

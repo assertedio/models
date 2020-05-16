@@ -2,7 +2,7 @@ import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min, ValidateNested }
 import { DateTime } from 'luxon';
 import shortid from 'shortid';
 
-import { Mocha, MochaInterface } from '../models/routineConfig';
+import { DEPENDENCIES_VERSIONS, Mocha, MochaInterface } from '../models/routineConfig';
 import { enumError, toDate } from '../utils';
 import { ValidatedBase } from '../validatedBase';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
@@ -46,6 +46,7 @@ export class Run extends ValidatedBase implements RunInterface {
     this.id = params.id;
     this.type = params.type;
     this.package = params?.package;
+    this.dependencies = params?.dependencies;
     this.mocha = new Mocha(params?.mocha, false);
     this.timeoutMs = params?.timeoutMs;
 
@@ -70,6 +71,9 @@ export class Run extends ValidatedBase implements RunInterface {
 
   @IsString()
   package: string;
+
+  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
+  dependencies: DEPENDENCIES_VERSIONS;
 
   @Min(CONSTANTS.MIN_TIMEOUT_MS)
   @Max(CONSTANTS.MAX_TIMEOUT_MS)
