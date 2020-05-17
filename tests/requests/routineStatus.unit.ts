@@ -88,10 +88,11 @@ describe('routine status unit', () => {
       runs: stats,
     };
 
-    const params: Omit<RoutineStatusConstructorInterface, 'overallStatus' | 'nextRunAt'> = {
+    const params: Omit<RoutineStatusConstructorInterface, 'overallStatus'> = {
       record: completeRunRecord,
       status: timelineEvent,
       downtime: timelineEvent,
+      nextRunAt: curDate,
       uptimes: {
         day: uptime,
         week: uptime,
@@ -103,7 +104,7 @@ describe('routine status unit', () => {
 
     const expected = {
       overallStatus: 'notPushed',
-      nextRunAt: null,
+      nextRunAt: curDate,
       record: {
         id: 'rs-run-id',
         projectId: 'project-id',
