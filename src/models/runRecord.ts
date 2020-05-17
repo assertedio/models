@@ -57,6 +57,7 @@ export interface RunRecordInterface extends CreateRunRecordInterface {
 
 const CONSTANTS = {
   ID_PREFIX: 'rs-',
+  MAX_CONSOLE_LENGTH: 200,
   INCLUDED_EVENT_TYPES: [
     TEST_EVENT_TYPES.EVENT_HOOK_BEGIN,
     TEST_EVENT_TYPES.EVENT_HOOK_END,
@@ -285,24 +286,76 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
   }
 
   /**
+   * Get status of run based on result
+   *
+   * @param {TestResultInterface} testResult
+   * @param {TestStatsInterface | null} stats
+   * @param {TestEventInterface | null} lastEvent
+   * @returns {{
+    status: RUN_STATUS,
+    failType: RUN_FAIL_TYPE | null,
+    timeoutType: RUN_TIMEOUT_TYPE | null,
+    error: string | null,
+  }}
+   */
+  static getPatchStatus(
+    testResult: TestResultInterface,
+    stats: TestStatsInterface | null,
+    lastEvent: TestEventInterface | null
+  ): {
+    status: RUN_STATUS;
+    failType: RUN_FAIL_TYPE | null;
+    timeoutType: RUN_TIMEOUT_TYPE | null;
+    error: string | null;
+  } {
+    if (testResult.error) {
+      return {
+        status: RUN_STATUS.FAILED,
+        failType: RUN_FAIL_TYPE.ERROR,
+        error: testResult.error,
+        timeoutType: null,
+      };
+    }
+    if (lastEvent?.data.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!testResult.timeoutType) {
+      return {
+        status: RUN_STATUS.FAILED,
+        failType: RUN_FAIL_TYPE.TIMEOUT,
+        error: testResult.error,
+        timeoutType: testResult.timeoutType || RUN_TIMEOUT_TYPE.UNKNOWN,
+      };
+    }
+    if (testResult.events.length === 0) {
+      return {
+        status: RUN_STATUS.FAILED,
+        failType: RUN_FAIL_TYPE.ERROR,
+        error: testResult.error,
+        timeoutType: null,
+      };
+    }
+    if ((stats?.failures && stats?.failures > 0) || (stats?.incomplete && stats?.incomplete > 0)) {
+      return {
+        status: RUN_STATUS.FAILED,
+        failType: RUN_FAIL_TYPE.TEST,
+        error: null,
+        timeoutType: null,
+      };
+    }
+    return {
+      status: RUN_STATUS.PASSED,
+      failType: null,
+      error: null,
+      timeoutType: null,
+    };
+  }
+
+  /**
    * Get patch from test result
    *
    * @param {TestResultInterface} testResult
    * @returns {Partial<RunRecord>}
    */
   static getPatchFromResult(testResult: TestResultInterface): Partial<RunRecord> {
-    const patch = {} as {
-      status: RUN_STATUS;
-      failType: RUN_FAIL_TYPE | null;
-      timeoutType: RUN_TIMEOUT_TYPE | null;
-      console: string | null;
-      error: string | null;
-      results: TestDataInterface[];
-      stats: TestStatsInterface | null;
-      runDurationMs: number;
-      testDurationMs: number | null;
-      completedAt: Date;
-    };
+    let patch: Partial<RunRecord> = {};
 
     const lastEvent = last(testResult.events || []);
 
@@ -317,29 +370,18 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
 
     patch.stats = stats ? new TestStats(stats as TestStatsConstructorInterface) : null;
 
-    patch.console = testResult.console;
     patch.runDurationMs = testResult.runDurationMs;
     patch.testDurationMs = lastEvent?.elapsedMs || null;
     patch.completedAt = testResult.createdAt;
-    patch.timeoutType = testResult.timeoutType || null;
 
-    if (testResult.error) {
-      patch.status = RUN_STATUS.FAILED;
-      patch.failType = RUN_FAIL_TYPE.ERROR;
-      patch.error = testResult.error;
-    } else if (lastEvent?.data.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!patch.timeoutType) {
-      patch.status = RUN_STATUS.FAILED;
-      patch.failType = RUN_FAIL_TYPE.TIMEOUT;
-      patch.timeoutType = testResult.timeoutType || RUN_TIMEOUT_TYPE.UNKNOWN;
-    } else if (testResult.events.length === 0) {
-      patch.status = RUN_STATUS.FAILED;
-      patch.failType = RUN_FAIL_TYPE.ERROR;
-    } else if (patch.stats?.failures && patch.stats?.failures > 0) {
-      patch.status = RUN_STATUS.FAILED;
-      patch.failType = RUN_FAIL_TYPE.TEST;
+    const patchStatus = RunRecord.getPatchStatus(testResult, patch.stats, lastEvent || null);
+    patch = { ...patch, ...patchStatus };
+
+    // Trim console for scheduled runs
+    if (testResult.type === RUN_TYPE.SCHEDULED) {
+      patch.console = patch.status === RUN_STATUS.FAILED && testResult.console ? testResult.console.slice(-CONSTANTS.MAX_CONSOLE_LENGTH) : null;
     } else {
-      patch.status = RUN_STATUS.PASSED;
-      patch.failType = null;
+      patch.console = testResult.console;
     }
 
     return patch;

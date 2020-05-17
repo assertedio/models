@@ -235,6 +235,7 @@ describe('runRecord unit tests', () => {
       status: 'failed',
       failType: 'test',
       timeoutType: null,
+      error: null,
     };
     expect(patch).to.eql(expected);
   });
@@ -289,6 +290,7 @@ describe('runRecord unit tests', () => {
       runDurationMs: 0,
       testDurationMs: 75,
       timeoutType: null,
+      error: null,
       stats: {
         suites: 4,
         tests: 7,
@@ -369,6 +371,7 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
+      error: null,
       results: [],
       completedAt: curDate,
       status: 'failed',
@@ -438,6 +441,7 @@ describe('runRecord unit tests', () => {
         end: curDate,
         duration: 75,
       },
+      error: null,
       results: [],
       completedAt: curDate,
       status: 'failed',
@@ -548,6 +552,7 @@ describe('runRecord unit tests', () => {
         start: '2020-05-12T14:20:16.942Z',
         duration: null,
       },
+      error: null,
       runDurationMs: 1763,
       testDurationMs: 31,
       completedAt: '2020-05-12T14:20:16.277Z',
