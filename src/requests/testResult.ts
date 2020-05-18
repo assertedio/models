@@ -37,6 +37,11 @@ interface TestResultConstructorInterface extends Omit<TestResultInterface, 'even
  * @class
  */
 export class TestResult extends ValidatedBase implements TestResultInterface {
+  static CONSTANTS = {
+    // Large, but not crazy. Trimmed further before saving
+    MAX_CONSOLE_LENGTH: 5000,
+  };
+
   /**
    * @param {TestResultInterface} params
    * @param {boolean} validate
@@ -46,7 +51,7 @@ export class TestResult extends ValidatedBase implements TestResultInterface {
 
     this.runId = params.runId;
     this.type = params.type;
-    this.console = params.console;
+    this.console = params.console ? params.console.slice(-TestResult.CONSTANTS.MAX_CONSOLE_LENGTH) : params.console;
     this.error = params.error || null;
     this.runDurationMs = params.runDurationMs;
     this.events = (params.events || []).map((event) => new TestEvent(event, false));

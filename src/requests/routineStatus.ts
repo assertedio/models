@@ -80,9 +80,9 @@ export class RoutineStatus extends ValidatedBase implements RoutineStatusInterfa
    * @param {RoutineStatusConstructorInterface} params
    * @returns {RoutineStatus}
    */
-  static create(routine: RoutineInterface, params: Omit<RoutineStatusConstructorInterface, 'overallStatus' | 'nextRunAt'>): RoutineStatus {
-    const { status, record, uptimes, downtime } = params;
-    return new RoutineStatus({ overallStatus: RoutineStatus.getOverallStatus(routine, status), nextRunAt: null, status, record, uptimes, downtime });
+  static create(routine: RoutineInterface, params: Omit<RoutineStatusConstructorInterface, 'overallStatus'>): RoutineStatus {
+    const { status, record, uptimes, downtime, nextRunAt } = params;
+    return new RoutineStatus({ overallStatus: RoutineStatus.getOverallStatus(routine, status), nextRunAt, status, record, uptimes, downtime });
   }
 
   @IsString()
