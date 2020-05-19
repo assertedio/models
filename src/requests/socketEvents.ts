@@ -7,4 +7,8 @@ export enum SOCKET_EVENTS {
   REMOVE_NOTIFY_CONFIG = 'remove-notify-config',
   PROJECT_UPDATES = 'project-updates',
   PROJECT_PLAN_UPDATES = 'project-plan-updates',
+  MEMBERS_UPDATES = 'members-updates',
+  INVITES_UPDATES = 'invites-updates',
+  TOKENS_UPDATES = 'token-updates',
+  ROUTINE_UPDATES = 'routine-updates',
 }
