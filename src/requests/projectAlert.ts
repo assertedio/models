@@ -1,6 +1,6 @@
 export enum PROJECT_ALERT_LEVEL {
   INFO = 'info',
-  WARN = 'warn',
+  WARNING = 'warning',
   DANGER = 'danger',
 }
 
