@@ -208,8 +208,7 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
    */
   static requiredSeconds(timeoutSec: number, interval: IntervalInterface): number {
     const intervalMs = ms(`${interval.value} ${interval.unit}`);
-    // eslint-disable-next-line no-magic-numbers
-    return timeoutSec * Math.round(intervalMs / 1000);
+    return timeoutSec * Math.floor(ms('1 day') / intervalMs);
   }
 
   /**
