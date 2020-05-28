@@ -11,6 +11,7 @@ describe('subscription model unit', () => {
       subscriptionId: 'sub-id',
       subscriptionItemId: 'sub-item-id',
       nextBillDate: curDate,
+      cancelled: false,
       discount: {
         id: 'discount-id',
         name: 'discount-name',
@@ -31,6 +32,7 @@ describe('subscription model unit', () => {
     const params: SubscriptionInterface = {
       subscriptionId: 'sub-id',
       subscriptionItemId: 'sub-item-id',
+      cancelled: false,
       nextBillDate: null,
       discount: null,
       lastSyncAt: curDate,
