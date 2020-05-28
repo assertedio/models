@@ -33,6 +33,17 @@ describe('routine config unit tests', () => {
     expect(routineConfig).to.eql(expected);
   });
 
+  it('get required seconds', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+    };
+
+    const routineConfig = new RoutineConfig(params);
+
+    expect(routineConfig.requiredSeconds()).to.eql(300);
+  });
+
   it('create with minimum interval', () => {
     const params = {
       id: 'something',
