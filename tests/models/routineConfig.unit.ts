@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { RoutineConfig } from '../../src/models';
+import { INTERVAL_UNITS, RoutineConfig } from '../../src/models';
 
 describe('routine config unit tests', () => {
   it('minimal create', () => {
@@ -31,6 +31,38 @@ describe('routine config unit tests', () => {
     };
 
     expect(routineConfig).to.eql(expected);
+  });
+
+  it('get required seconds - typical', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      interval: {
+        unit: INTERVAL_UNITS.MIN,
+        value: 5,
+      },
+      timeoutSec: 1,
+    };
+
+    const routineConfig = new RoutineConfig(params);
+
+    expect(routineConfig.requiredSeconds()).to.eql(288);
+  });
+
+  it('get required seconds - day interval', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      interval: {
+        unit: INTERVAL_UNITS.DAY,
+        value: 1,
+      },
+      timeoutSec: 1,
+    };
+
+    const routineConfig = new RoutineConfig(params);
+
+    expect(routineConfig.requiredSeconds()).to.eql(1);
   });
 
   it('create with minimum interval', () => {

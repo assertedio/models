@@ -1,5 +1,6 @@
 import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 import { isNil } from 'lodash';
+import ms from 'ms';
 import { DeepPartial } from 'ts-essentials';
 
 import { cleanString, enumError } from '../utils';
@@ -197,4 +198,25 @@ export class RoutineConfig extends ValidatedBase implements RoutineConfigInterfa
 
   @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
   dependencies: DEPENDENCIES_VERSIONS;
+
+  /**
+   * Required seconds
+   *
+   * @param {number} timeoutSec
+   * @param {IntervalInterface} interval
+   * @returns {number}
+   */
+  static requiredSeconds(timeoutSec: number, interval: IntervalInterface): number {
+    const intervalMs = ms(`${interval.value} ${interval.unit}`);
+    return timeoutSec * Math.floor(ms('1 day') / intervalMs);
+  }
+
+  /**
+   * Required seconds
+   *
+   * @returns {number}
+   */
+  requiredSeconds(): number {
+    return RoutineConfig.requiredSeconds(this.timeoutSec, this.interval);
+  }
 }

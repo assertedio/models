@@ -1,4 +1,4 @@
-import { IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { toDate } from '../../utils';
 import { ValidatedBase } from '../../validatedBase';
@@ -9,6 +9,7 @@ export interface SubscriptionInterface {
   discount: DiscountInterface | null;
   subscriptionId: string;
   subscriptionItemId: string;
+  cancelled: boolean;
   lastSyncAt: Date;
 }
 
@@ -27,6 +28,7 @@ export class Subscription extends ValidatedBase implements SubscriptionInterface
     this.subscriptionItemId = params.subscriptionItemId;
     this.nextBillDate = params.nextBillDate ? toDate(params.nextBillDate) : params.nextBillDate;
     this.discount = params.discount ? new Discount(params.discount, false) : null;
+    this.cancelled = params.cancelled || false;
     this.lastSyncAt = toDate(params.lastSyncAt);
 
     if (validate) {
@@ -51,4 +53,7 @@ export class Subscription extends ValidatedBase implements SubscriptionInterface
 
   @IsDate()
   lastSyncAt: Date;
+
+  @IsBoolean()
+  cancelled: boolean;
 }
