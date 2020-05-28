@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { omit } from 'lodash';
 import { DeepPartial } from 'ts-essentials';
 
@@ -22,6 +22,7 @@ export interface CreateProjectPlanInterface {
 export interface ProjectPlanInterface extends CreateProjectPlanInterface {
   id: string;
   planId: string;
+  quantity: number;
   status: PLAN_STATUS;
   payment: PaymentInterface | null;
   subscription: SubscriptionInterface | null;
@@ -59,6 +60,10 @@ export interface InvoiceInterface {
   pdf: string | null;
 }
 
+export interface ProjectPlanConstructorInterface extends Omit<ProjectPlanInterface, 'quantity'> {
+  quantity?: number;
+}
+
 /**
  * @class
  */
@@ -69,11 +74,12 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @param {ProjectPlanInterface} params
    * @param {boolean} [validate=true]
    */
-  constructor(params: ProjectPlanInterface, validate = true) {
+  constructor(params: ProjectPlanConstructorInterface, validate = true) {
     super();
 
     this.id = params.id;
     this.projectId = params.projectId;
+    this.quantity = params.quantity || 1;
     this.limitsOverrides = params.limitsOverrides ? new PlanLimitsOverrides(params.limitsOverrides, false) : null;
     this.limits = new Limits(
       {
@@ -100,6 +106,10 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
 
   @IsString()
   projectId: string;
+
+  @IsNumber()
+  @Min(1)
+  quantity: number;
 
   @IsInstance(Limits)
   @ValidateNested()
