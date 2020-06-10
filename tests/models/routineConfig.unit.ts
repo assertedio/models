@@ -49,6 +49,38 @@ describe('routine config unit tests', () => {
     expect(routineConfig.requiredSeconds()).to.eql(288);
   });
 
+  it('get required seconds - hour', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      interval: {
+        unit: INTERVAL_UNITS.HR,
+        value: 1,
+      },
+      timeoutSec: 1,
+    };
+
+    const routineConfig = new RoutineConfig(params);
+
+    expect(routineConfig.requiredSeconds()).to.eql(24);
+  });
+
+  it('get required seconds - 2 hours', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      interval: {
+        unit: INTERVAL_UNITS.HR,
+        value: 2,
+      },
+      timeoutSec: 1,
+    };
+
+    const routineConfig = new RoutineConfig(params);
+
+    expect(routineConfig.requiredSeconds()).to.eql(12);
+  });
+
   it('get required seconds - day interval', () => {
     const params = {
       id: 'something',
