@@ -1,8 +1,8 @@
 import { IsDate, IsEnum, IsInstance, IsString, ValidateNested } from 'class-validator';
 
+import { ValidatedBase } from 'validated-base';
 import { BUCKET_WINDOW, BucketStats, BucketStatsConstructorInterface, BucketStatsInterface } from '../models/bucket';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface UptimeInterface {
   window: BUCKET_WINDOW;

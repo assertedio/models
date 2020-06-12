@@ -3,6 +3,7 @@ import { isNumber, last } from 'lodash';
 import { DateTime } from 'luxon';
 import { DeepPartial } from 'ts-essentials';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import { Run, RUN_TYPE, RunInterface } from '../requests/run';
 import {
   TEST_EVENT_TYPES,
@@ -17,8 +18,7 @@ import {
   TestStatsInterface,
 } from '../requests/testEvent';
 import { RUN_TIMEOUT_TYPE, TestResultInterface } from '../requests/testResult';
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { toDate } from '../utils';
 
 export enum RUN_STATUS {
   CREATED = 'created',

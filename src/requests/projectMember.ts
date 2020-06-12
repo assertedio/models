@@ -1,8 +1,8 @@
 import { IsDate, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import { PROJECT_ROLE } from '../models/projectMembership';
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { toDate } from '../utils';
 
 export interface ProjectMemberInterface {
   userId: string;

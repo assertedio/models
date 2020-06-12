@@ -1,7 +1,6 @@
 import { Allow, IsEnum, IsNumber, IsString, Min } from 'class-validator';
 
-import { enumError } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
 
 export enum PLAN_INTERVAL {
   MONTH = 'month',

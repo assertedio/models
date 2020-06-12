@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 import { DeepPartial } from 'ts-essentials';
 
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { toDate } from '../utils';
 
 export enum PROJECT_ROLE {
   OWNER = 'owner',

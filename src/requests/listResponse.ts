@@ -1,7 +1,7 @@
 import { IsArray, IsDate, IsOptional, ValidateNested } from 'class-validator';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface ListResponseInterface<T> {
   list: T[];

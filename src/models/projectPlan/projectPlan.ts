@@ -2,8 +2,8 @@ import { IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, Min, Valida
 import { omit } from 'lodash';
 import { DeepPartial } from 'ts-essentials';
 
-import { enumError, toDate } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { toDate } from '../../utils';
 import { Limits, LimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './limits';
 import { Payment, PaymentInterface } from './payment';
 import { Subscription, SubscriptionInterface } from './subscription';

@@ -1,6 +1,6 @@
 import { IsInstance, ValidateNested } from 'class-validator';
 
-import { ValidatedBase } from '../validatedBase';
+import { ValidatedBase } from 'validated-base';
 import { DateFilter, DateFilterConstructorInterface, DateFilterInterface } from './dateFilter';
 import { Pagination, PaginationConstructorInterface, PaginationInterface } from './pagination';
 

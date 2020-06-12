@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 import { DeepPartial } from 'ts-essentials';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface CreateInviteInterface {
   projectId: string;

@@ -1,9 +1,9 @@
 import { IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 
+import { ValidatedBase } from 'validated-base';
 import { CompletedRunRecord, CompletedRunRecordConstructorInterface, CompletedRunRecordInterface, RoutineInterface } from '../models';
 import { TIMELINE_EVENT_STATUS, TimelineEvent, TimelineEventConstructorInterface, TimelineEventInterface } from '../models/timelineEvent';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 import { Uptimes, UptimesConstructorInterface, UptimesInterface } from './uptime';
 
 export enum ROUTINE_CONFIG_STATUS {

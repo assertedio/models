@@ -2,9 +2,9 @@ import { IsDate, IsEnum, IsInstance, IsInt, IsString, Max, Min, ValidateNested }
 import { DateTime } from 'luxon';
 import shortid from 'shortid';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import { DEPENDENCIES_VERSIONS, Mocha, MochaInterface } from '../models/routineConfig';
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { toDate } from '../utils';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
 
 export enum RUN_TYPE {

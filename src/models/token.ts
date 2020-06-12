@@ -4,8 +4,8 @@ import { DateTime } from 'luxon';
 import { customAlphabet } from 'nanoid';
 import { DeepPartial } from 'ts-essentials';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 interface CreateTokenInterface {
   userId: string;

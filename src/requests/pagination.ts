@@ -2,8 +2,8 @@ import { IsDate, IsInt, IsOptional, Max, Min } from 'class-validator';
 import Err from 'err';
 import HTTP_STATUS from 'http-status';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface PaginationInterface {
   before: Date | null;

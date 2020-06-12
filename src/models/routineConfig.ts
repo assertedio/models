@@ -3,8 +3,8 @@ import { isNil } from 'lodash';
 import ms from 'ms';
 import { DeepPartial } from 'ts-essentials';
 
-import { cleanString, enumError } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { cleanString } from '../utils';
 
 export enum INTERVAL_UNITS {
   MIN = 'min',
