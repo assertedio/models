@@ -102,7 +102,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<ProjectMembership>): object {
+  static forDb(instance: DeepPartial<ProjectMembership>): Record<string, any> {
     return instance;
   }
 

@@ -96,7 +96,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<Project>): object {
+  static forDb(instance: DeepPartial<Project>): Record<string, any> {
     return instance;
   }
 

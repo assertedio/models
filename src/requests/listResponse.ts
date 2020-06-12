@@ -10,7 +10,7 @@ export interface ListResponseInterface<T> {
 }
 
 export interface ListResponseConstructorInterface {
-  list: {}[];
+  list: any[];
   nextAfter?: Date | string;
   prevBefore?: Date | string;
 }
@@ -19,12 +19,15 @@ export interface ListResponseConstructorInterface {
  * @class
  */
 export class ListResponse<T> extends ValidatedBase implements ListResponseInterface<T> {
+  // TODO [@ehacke/eslint-config@>1.1.5]: constructor should be type C: { new (parms, validate: boolean): T }
+
   /**
-   * @param {ListResponseInterface} params
-   * @param {{}} C
-   * @param {boolean} validate
+   * @param {} params
+   * @param {any} C
+   * @param {} validate
+   * @returns {}
    */
-  constructor(params: ListResponseConstructorInterface, C: { new (parms, validate: boolean): T }, validate = true) {
+  constructor(params: ListResponseConstructorInterface, C: any, validate = true) {
     super();
 
     this.list = params.list.map((item) => new C(item, false));

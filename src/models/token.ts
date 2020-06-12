@@ -115,7 +115,7 @@ export class Token extends ValidatedBase implements TokenInterface {
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<Token>): object {
+  static forDb(instance: DeepPartial<Token>): Record<string, any> {
     return instance;
   }
 

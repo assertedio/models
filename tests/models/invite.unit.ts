@@ -17,8 +17,7 @@ describe('invite unit tests', () => {
     await invite.validate();
 
     expect(invite.id.startsWith(Invite.CONSTANTS.ID_PREFIX)).to.eql(true);
-    // @ts-ignore
-    delete invite.id;
+    delete (invite as any).id;
     expect(invite).to.eql({
       projectId: 'project-id',
       sendTo: 'foo@bar.com',

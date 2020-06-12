@@ -147,7 +147,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    *
    * @returns {object}
    */
-  clean(): object {
+  clean(): Record<string, any> {
     return omit(this, ['subscription.subscriptionId', 'subscription.subscriptionItemId', 'payment.customerId']);
   }
 
@@ -167,7 +167,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @param {DeepPartial<Plan>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<ProjectPlan>): object {
+  static forDb(instance: DeepPartial<ProjectPlan>): Record<string, any> {
     return omit(instance, 'limits');
   }
 

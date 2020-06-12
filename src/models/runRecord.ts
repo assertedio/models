@@ -393,7 +393,7 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
    * @param {DeepPartial<RunRecord>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<RunRecord>): object {
+  static forDb(instance: DeepPartial<RunRecord>): Record<string, any> {
     return instance;
   }
 
