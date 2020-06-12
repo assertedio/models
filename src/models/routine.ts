@@ -11,7 +11,7 @@ export interface PublicInterface {
 /**
  * @class
  */
-class Public extends ValidatedBase implements PublicInterface {
+export class Public extends ValidatedBase implements PublicInterface {
   /**
    * @param {PublicInterface} params
    * @param {boolean} validate
