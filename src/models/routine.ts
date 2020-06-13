@@ -7,7 +7,7 @@ import { RoutineConfig, RoutineConfigInterface } from './routineConfig';
 export enum ROUTINE_VISIBILITY {
   PRIVATE = 'private',
   PUBLIC = 'public',
-  PUBBLIC_PASSWORD = 'publicPassword',
+  PROTECTED = 'protected',
 }
 
 export interface RoutineInterface extends RoutineConfigInterface {

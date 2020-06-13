@@ -65,7 +65,7 @@ describe('routine unit tests', () => {
       name: '',
       description: '',
       dependencies: DEPENDENCIES_VERSIONS.V1,
-      visibility: ROUTINE_VISIBILITY.PUBBLIC_PASSWORD,
+      visibility: ROUTINE_VISIBILITY.PROTECTED,
       interval: {
         unit: 'hr' as any,
         value: 10,
@@ -91,7 +91,7 @@ describe('routine unit tests', () => {
       name: '',
       description: '',
       dependencies: 'v1',
-      visibility: ROUTINE_VISIBILITY.PUBBLIC_PASSWORD,
+      visibility: ROUTINE_VISIBILITY.PROTECTED,
       interval: {
         unit: 'hr',
         value: 10,
