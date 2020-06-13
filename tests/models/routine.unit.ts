@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { DEPENDENCIES_VERSIONS, Routine } from '../../src/models';
+import { DEPENDENCIES_VERSIONS, Routine, ROUTINE_VISIBILITY } from '../../src/models';
 
 const curDate = new Date('2018-01-01T00:00:00.000Z');
 
@@ -37,7 +37,7 @@ describe('routine unit tests', () => {
       name: '',
       description: '',
       dependencies: 'v1',
-      public: null,
+      visibility: ROUTINE_VISIBILITY.PRIVATE,
       interval: {
         unit: 'hr',
         value: 10,
@@ -65,9 +65,7 @@ describe('routine unit tests', () => {
       name: '',
       description: '',
       dependencies: DEPENDENCIES_VERSIONS.V1,
-      public: {
-        passwordHash: 'foo',
-      },
+      visibility: ROUTINE_VISIBILITY.PUBBLIC_PASSWORD,
       interval: {
         unit: 'hr' as any,
         value: 10,
@@ -93,9 +91,7 @@ describe('routine unit tests', () => {
       name: '',
       description: '',
       dependencies: 'v1',
-      public: {
-        passwordHash: 'foo',
-      },
+      visibility: ROUTINE_VISIBILITY.PUBBLIC_PASSWORD,
       interval: {
         unit: 'hr',
         value: 10,

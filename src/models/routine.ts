@@ -1,46 +1,25 @@
-import { IsBoolean, IsDate, IsInstance, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum } from 'class-validator';
 
-import { ValidatedBase } from 'validated-base';
+import { enumError } from 'validated-base';
 import { toDate } from '../utils';
 import { RoutineConfig, RoutineConfigInterface } from './routineConfig';
 
-export interface PublicInterface {
-  passwordHash: string | null;
-}
-
-/**
- * @class
- */
-export class Public extends ValidatedBase implements PublicInterface {
-  /**
-   * @param {PublicInterface} params
-   * @param {boolean} validate
-   */
-  constructor(params: PublicInterface, validate = true) {
-    super();
-
-    this.passwordHash = params.passwordHash || null;
-
-    if (validate) {
-      this.validate();
-    }
-  }
-
-  @IsOptional()
-  @IsString()
-  passwordHash: string | null;
+export enum ROUTINE_VISIBILITY {
+  PRIVATE = 'private',
+  PUBLIC = 'public',
+  PUBBLIC_PASSWORD = 'publicPassword',
 }
 
 export interface RoutineInterface extends RoutineConfigInterface {
   hasPackage: boolean;
   enabled: boolean;
-  public: PublicInterface | null;
+  visibility: ROUTINE_VISIBILITY;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'public'> {
-  public?: PublicInterface | null;
+export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'visibility'> {
+  visibility?: ROUTINE_VISIBILITY;
 }
 
 /**
@@ -56,7 +35,7 @@ export class Routine extends RoutineConfig implements RoutineInterface {
 
     this.hasPackage = params.hasPackage;
     this.enabled = params.enabled;
-    this.public = params.public ? new Public(params.public) : null;
+    this.visibility = params.visibility || ROUTINE_VISIBILITY.PRIVATE;
     this.createdAt = params.createdAt ? toDate(params.createdAt) : params.createdAt;
     this.updatedAt = params.updatedAt ? toDate(params.updatedAt) : params.updatedAt;
 
@@ -71,9 +50,8 @@ export class Routine extends RoutineConfig implements RoutineInterface {
   @IsBoolean()
   enabled: boolean;
 
-  @IsOptional()
-  @IsInstance(Public)
-  public: PublicInterface | null;
+  @IsEnum(ROUTINE_VISIBILITY, { message: enumError(ROUTINE_VISIBILITY) })
+  visibility: ROUTINE_VISIBILITY;
 
   @IsDate()
   createdAt: Date;
