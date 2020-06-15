@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import shortid from 'shortid';
 import { DeepPartial } from 'ts-essentials';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 /**
  * @interface
@@ -96,7 +96,7 @@ export class Project extends ValidatedBase implements ProjectInterface {
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<Project>): object {
+  static forDb(instance: DeepPartial<Project>): Record<string, any> {
     return instance;
   }
 

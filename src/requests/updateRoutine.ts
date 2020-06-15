@@ -1,5 +1,6 @@
 import { IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import {
   DEPENDENCIES_VERSIONS,
   Interval,
@@ -9,8 +10,6 @@ import {
   RoutineConfig,
   RoutineConfigInterface,
 } from '../models/routineConfig';
-import { enumError } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'projectId'> {
   package: string;

@@ -1,8 +1,7 @@
 import { IsEnum, IsInstance, IsString } from 'class-validator';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import { DEPENDENCIES_VERSIONS, Mocha, MochaInterface } from '../models/routineConfig';
-import { enumError } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface DebugRoutineInterface {
   package: string;

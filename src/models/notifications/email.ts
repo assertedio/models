@@ -3,8 +3,8 @@ import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
 import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from './base';
 
 export interface EmailNotificationConfigInterface extends BaseNotificationConfigInterface {

@@ -3,8 +3,8 @@ import Err from 'err';
 import HTTP_STATUS from 'http-status';
 import { DateTime } from 'luxon';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export enum SORT_ORDER {
   ASC = 'asc',

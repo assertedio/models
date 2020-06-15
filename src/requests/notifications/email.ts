@@ -1,8 +1,7 @@
 import { IsEmail, IsEnum, IsString, MaxLength } from 'class-validator';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import { NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from '../../models/notifications/base';
-import { enumError } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
 
 export interface CreateEmailNotificationInterface {
   name: string;

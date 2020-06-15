@@ -1,6 +1,7 @@
 import { IsEnum, IsInstance, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 import { isNumber } from 'lodash';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import {
   DEPENDENCIES_VERSIONS,
   Interval,
@@ -10,8 +11,7 @@ import {
   RoutineConfig,
   RoutineConfigConstructorInterface,
 } from '../models/routineConfig';
-import { cleanString, enumError } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { cleanString } from '../utils';
 
 export type CreateRoutineInterface = Omit<RoutineConfigConstructorInterface, 'id'>;
 

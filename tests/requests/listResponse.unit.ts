@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { IsString } from 'class-validator';
 
-import { ValidatedBase } from '../../src';
+import { ValidatedBase } from 'validated-base';
 import { ListResponse } from '../../src/requests/listResponse';
 
 class TestClass extends ValidatedBase {

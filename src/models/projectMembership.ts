@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 import { DeepPartial } from 'ts-essentials';
 
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { toDate } from '../utils';
 
 export enum PROJECT_ROLE {
   OWNER = 'owner',
@@ -102,7 +102,7 @@ export class ProjectMembership extends ValidatedBase implements ProjectMembershi
    * @param {DeepPartial<Project>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<ProjectMembership>): object {
+  static forDb(instance: DeepPartial<ProjectMembership>): Record<string, any> {
     return instance;
   }
 

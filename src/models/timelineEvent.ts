@@ -1,8 +1,8 @@
 import { IsDate, IsEnum, IsInt, IsString, Min } from 'class-validator';
 import shorthash from 'shorthash';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export enum TIMELINE_EVENT_STATUS {
   UP = 'up',

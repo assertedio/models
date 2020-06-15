@@ -1,7 +1,7 @@
 import { IsBoolean, IsDate, IsInstance, IsOptional, IsString, ValidateNested } from 'class-validator';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
 import { Discount, DiscountInterface } from './discount';
 
 export interface SubscriptionInterface {

@@ -1,8 +1,8 @@
 import { IsBoolean, IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { isNumber } from 'lodash';
 
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { toDate } from '../utils';
 
 // Should map directly to: RunnerConstants in Mocha
 export enum TEST_EVENT_TYPES {

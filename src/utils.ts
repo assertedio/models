@@ -1,4 +1,4 @@
-import { isDate, isFunction, isNil, isNumber, isObject, isString } from 'lodash';
+import { isDate, isFunction, isNil, isNumber, isString } from 'lodash';
 import { DateTime } from 'luxon';
 
 export const stringNotDate = (input: any | string): input is string => {
@@ -32,15 +32,4 @@ export const toDate = (input: Date | string | FirestoreTimestamp | DateTime | nu
  */
 export const cleanString = (input: string): string => {
   return input.replace(/\s+/g, ' ').trim();
-};
-
-/**
- * Enum error message
- *
- * @param {{}} entity
- * @returns {string | undefined}
- */
-export const enumError = (entity: any): string | undefined => {
-  if (!isObject(entity)) return undefined;
-  return `$property must be one of: ${Object.values(entity).join(', ')}`;
 };

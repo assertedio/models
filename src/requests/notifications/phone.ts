@@ -1,9 +1,8 @@
 import { IsEnum, IsString, Length, Matches, MaxLength } from 'class-validator';
 
+import { enumError, ValidatedBase } from 'validated-base';
 import { NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from '../../models/notifications/base';
 import { PHONE_NOTIFY_TYPE } from '../../models/notifications/phone';
-import { enumError } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
 
 export interface CreatePhoneNotificationInterface {
   name: string;

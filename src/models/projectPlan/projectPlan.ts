@@ -2,8 +2,8 @@ import { IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, Min, Valida
 import { omit } from 'lodash';
 import { DeepPartial } from 'ts-essentials';
 
-import { enumError, toDate } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { toDate } from '../../utils';
 import { Limits, LimitsInterface, PlanLimitsOverrides, PlanLimitsOverridesInterface } from './limits';
 import { Payment, PaymentInterface } from './payment';
 import { Subscription, SubscriptionInterface } from './subscription';
@@ -147,7 +147,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    *
    * @returns {object}
    */
-  clean(): object {
+  clean(): Record<string, any> {
     return omit(this, ['subscription.subscriptionId', 'subscription.subscriptionItemId', 'payment.customerId']);
   }
 
@@ -167,7 +167,7 @@ export class ProjectPlan extends ValidatedBase implements ProjectPlanInterface {
    * @param {DeepPartial<Plan>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<ProjectPlan>): object {
+  static forDb(instance: DeepPartial<ProjectPlan>): Record<string, any> {
     return omit(instance, 'limits');
   }
 

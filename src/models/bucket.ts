@@ -2,8 +2,8 @@ import { IsDate, IsEnum, IsInstance, IsInt, IsNumber, IsString, Min, ValidateNes
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 import { CompletedRunRecordInterface, RUN_STATUS } from './runRecord';
 
 export enum BUCKET_SIZE {

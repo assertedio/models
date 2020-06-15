@@ -1,7 +1,7 @@
 import { IsArray, IsDate, IsOptional, ValidateNested } from 'class-validator';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface ListResponseInterface<T> {
   list: T[];
@@ -10,7 +10,7 @@ export interface ListResponseInterface<T> {
 }
 
 export interface ListResponseConstructorInterface {
-  list: {}[];
+  list: any[];
   nextAfter?: Date | string;
   prevBefore?: Date | string;
 }
@@ -20,9 +20,10 @@ export interface ListResponseConstructorInterface {
  */
 export class ListResponse<T> extends ValidatedBase implements ListResponseInterface<T> {
   /**
-   * @param {ListResponseInterface} params
-   * @param {{}} C
-   * @param {boolean} validate
+   * @param {} params
+   * @param {any} C
+   * @param {} validate
+   * @returns {}
    */
   constructor(params: ListResponseConstructorInterface, C: { new (parms, validate: boolean): T }, validate = true) {
     super();

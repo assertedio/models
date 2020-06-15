@@ -1,6 +1,6 @@
 import { IsInt, IsOptional, Min } from 'class-validator';
 
-import { ValidatedBase } from '../../validatedBase';
+import { ValidatedBase } from 'validated-base';
 
 export interface LimitsInterface {
   smsCount: number;

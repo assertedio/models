@@ -3,8 +3,8 @@ import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 import { DeepPartial } from 'ts-essentials';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
 
 export interface CreateInviteInterface {
   projectId: string;
@@ -82,6 +82,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
    *
    * @param {object} params
    * @param {string} params.projectId
+   * @param params.sendTo
    * @returns {string}
    */
   static generateId({ projectId, sendTo }: { projectId: string; sendTo: string }): string {
@@ -94,7 +95,7 @@ export class Invite extends ValidatedBase implements InviteInterface {
    * @param {DeepPartial<Invite>} instance
    * @returns {object}
    */
-  static forDb(instance: DeepPartial<Invite>): object {
+  static forDb(instance: DeepPartial<Invite>): Record<string, any> {
     return instance;
   }
 

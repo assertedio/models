@@ -11,4 +11,5 @@ export enum SOCKET_EVENTS {
   INVITES_UPDATES = 'invites-updates',
   TOKENS_UPDATES = 'token-updates',
   ROUTINE_UPDATES = 'routine-updates',
+  CURRENT_ROUTINE = 'current-routine',
 }

@@ -1,7 +1,7 @@
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 
+import { ValidatedBase } from 'validated-base';
 import { toDate } from '../../utils';
-import { ValidatedBase } from '../../validatedBase';
 
 export interface DiscountInterface {
   amountOff: number | null;

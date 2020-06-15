@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { DEPENDENCIES_VERSIONS, Routine } from '../../src/models';
+import { DEPENDENCIES_VERSIONS, Routine, ROUTINE_VISIBILITY } from '../../src/models';
 
 const curDate = new Date('2018-01-01T00:00:00.000Z');
 
@@ -37,6 +37,61 @@ describe('routine unit tests', () => {
       name: '',
       description: '',
       dependencies: 'v1',
+      visibility: ROUTINE_VISIBILITY.PRIVATE,
+      interval: {
+        unit: 'hr',
+        value: 10,
+      },
+      mocha: {
+        files: ['**/specific.asrtd.js', 'other.js'],
+        ignore: ['!foo', '!scratch.js'],
+        bail: true,
+        ui: 'exports',
+      },
+      timeoutSec: 10,
+      createdAt: curDate,
+      updatedAt: curDate,
+      hasPackage: false,
+      enabled: false,
+    };
+
+    expect(routine).to.eql(expected);
+  });
+
+  it('full create - w public', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      name: '',
+      description: '',
+      dependencies: DEPENDENCIES_VERSIONS.V1,
+      visibility: ROUTINE_VISIBILITY.PRIVATE,
+      interval: {
+        unit: 'hr' as any,
+        value: 10,
+      },
+      mocha: {
+        files: ['**/specific.asrtd.js', 'other.js'],
+        ignore: ['!foo', '!scratch.js'],
+        bail: true,
+        ui: 'exports' as any,
+      },
+      timeoutSec: 10,
+      createdAt: curDate,
+      updatedAt: curDate,
+      hasPackage: false,
+      enabled: false,
+    };
+
+    const routine = new Routine(params);
+
+    const expected = {
+      id: 'something',
+      projectId: 'project-id',
+      name: '',
+      description: '',
+      dependencies: 'v1',
+      visibility: ROUTINE_VISIBILITY.PRIVATE,
       interval: {
         unit: 'hr',
         value: 10,

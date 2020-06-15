@@ -1,8 +1,8 @@
 import { IsDate, IsEnum, IsInstance, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { DateTime } from 'luxon';
 
-import { enumError, toDate } from '../utils';
-import { ValidatedBase } from '../validatedBase';
+import { enumError, ValidatedBase } from 'validated-base';
+import { toDate } from '../utils';
 import { RUN_TYPE } from './run';
 import { TestEvent, TestEventConstructorInterface, TestEventInterface } from './testEvent';
 
