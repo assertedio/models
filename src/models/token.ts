@@ -136,12 +136,12 @@ export class Token extends ValidatedBase implements TokenInterface {
    * @returns {Project}
    */
   static fromJson(object): Token {
-    const { createdAt, updatedAt, lastActiveAt, ...rest } = object;
+    const { createdAt, updatedAt, lastUsedAt, ...rest } = object;
     return new Token({
       ...rest,
       createdAt: DateTime.fromISO(createdAt).toJSDate(),
       updatedAt: DateTime.fromISO(updatedAt).toJSDate(),
-      lastUsedAt: lastActiveAt ? DateTime.fromISO(lastActiveAt).toJSDate() : null,
+      lastUsedAt: lastUsedAt ? DateTime.fromISO(lastUsedAt).toJSDate() : null,
     });
   }
 
