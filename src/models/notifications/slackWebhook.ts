@@ -25,7 +25,7 @@ export const isPossibleSlackWebhook = (input: string): boolean => isString(input
 export const isSlackWebhookConfig = (input: any): input is SlackWebhookNotificationConfigInterface =>
   isObject(input) && (input as SlackWebhookNotificationConfigInterface).type === NOTIFICATION_TYPE.SLACK_WEBHOOK;
 
-export type CreateSlackWebhookNotificationInterface = Pick<
+type CreateSlackWebhookNotificationInterface = Pick<
   SlackWebhookNotificationConfigInterface,
   'routineId' | 'projectId' | 'name' | 'origin' | 'webhookUrl'
 >;

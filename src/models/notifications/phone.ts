@@ -31,7 +31,7 @@ export interface PhoneNotificationConfigConstructorInterface
 export const isPhoneConfig = (input: any): input is PhoneNotificationConfigInterface =>
   isObject(input) && (input as PhoneNotificationConfigInterface).type === NOTIFICATION_TYPE.PHONE;
 
-export type CreatePhoneNotificationInterface = Pick<
+type CreatePhoneNotificationInterface = Pick<
   PhoneNotificationConfigInterface,
   'routineId' | 'projectId' | 'name' | 'origin' | 'notifyType' | 'number'
 >;

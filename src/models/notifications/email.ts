@@ -22,7 +22,7 @@ export interface EmailNotificationConfigConstructorInterface
 export const isEmailConfig = (input: any): input is EmailNotificationConfigInterface =>
   isObject(input) && (input as EmailNotificationConfigInterface).type === NOTIFICATION_TYPE.EMAIL;
 
-export type CreateEmailNotificationInterface = Pick<EmailNotificationConfigInterface, 'routineId' | 'projectId' | 'name' | 'origin' | 'email'>;
+type CreateEmailNotificationInterface = Pick<EmailNotificationConfigInterface, 'routineId' | 'projectId' | 'name' | 'origin' | 'email'>;
 
 /**
  * @class
