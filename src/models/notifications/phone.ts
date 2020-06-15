@@ -41,7 +41,7 @@ type CreatePhoneNotificationInterface = Pick<
  */
 export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotificationConfigInterface {
   static CONSTANTS = {
-    ID_PREFIX: 'nt-ph-',
+    ID_PREFIX: `${NOTIFICATION_CONSTANTS.BASE_ID_PREFIX}ph-`,
   };
 
   /**

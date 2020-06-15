@@ -29,7 +29,7 @@ type CreateEmailNotificationInterface = Pick<EmailNotificationConfigInterface, '
  */
 export class EmailNotificationConfig extends ValidatedBase implements EmailNotificationConfigInterface {
   static CONSTANTS = {
-    ID_PREFIX: 'nt-em-',
+    ID_PREFIX: `${NOTIFICATION_CONSTANTS.BASE_ID_PREFIX}em-`,
   };
 
   /**

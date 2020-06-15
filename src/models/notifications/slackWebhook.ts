@@ -35,7 +35,7 @@ type CreateSlackWebhookNotificationInterface = Pick<
  */
 export class SlackWebhookNotificationConfig extends ValidatedBase implements SlackWebhookNotificationConfigInterface {
   static CONSTANTS = {
-    ID_PREFIX: 'nt-sw-',
+    ID_PREFIX: `${NOTIFICATION_CONSTANTS.BASE_ID_PREFIX}sw-`,
   };
 
   /**

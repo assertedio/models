@@ -11,7 +11,10 @@ export enum ORIGIN_TYPE {
 
 export const NOTIFICATION_CONSTANTS = {
   MAX_NAME_LENGTH: 40,
+  BASE_ID_PREFIX: 'nt-',
 };
+
+export const isNotificationId = (id: string): boolean => id.startsWith(NOTIFICATION_CONSTANTS.BASE_ID_PREFIX);
 
 export interface BaseNotificationConfigInterface {
   id: string;
