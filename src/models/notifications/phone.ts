@@ -6,9 +6,9 @@ import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
-import { ValidatedBase } from 'validated-base';
+import { enumError, ValidatedBase } from 'validated-base';
 import { toDate } from '../../utils';
-import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from './base';
+import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE, ORIGIN_TYPE } from './base';
 
 export enum PHONE_NOTIFY_TYPE {
   VOICE = 'voice',
@@ -21,13 +21,20 @@ export interface PhoneNotificationConfigInterface extends BaseNotificationConfig
   notifyType: PHONE_NOTIFY_TYPE;
 }
 
-export interface PhoneNotificationConfigConstructorInterface extends Omit<PhoneNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type'> {
+export interface PhoneNotificationConfigConstructorInterface
+  extends Omit<PhoneNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type' | 'origin'> {
   createdAt: Date | string;
   updatedAt: Date | string;
+  origin?: ORIGIN_TYPE;
 }
 
 export const isPhoneConfig = (input: any): input is PhoneNotificationConfigInterface =>
   isObject(input) && (input as PhoneNotificationConfigInterface).type === NOTIFICATION_TYPE.PHONE;
+
+export type CreatePhoneNotificationInterface = Pick<
+  PhoneNotificationConfigInterface,
+  'routineId' | 'projectId' | 'name' | 'origin' | 'notifyType' | 'number'
+>;
 
 /**
  * @class
@@ -59,6 +66,7 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
     this.enabled = params.enabled;
     this.routineId = params.routineId;
     this.projectId = params.projectId;
+    this.origin = params.origin || ORIGIN_TYPE.MEMBER;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
 
@@ -83,6 +91,9 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
 
   @IsBoolean()
   enabled: boolean;
+
+  @IsEnum(ORIGIN_TYPE, { message: enumError(ORIGIN_TYPE) })
+  readonly origin: ORIGIN_TYPE;
 
   @IsString()
   readonly routineId: string;
@@ -117,26 +128,17 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
     return `${PhoneNotificationConfig.CONSTANTS.ID_PREFIX}${shorthash.unique(routineId + phone + notifyType)}`;
   }
 
-  /* eslint-disable max-params */
   /**
    * Create instance of model
    *
-   * @param {string} routineId
-   * @param {string} projectId
-   * @param {string} name
-   * @param {string} number
-   * @param {PHONE_NOTIFY_TYPE} notifyType
+   * @param {CreatePhoneNotificationInterface} params
+   * @param params
    * @param {Date} curDate
    * @returns {PhoneNotificationConfig}
    */
-  static create(
-    routineId: string,
-    projectId: string,
-    name: string,
-    number: string,
-    notifyType: PHONE_NOTIFY_TYPE,
-    curDate = DateTime.utc().toJSDate()
-  ): PhoneNotificationConfig {
+  static create(params: CreatePhoneNotificationInterface, curDate = DateTime.utc().toJSDate()): PhoneNotificationConfig {
+    const { routineId, projectId, name, number, notifyType, origin } = params;
+
     if (!isString(number)) {
       throw new Err('number must be a string', HTTP_STATUS.BAD_REQUEST);
     }
@@ -147,20 +149,20 @@ export class PhoneNotificationConfig extends ValidatedBase implements PhoneNotif
       throw new Err('number does not look like a phone number', HTTP_STATUS.BAD_REQUEST);
     }
 
-    number = phoneNumber?.number as string;
+    const parsedNUmber = phoneNumber?.number as string;
 
     return new PhoneNotificationConfig({
-      id: PhoneNotificationConfig.generateId(routineId, number, notifyType),
-      number,
+      id: PhoneNotificationConfig.generateId(routineId, parsedNUmber, notifyType),
+      number: parsedNUmber,
       notifyType,
       verified: false,
       enabled: true,
       routineId,
       projectId,
       name,
+      origin,
       createdAt: curDate,
       updatedAt: curDate,
     });
   }
-  /* eslint-enable max-params */
 }

@@ -5,24 +5,30 @@ import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
-import { ValidatedBase } from 'validated-base';
+import { enumError, ValidatedBase } from 'validated-base';
 import { toDate } from '../../utils';
-import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from './base';
+import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE, ORIGIN_TYPE } from './base';
 
 export interface SlackWebhookNotificationConfigInterface extends BaseNotificationConfigInterface {
   webhookUrl: string;
 }
 
 export interface SlackWebhookNotificationConfigConstructorInterface
-  extends Omit<SlackWebhookNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type' | 'verified'> {
+  extends Omit<SlackWebhookNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type' | 'verified' | 'origin'> {
   createdAt: Date | string;
   updatedAt: Date | string;
+  origin?: ORIGIN_TYPE;
 }
 
 export const isPossibleSlackWebhook = (input: string): boolean => isString(input) && input.startsWith('https://hooks.slack.com');
 
 export const isSlackWebhookConfig = (input: any): input is SlackWebhookNotificationConfigInterface =>
   isObject(input) && (input as SlackWebhookNotificationConfigInterface).type === NOTIFICATION_TYPE.SLACK_WEBHOOK;
+
+export type CreateSlackWebhookNotificationInterface = Pick<
+  SlackWebhookNotificationConfigInterface,
+  'routineId' | 'projectId' | 'name' | 'origin' | 'webhookUrl'
+>;
 
 /**
  * @class
@@ -54,6 +60,7 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
     this.enabled = params.enabled;
     this.routineId = params.routineId;
     this.projectId = params.projectId;
+    this.origin = params.origin || ORIGIN_TYPE.MEMBER;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
     this.webhookUrl = params.webhookUrl;
@@ -79,6 +86,9 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
 
   @IsBoolean()
   enabled: boolean;
+
+  @IsEnum(ORIGIN_TYPE, { message: enumError(ORIGIN_TYPE) })
+  readonly origin: ORIGIN_TYPE;
 
   @IsBoolean()
   readonly verified: boolean = true;
@@ -112,25 +122,19 @@ export class SlackWebhookNotificationConfig extends ValidatedBase implements Sla
   /**
    * Create instance of model
    *
-   * @param {string} routineId
-   * @param {string} projectId
-   * @param {string} name
-   * @param {string} webhookUrl
+   * @param {CreateSlackWebhookNotificationInterface} params
    * @param {Date} curDate
    * @returns {SlackWebhookNotificationConfig}
    */
-  static create(
-    routineId: string,
-    projectId: string,
-    name: string,
-    webhookUrl: string,
-    curDate = DateTime.utc().toJSDate()
-  ): SlackWebhookNotificationConfig {
+  static create(params: CreateSlackWebhookNotificationInterface, curDate = DateTime.utc().toJSDate()): SlackWebhookNotificationConfig {
+    const { routineId, projectId, name, webhookUrl, origin } = params;
+
     return new SlackWebhookNotificationConfig({
       id: SlackWebhookNotificationConfig.generateId(routineId, webhookUrl),
       routineId,
       projectId,
       name,
+      origin,
       webhookUrl,
       enabled: true,
       createdAt: curDate,
