@@ -62,10 +62,10 @@ export class Build extends ValidatedBase implements BuildInterface {
    * @returns {string}
    */
   static generateId(packageJson: Record<string, any>, shrinkwrapJson: Record<string, any> | null): string {
-    const { dependencies = {} } = packageJson;
+    const { name, version, keywords, repository, devDependencies, bugs, author, ...rest } = packageJson;
     const { dependencies: shrinkwrapDependencies = {} } = shrinkwrapJson || {};
 
-    return CONSTANTS.ID_PREFIX + shorthash.unique(JSON.stringify(dependencies) + JSON.stringify(shrinkwrapDependencies));
+    return CONSTANTS.ID_PREFIX + shorthash.unique(JSON.stringify(rest) + JSON.stringify(shrinkwrapDependencies));
   }
 
   /**

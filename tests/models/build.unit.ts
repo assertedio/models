@@ -29,7 +29,7 @@ describe('build unit tests', () => {
     const build = Build.create({ packageJson: params, shrinkwrapJson: shrink }, curDate);
 
     expect(build).to.eql({
-      id: 'pj-Z2gBcm0',
+      id: 'pj-mWkmq',
       packageJson: {
         dependencies: {
           foo: '1.2.4',
