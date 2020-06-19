@@ -3,29 +3,33 @@ import { isObject, isString } from 'lodash';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
 
-import { ValidatedBase } from 'validated-base';
+import { enumError, ValidatedBase } from 'validated-base';
 import { toDate } from '../../utils';
-import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE } from './base';
+import { BaseNotificationConfigInterface, NOTIFICATION_CONSTANTS, NOTIFICATION_TYPE, ORIGIN_TYPE } from './base';
 
 export interface EmailNotificationConfigInterface extends BaseNotificationConfigInterface {
   email: string;
   verified: boolean;
 }
 
-export interface EmailNotificationConfigConstructorInterface extends Omit<EmailNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type'> {
+export interface EmailNotificationConfigConstructorInterface
+  extends Omit<EmailNotificationConfigInterface, 'createdAt' | 'updatedAt' | 'type' | 'origin'> {
   createdAt: Date | string;
   updatedAt: Date | string;
+  origin?: ORIGIN_TYPE;
 }
 
 export const isEmailConfig = (input: any): input is EmailNotificationConfigInterface =>
   isObject(input) && (input as EmailNotificationConfigInterface).type === NOTIFICATION_TYPE.EMAIL;
+
+type CreateEmailNotificationInterface = Pick<EmailNotificationConfigInterface, 'routineId' | 'projectId' | 'name' | 'origin' | 'email'>;
 
 /**
  * @class
  */
 export class EmailNotificationConfig extends ValidatedBase implements EmailNotificationConfigInterface {
   static CONSTANTS = {
-    ID_PREFIX: 'nt-em-',
+    ID_PREFIX: `${NOTIFICATION_CONSTANTS.BASE_ID_PREFIX}em-`,
   };
 
   /**
@@ -50,6 +54,7 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
     this.enabled = params.enabled;
     this.routineId = params.routineId;
     this.projectId = params.projectId;
+    this.origin = params.origin || ORIGIN_TYPE.MEMBER;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
     this.email = params.email;
@@ -72,6 +77,9 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
 
   @IsBoolean()
   enabled: boolean;
+
+  @IsEnum(ORIGIN_TYPE, { message: enumError(ORIGIN_TYPE) })
+  readonly origin: ORIGIN_TYPE;
 
   @IsString()
   readonly routineId: string;
@@ -105,18 +113,18 @@ export class EmailNotificationConfig extends ValidatedBase implements EmailNotif
   /**
    * Create instance of model
    *
-   * @param {string} routineId
-   * @param {string} projectId
-   * @param {string} name
-   * @param {string} email
+   * @param {CreateEmailNotificationInterface} params
    * @param {Date} curDate
    * @returns {EmailNotificationConfig}
    */
-  static create(routineId: string, projectId: string, name: string, email: string, curDate = DateTime.utc().toJSDate()): EmailNotificationConfig {
+  static create(params: CreateEmailNotificationInterface, curDate = DateTime.utc().toJSDate()): EmailNotificationConfig {
+    const { routineId, projectId, email, name, origin } = params;
+
     return new EmailNotificationConfig({
       id: EmailNotificationConfig.generateId(routineId, email),
       routineId,
       projectId,
+      origin,
       name,
       email,
       verified: false,

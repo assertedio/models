@@ -18,3 +18,4 @@ export * from './deletionDetails';
 export * from './plan';
 export * from './debug';
 export * from './projectAlert';
+export * from './unsubscribeDetails';
