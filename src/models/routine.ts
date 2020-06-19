@@ -1,20 +1,30 @@
-import { IsBoolean, IsDate, IsEnum } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 
-import { enumError } from 'validated-base';
-import { toDate } from '../utils';
-import { RoutineConfig, RoutineConfigInterface } from './routineConfig';
+import { enumError, ValidatedBase } from 'validated-base';
+import { cleanString, toDate } from '../utils';
+import {
+  DEPENDENCIES_VERSIONS,
+  Interval,
+  IntervalInterface,
+  isDependencyVersion,
+  Mocha,
+  MochaInterface,
+  RoutineConfig,
+  RoutineConfigInterface,
+} from './routineConfig';
 
 export enum ROUTINE_VISIBILITY {
   PRIVATE = 'private',
   PUBLIC = 'public',
 }
 
-export interface RoutineInterface extends RoutineConfigInterface {
+export interface RoutineInterface extends Omit<RoutineConfigInterface, 'dependencies'> {
   hasPackage: boolean;
   enabled: boolean;
   visibility: ROUTINE_VISIBILITY;
   createdAt: Date;
   updatedAt: Date;
+  dependencies: string;
 }
 
 export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'visibility'> {
@@ -24,13 +34,22 @@ export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'vis
 /**
  * @class
  */
-export class Routine extends RoutineConfig implements RoutineInterface {
+export class Routine extends ValidatedBase implements RoutineInterface {
   /**
    * @param {RoutineInterface} params
    * @param {boolean} validate
    */
   constructor(params: RoutineConstructorInterface, validate = true) {
-    super(params, false);
+    super();
+
+    this.id = params?.id;
+    this.projectId = params?.projectId;
+    this.name = cleanString(params?.name || '');
+    this.description = cleanString(params?.description || '');
+    this.interval = new Interval(params?.interval, false);
+    this.mocha = new Mocha({ ...params?.mocha }, false);
+    this.timeoutSec = params.timeoutSec || RoutineConfig.CONSTANTS.DEFAULT_TIMEOUT_SEC;
+    this.dependencies = params.dependencies || RoutineConfig.CONSTANTS.LATEST_DEPENDENCIES_VERSION;
 
     this.hasPackage = params.hasPackage;
     this.enabled = params.enabled;
@@ -42,6 +61,36 @@ export class Routine extends RoutineConfig implements RoutineInterface {
       this.validate();
     }
   }
+
+  @IsString()
+  id: string;
+
+  @MaxLength(RoutineConfig.CONSTANTS.NAME_MAX_LENGTH)
+  @IsString()
+  name: string;
+
+  @MaxLength(RoutineConfig.CONSTANTS.DESCRIPTION_MAX_LENGTH)
+  @IsString()
+  description: string;
+
+  @ValidateNested()
+  @IsInstance(Interval)
+  interval: IntervalInterface;
+
+  @Min(1)
+  @Max(RoutineConfig.CONSTANTS.MAX_TIMEOUT_SEC, { message: RoutineConfig.CONSTANTS.MAX_TIMEOUT_ERROR })
+  @IsInt()
+  timeoutSec: number;
+
+  @ValidateNested()
+  @IsInstance(Mocha)
+  mocha: MochaInterface;
+
+  @IsString()
+  projectId: string;
+
+  @IsString()
+  dependencies: string;
 
   @IsBoolean()
   hasPackage: boolean;
@@ -73,6 +122,11 @@ export class Routine extends RoutineConfig implements RoutineInterface {
    * @returns {RoutineConfig}
    */
   toRoutineConfig(): RoutineConfig {
-    return new RoutineConfig(this);
+    const { dependencies: stringDependencies, ...rest } = this;
+
+    // This is to handle conversion where the dependencies is a dependency build ID
+    const dependencies = isDependencyVersion(stringDependencies) ? stringDependencies : DEPENDENCIES_VERSIONS.CUSTOM;
+
+    return new RoutineConfig({ ...rest, dependencies });
   }
 }

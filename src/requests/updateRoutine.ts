@@ -1,6 +1,8 @@
-import { IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
+import { Allow, isEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
+import Err from 'err';
+import HTTP_STATUS from 'http-status';
 
-import { enumError, ValidatedBase } from 'validated-base';
+import { ValidatedBase } from 'validated-base';
 import {
   DEPENDENCIES_VERSIONS,
   Interval,
@@ -10,9 +12,11 @@ import {
   RoutineConfig,
   RoutineConfigInterface,
 } from '../models/routineConfig';
+import { DependenciesInterface, isDependenciesObject } from './build';
 
-export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'projectId'> {
+export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'projectId' | 'dependencies'> {
   package: string;
+  dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface;
 }
 
 /**
@@ -32,7 +36,15 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
     this.mocha = new Mocha(params.mocha, false);
     this.package = params.package;
     this.timeoutSec = params.timeoutSec;
-    this.dependencies = params.dependencies;
+    this.dependencies = params.dependencies || DEPENDENCIES_VERSIONS.V1;
+
+    if (!isEnum(this.dependencies, DEPENDENCIES_VERSIONS) && !isDependenciesObject(this.dependencies)) {
+      throw new Err('dependencies must be an enum or an object containing at least the packageJson', HTTP_STATUS.BAD_REQUEST);
+    }
+
+    if (this.dependencies === DEPENDENCIES_VERSIONS.CUSTOM) {
+      throw new Err('custom dependencies are specified as object', HTTP_STATUS.BAD_REQUEST);
+    }
 
     if (validate) {
       this.validate();
@@ -63,19 +75,21 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
   @IsInt()
   timeoutSec: number;
 
-  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
-  dependencies: DEPENDENCIES_VERSIONS;
+  @Allow()
+  dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface;
 
   /**
    * Create instance of update
    *
    * @param {RoutineInterface} routine
    * @param {string} pkg
+   * @param {DEPENDENCIES_VERSIONS | DependenciesInterface} dependencies
    * @returns {UpdateRoutine}
    */
-  static create(routine: RoutineConfigInterface, pkg: string): UpdateRoutine {
+  static create(routine: RoutineConfigInterface, pkg: string, dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface): UpdateRoutine {
     return new UpdateRoutine({
       ...routine,
+      dependencies,
       package: pkg,
     });
   }

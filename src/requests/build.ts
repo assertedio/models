@@ -2,12 +2,20 @@ import { ValidatedBase } from 'validated-base';
 import { Allow, IsString, IsDate } from 'class-validator';
 import { DateTime } from 'luxon';
 import shorthash from 'shorthash';
+import { isString, isObject } from 'lodash';
 import { toDate } from '../utils';
 
-export interface BuildInterface {
-  id: string;
+export interface DependenciesInterface {
   packageJson: Record<string, any>;
   shrinkwrapJson: Record<string, any> | null;
+}
+
+export const isDependenciesObject = (input: any): input is DependenciesInterface => {
+  return isObject(input?.packageJson) && (input?.shrinkwrapJson === null || isObject(input?.shrinkwrapJson));
+};
+
+export interface BuildInterface extends DependenciesInterface {
+  id: string;
   createdAt: Date;
 }
 
@@ -16,8 +24,10 @@ export interface BuildConstructorInterface extends Omit<BuildInterface, 'created
 }
 
 const CONSTANTS = {
-  ID_PREFIX: 'pj-',
+  ID_PREFIX: 'db-',
 };
+
+const isDependencyBuildId = (input: string): boolean => isString(input) && input.startsWith(CONSTANTS.ID_PREFIX);
 
 /**
  * @class
@@ -55,17 +65,17 @@ export class Build extends ValidatedBase implements BuildInterface {
   createdAt: Date;
 
   /**
-   * Generate ID
+   * Generate ID based on dependencies and shrinkwrapped dependencies
    *
    * @param {Record<string, any>} packageJson
    * @param {Record<string, any>} shrinkwrapJson
    * @returns {string}
    */
   static generateId(packageJson: Record<string, any>, shrinkwrapJson: Record<string, any> | null): string {
-    const { name, version, keywords, repository, devDependencies, bugs, author, ...rest } = packageJson;
+    const { dependencies = {} } = packageJson;
     const { dependencies: shrinkwrapDependencies = {} } = shrinkwrapJson || {};
 
-    return CONSTANTS.ID_PREFIX + shorthash.unique(JSON.stringify(rest) + JSON.stringify(shrinkwrapDependencies));
+    return CONSTANTS.ID_PREFIX + shorthash.unique(JSON.stringify(dependencies) + JSON.stringify(shrinkwrapDependencies));
   }
 
   /**
