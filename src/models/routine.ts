@@ -35,6 +35,8 @@ export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'vis
  * @class
  */
 export class Routine extends ValidatedBase implements RoutineInterface {
+  static CONSTANTS = RoutineConfig.CONSTANTS;
+
   /**
    * @param {RoutineInterface} params
    * @param {boolean} validate
