@@ -5,9 +5,13 @@ import shorthash from 'shorthash';
 import { isString, isObject } from 'lodash';
 import { toDate } from '../utils';
 
+export interface PackageJsonInterface extends Record<string, any> {
+  dependencies?: Record<string, any>;
+}
+
 export interface DependenciesInterface {
-  packageJson: Record<string, any>;
-  shrinkwrapJson: Record<string, any> | null;
+  packageJson: PackageJsonInterface;
+  shrinkwrapJson: PackageJsonInterface;
 }
 
 export const isDependenciesObject = (input: any): input is DependenciesInterface => {
@@ -27,7 +31,7 @@ const CONSTANTS = {
   ID_PREFIX: 'db-',
 };
 
-const isDependencyBuildId = (input: string): boolean => isString(input) && input.startsWith(CONSTANTS.ID_PREFIX);
+export const isDependencyBuildId = (input: string): boolean => isString(input) && input.startsWith(CONSTANTS.ID_PREFIX);
 
 /**
  * @class
@@ -59,7 +63,7 @@ export class Build extends ValidatedBase implements BuildInterface {
   packageJson: Record<string, any>;
 
   @Allow()
-  shrinkwrapJson: Record<string, any> | null;
+  shrinkwrapJson: Record<string, any>;
 
   @IsDate()
   createdAt: Date;

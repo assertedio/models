@@ -36,7 +36,7 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
     this.mocha = new Mocha(params.mocha, false);
     this.package = params.package;
     this.timeoutSec = params.timeoutSec;
-    this.dependencies = params.dependencies || DEPENDENCIES_VERSIONS.V1;
+    this.dependencies = params.dependencies;
 
     if (!isEnum(this.dependencies, DEPENDENCIES_VERSIONS) && !isDependenciesObject(this.dependencies)) {
       throw new Err('dependencies must be an enum or an object containing at least the packageJson', HTTP_STATUS.BAD_REQUEST);
@@ -86,7 +86,11 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
    * @param {DEPENDENCIES_VERSIONS | DependenciesInterface} dependencies
    * @returns {UpdateRoutine}
    */
-  static create(routine: RoutineConfigInterface, pkg: string, dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface): UpdateRoutine {
+  static create(
+    routine: Omit<RoutineConfigInterface, 'dependencies' | 'id'>,
+    pkg: string,
+    dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface
+  ): UpdateRoutine {
     return new UpdateRoutine({
       ...routine,
       dependencies,
