@@ -28,6 +28,7 @@ describe('build unit tests', () => {
 
     const build = Build.create({ packageJson: params, shrinkwrapJson: shrink }, curDate);
 
+    expect(build.filename()).to.eql('db-Z2gBcm0.tgz');
     expect(build).to.eql({
       id: 'db-Z2gBcm0',
       packageJson: {

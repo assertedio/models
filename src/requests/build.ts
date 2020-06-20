@@ -69,6 +69,25 @@ export class Build extends ValidatedBase implements BuildInterface {
   createdAt: Date;
 
   /**
+   * Get filename
+   *
+   * @returns {string}
+   */
+  filename() {
+    return Build.filename(this);
+  }
+
+  /**
+   * Get filename
+   *
+   * @param {string} id
+   * @returns {string}
+   */
+  static filename({ id }: { id: string }): string {
+    return `${id}.tgz`;
+  }
+
+  /**
    * Generate ID based on dependencies and shrinkwrapped dependencies
    *
    * @param {Record<string, any>} packageJson
