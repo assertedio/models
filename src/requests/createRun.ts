@@ -1,11 +1,11 @@
-import { IsEnum, IsInstance, IsString, ValidateNested } from 'class-validator';
+import { IsInstance, IsString, ValidateNested } from 'class-validator';
 
-import { enumError, ValidatedBase } from 'validated-base';
-import { DEPENDENCIES_VERSIONS, Mocha, MochaInterface } from '../models/routineConfig';
+import { ValidatedBase } from 'validated-base';
+import { Mocha, MochaInterface } from '../models/routineConfig';
 
 export interface CreateRunInterface {
   package: string;
-  dependencies: DEPENDENCIES_VERSIONS;
+  dependencies: string;
   mocha?: MochaInterface;
 }
 
@@ -36,6 +36,6 @@ export class CreateRun extends ValidatedBase implements CreateRunInterface {
   @IsString()
   package: string;
 
-  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
-  dependencies: DEPENDENCIES_VERSIONS;
+  @IsString()
+  dependencies: string;
 }
