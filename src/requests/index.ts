@@ -20,3 +20,4 @@ export * from './debug';
 export * from './projectAlert';
 export * from './unsubscribeDetails';
 export * from './build';
+export * from './buildResult';
