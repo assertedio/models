@@ -19,6 +19,16 @@ export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id
   dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface;
 }
 
+export const validateUpdateRoutineDependencies = (input: any): void => {
+  if (!isEnum(input, DEPENDENCIES_VERSIONS) && !isDependenciesObject(input)) {
+    throw new Err('dependencies must be an enum or an object containing at least the packageJson', HTTP_STATUS.BAD_REQUEST);
+  }
+
+  if (input === DEPENDENCIES_VERSIONS.CUSTOM) {
+    throw new Err('custom dependencies are specified as object', HTTP_STATUS.BAD_REQUEST);
+  }
+};
+
 /**
  * @class
  */
@@ -38,15 +48,8 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
     this.timeoutSec = params.timeoutSec;
     this.dependencies = params.dependencies;
 
-    if (!isEnum(this.dependencies, DEPENDENCIES_VERSIONS) && !isDependenciesObject(this.dependencies)) {
-      throw new Err('dependencies must be an enum or an object containing at least the packageJson', HTTP_STATUS.BAD_REQUEST);
-    }
-
-    if (this.dependencies === DEPENDENCIES_VERSIONS.CUSTOM) {
-      throw new Err('custom dependencies are specified as object', HTTP_STATUS.BAD_REQUEST);
-    }
-
     if (validate) {
+      validateUpdateRoutineDependencies(this.dependencies);
       this.validate();
     }
   }

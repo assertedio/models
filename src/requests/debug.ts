@@ -1,12 +1,14 @@
-import { IsEnum, IsInstance, IsString } from 'class-validator';
+import { Allow, IsInstance, IsString } from 'class-validator';
 
-import { enumError, ValidatedBase } from 'validated-base';
+import { ValidatedBase } from 'validated-base';
 import { DEPENDENCIES_VERSIONS, Mocha, MochaInterface } from '../models/routineConfig';
+import { DependenciesInterface } from './build';
+import { validateUpdateRoutineDependencies } from './updateRoutine';
 
 export interface DebugRoutineInterface {
   package: string;
   mocha: MochaInterface;
-  dependencies: DEPENDENCIES_VERSIONS;
+  dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface;
 }
 
 /**
@@ -25,6 +27,7 @@ export class Debug extends ValidatedBase implements DebugRoutineInterface {
     this.dependencies = params.dependencies;
 
     if (validate) {
+      validateUpdateRoutineDependencies(this.dependencies);
       this.validate();
     }
   }
@@ -35,6 +38,6 @@ export class Debug extends ValidatedBase implements DebugRoutineInterface {
   @IsString()
   package: string;
 
-  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
-  dependencies: DEPENDENCIES_VERSIONS;
+  @Allow()
+  dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface;
 }
