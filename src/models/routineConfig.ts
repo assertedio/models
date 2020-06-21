@@ -1,5 +1,5 @@
 import { IsBoolean, IsEnum, IsInstance, IsInt, IsString, Max, MaxLength, Min, ValidateNested } from 'class-validator';
-import { isNil } from 'lodash';
+import { isNil, isString } from 'lodash';
 import ms from 'ms';
 import { DeepPartial } from 'ts-essentials';
 
@@ -107,9 +107,14 @@ export class Mocha extends ValidatedBase implements MochaInterface {
   ui: MOCHA_UI;
 }
 
+// Ensure that this is up to date with what is in @asserted/runner
 export enum DEPENDENCIES_VERSIONS {
   V1 = 'v1',
+  CUSTOM = 'custom',
 }
+
+export const isDependencyVersion = (input: string): input is DEPENDENCIES_VERSIONS =>
+  isString(input) && Object.values(DEPENDENCIES_VERSIONS).includes(input as any);
 
 export interface RoutineConfigInterface {
   id: string;

@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import shortid from 'shortid';
 
 import { enumError, ValidatedBase } from 'validated-base';
-import { DEPENDENCIES_VERSIONS, Mocha, MochaInterface } from '../models/routineConfig';
+import { Mocha, MochaInterface } from '../models/routineConfig';
 import { toDate } from '../utils';
 import { CreateRunInterface as CreateRunRequestInterface } from './createRun';
 
@@ -72,8 +72,8 @@ export class Run extends ValidatedBase implements RunInterface {
   @IsString()
   package: string;
 
-  @IsEnum(DEPENDENCIES_VERSIONS, { message: enumError(DEPENDENCIES_VERSIONS) })
-  dependencies: DEPENDENCIES_VERSIONS;
+  @IsString()
+  dependencies: string;
 
   @Min(CONSTANTS.MIN_TIMEOUT_MS)
   @Max(CONSTANTS.MAX_TIMEOUT_MS)

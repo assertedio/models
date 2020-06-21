@@ -221,6 +221,50 @@ describe('routine config unit tests', () => {
     expect(routineConfig).to.eql(expected);
   });
 
+  it('full create w custom', () => {
+    const params = {
+      id: 'something',
+      projectId: 'project-id',
+      name: '',
+      description: '',
+      dependencies: 'custom',
+      interval: {
+        unit: 'hr',
+        value: 10,
+      },
+      mocha: {
+        files: ['**/specific.asrtd.js', 'other.js'],
+        ignore: ['!foo', '!scratch.js'],
+        bail: true,
+        ui: 'exports',
+      },
+      timeoutSec: 10,
+    } as any;
+
+    const routineConfig = new RoutineConfig(params);
+
+    const expected = {
+      id: 'something',
+      projectId: 'project-id',
+      name: '',
+      description: '',
+      dependencies: 'custom',
+      interval: {
+        unit: 'hr',
+        value: 10,
+      },
+      mocha: {
+        files: ['**/specific.asrtd.js', 'other.js'],
+        ignore: ['!foo', '!scratch.js'],
+        bail: true,
+        ui: 'exports',
+      },
+      timeoutSec: 10,
+    };
+
+    expect(routineConfig).to.eql(expected);
+  });
+
   it('throw if missing id', () => {
     const params = {
       name: 'something',
