@@ -12,4 +12,6 @@ export enum SOCKET_EVENTS {
   TOKENS_UPDATES = 'token-updates',
   ROUTINE_UPDATES = 'routine-updates',
   CURRENT_ROUTINE = 'current-routine',
+  DEP_BUILD_START = 'dep-build-start',
+  DEP_BUILD_COMPLETE = 'dep-build-complete',
 }
