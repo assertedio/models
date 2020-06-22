@@ -316,20 +316,20 @@ export class RunRecord extends ValidatedBase implements RunRecordInterface {
         timeoutType: null,
       };
     }
+    if (testResult.events.length === 0) {
+      return {
+        status: RUN_STATUS.FAILED,
+        failType: RUN_FAIL_TYPE.ERROR,
+        error: testResult.error || testResult.console,
+        timeoutType: null,
+      };
+    }
     if (lastEvent?.data.type !== TEST_EVENT_TYPES.EVENT_RUN_END || !!testResult.timeoutType) {
       return {
         status: RUN_STATUS.FAILED,
         failType: RUN_FAIL_TYPE.TIMEOUT,
         error: testResult.error,
         timeoutType: testResult.timeoutType || RUN_TIMEOUT_TYPE.UNKNOWN,
-      };
-    }
-    if (testResult.events.length === 0) {
-      return {
-        status: RUN_STATUS.FAILED,
-        failType: RUN_FAIL_TYPE.ERROR,
-        error: testResult.error,
-        timeoutType: null,
       };
     }
     if ((stats?.failures && stats?.failures > 0) || (stats?.incomplete && stats?.incomplete > 0)) {

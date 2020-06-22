@@ -520,6 +520,37 @@ describe('runRecord unit tests', () => {
     expect(expected).to.eql(patch);
   });
 
+  it('gets patch with big error', () => {
+    const curDate = DateTime.fromISO('2018-01-01T00:00:00.000Z').toJSDate();
+
+    const testResult: TestResultInterface = {
+      runId: 'run-id',
+      type: 'manual' as any,
+      console: "stderr: Error: Cannot find module 'chi'\nRequire stack:\n- /tmp/asserted-rn-ei7Q8mvqz-NaQGsB/ssl-check.asrtd.js",
+      error: null,
+      runDurationMs: 3212,
+      events: [],
+      timeoutType: null,
+      createdAt: curDate,
+    };
+
+    const patch = RunRecord.getPatchFromResult(testResult);
+
+    const expected = {
+      console: "stderr: Error: Cannot find module 'chi'\nRequire stack:\n- /tmp/asserted-rn-ei7Q8mvqz-NaQGsB/ssl-check.asrtd.js",
+      runDurationMs: 3212,
+      testDurationMs: null,
+      timeoutType: null,
+      error: "stderr: Error: Cannot find module 'chi'\nRequire stack:\n- /tmp/asserted-rn-ei7Q8mvqz-NaQGsB/ssl-check.asrtd.js",
+      stats: null,
+      results: [],
+      completedAt: curDate,
+      status: 'failed',
+      failType: 'error',
+    };
+    expect(expected).to.eql(patch);
+  });
+
   it('get patch for incomplete run', async () => {
     const testResult: TestResultInterface = await fs.readJson(path.join(RESOURCE_PATH, 'reporterTimeoutResult.json'));
 
