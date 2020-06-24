@@ -1,6 +1,7 @@
 export enum SOCKET_EVENTS {
   RUN_CREATED = 'run-created',
   RUN_COMPLETE = 'run-complete',
+  MANUAL_RUN_COMPLETE = 'manual-run-complete',
   TIMELINE_UPSERT = 'timeline-upsert',
   BUCKET_UPSERT = 'bucket-upsert',
   UPSERT_NOTIFY_CONFIG = 'upsert-notify-config',
@@ -12,4 +13,6 @@ export enum SOCKET_EVENTS {
   TOKENS_UPDATES = 'token-updates',
   ROUTINE_UPDATES = 'routine-updates',
   CURRENT_ROUTINE = 'current-routine',
+  DEP_BUILD_START = 'dep-build-start',
+  DEP_BUILD_COMPLETE = 'dep-build-complete',
 }
