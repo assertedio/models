@@ -1,5 +1,7 @@
-import { IsBoolean, IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { isNumber } from 'lodash';
+import { IsBoolean, IsDate, IsEnum, IsInstance, IsNumber, IsOptional, IsString, ValidateNested, Allow } from 'class-validator';
+import { isNumber, isString } from 'lodash';
+import Err from 'err';
+import HTTP_STATUS from 'http-status';
 
 import { enumError, ValidatedBase } from 'validated-base';
 import { toDate } from '../utils';
@@ -121,6 +123,10 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
     this.diff = params.diff;
     this.code = params.code;
 
+    if (this.code && !isString(this.code) && !isNumber(this.code)) {
+      throw new Err('code must be a number or string', HTTP_STATUS.BAD_REQUEST);
+    }
+
     if (validate) {
       this.validate();
     }
@@ -143,7 +149,7 @@ export class TestError extends ValidatedBase implements TestErrorInterface {
   diff?: string;
 
   @IsOptional()
-  @IsString()
+  @Allow()
   code?: string | number;
 }
 
