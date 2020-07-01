@@ -33,6 +33,7 @@ describe('createRoutine unit tests', () => {
         ignore: ['foo.js'],
         ui: 'require' as any,
         bail: true,
+        parallel: false,
       },
       interval: {
         unit: INTERVAL_UNITS.DAY,
@@ -57,6 +58,7 @@ describe('createRoutine unit tests', () => {
         ignore: ['foo.js'],
         bail: true,
         ui: 'require',
+        parallel: false,
       },
       timeoutSec: 10,
     };
@@ -75,6 +77,7 @@ describe('createRoutine unit tests', () => {
         ignore: ['foo.js'],
         ui: 'require' as any,
         bail: true,
+        parallel: false,
       },
       interval: {
         unit: INTERVAL_UNITS.DAY,

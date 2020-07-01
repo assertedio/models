@@ -7,6 +7,7 @@ import {
   Interval,
   IntervalInterface,
   Mocha,
+  MochaConstructorInterface,
   MochaInterface,
   RoutineConfig,
   RoutineConfigConstructorInterface,
@@ -15,15 +16,19 @@ import { cleanString } from '../utils';
 
 export type CreateRoutineInterface = Omit<RoutineConfigConstructorInterface, 'id'>;
 
+export interface CreateRoutineConstructorInterface extends Omit<RoutineConfigConstructorInterface, 'id'> {
+  mocha?: MochaConstructorInterface;
+}
+
 /**
  * @class
  */
 export class CreateRoutine extends ValidatedBase implements CreateRoutineInterface {
   /**
-   * @param {CreateRoutineInterface} params
+   * @param {CreateRoutineConstructorInterface} params
    * @param {boolean} validate
    */
-  constructor(params: CreateRoutineInterface, validate = true) {
+  constructor(params: CreateRoutineConstructorInterface, validate = true) {
     super();
 
     this.projectId = params?.projectId;

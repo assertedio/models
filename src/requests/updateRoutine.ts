@@ -8,6 +8,7 @@ import {
   Interval,
   IntervalInterface,
   Mocha,
+  MochaConstructorInterface,
   MochaInterface,
   RoutineConfig,
   RoutineConfigInterface,
@@ -17,6 +18,14 @@ import { DependenciesInterface, isDependenciesObject } from './build';
 export interface UpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'projectId' | 'dependencies'> {
   package: string;
   dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface;
+}
+
+export interface UpdateRoutineConstructorInterface extends Omit<UpdateRoutineInterface, 'mocha'> {
+  mocha?: MochaConstructorInterface;
+}
+
+export interface CreateUpdateRoutineInterface extends Omit<RoutineConfigInterface, 'id' | 'dependencies' | 'mocha'> {
+  mocha?: MochaConstructorInterface;
 }
 
 export const validateUpdateRoutineDependencies = (input: any): void => {
@@ -37,13 +46,13 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
    * @param {UpdateRoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: UpdateRoutineInterface, validate = true) {
+  constructor(params: UpdateRoutineConstructorInterface, validate = true) {
     super();
 
     this.name = params?.name || '';
     this.description = params?.description || '';
     this.interval = new Interval(params.interval, false);
-    this.mocha = new Mocha(params.mocha, false);
+    this.mocha = new Mocha({ ...params?.mocha }, false);
     this.package = params.package;
     this.timeoutSec = params.timeoutSec;
     this.dependencies = params.dependencies;
@@ -89,11 +98,7 @@ export class UpdateRoutine extends ValidatedBase implements UpdateRoutineInterfa
    * @param {DEPENDENCIES_VERSIONS | DependenciesInterface} dependencies
    * @returns {UpdateRoutine}
    */
-  static create(
-    routine: Omit<RoutineConfigInterface, 'dependencies' | 'id'>,
-    pkg: string,
-    dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface
-  ): UpdateRoutine {
+  static create(routine: CreateUpdateRoutineInterface, pkg: string, dependencies: DEPENDENCIES_VERSIONS | DependenciesInterface): UpdateRoutine {
     return new UpdateRoutine({
       ...routine,
       dependencies,

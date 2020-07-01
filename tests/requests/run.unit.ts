@@ -30,6 +30,7 @@ describe('run unit tests', () => {
         ignore: [],
         bail: false,
         ui: 'bdd',
+        parallel: false,
       },
       createdAt: curDate,
     };
@@ -63,6 +64,7 @@ describe('run unit tests', () => {
         ignore: [],
         bail: false,
         ui: 'bdd',
+        parallel: false,
       },
       createdAt: curDate,
     };

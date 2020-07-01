@@ -14,6 +14,7 @@ describe('update routine', () => {
           ignore: ['foo.js'],
           ui: 'require' as any,
           bail: true,
+          parallel: false,
         },
         interval: {
           unit: INTERVAL_UNITS.DAY,
@@ -37,6 +38,7 @@ describe('update routine', () => {
         ignore: ['foo.js'],
         bail: true,
         ui: 'require',
+        parallel: false,
       },
       package: 'pack',
       timeoutSec: 10,
@@ -56,6 +58,7 @@ describe('update routine', () => {
             ignore: ['foo.js'],
             ui: 'require' as any,
             bail: true,
+            parallel: false,
           },
           interval: {
             unit: INTERVAL_UNITS.DAY,
@@ -106,6 +109,7 @@ describe('update routine', () => {
         ignore: ['foo.js'],
         bail: true,
         ui: 'require',
+        parallel: false,
       },
       package: 'pack',
       timeoutSec: 10,

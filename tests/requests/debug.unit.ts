@@ -21,6 +21,7 @@ describe('debug routine', () => {
         ignore: ['foo.js'],
         ui: 'require' as any,
         bail: true,
+        parallel: false,
       },
       dependencies: DEPENDENCIES_VERSIONS.V1,
       package: 'pack',
@@ -36,6 +37,7 @@ describe('debug routine', () => {
             ignore: ['foo.js'],
             ui: 'require' as any,
             bail: true,
+            parallel: false,
           },
           package: 'pack',
           dependencies: DEPENDENCIES_VERSIONS.CUSTOM,
@@ -64,6 +66,7 @@ describe('debug routine', () => {
         ignore: ['foo.js'],
         ui: 'require' as any,
         bail: true,
+        parallel: false,
       },
       package: 'pack',
       dependencies: {

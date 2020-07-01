@@ -64,7 +64,10 @@ export interface MochaInterface {
   ignore: string[];
   bail: boolean;
   ui: MOCHA_UI;
+  parallel: boolean;
 }
+
+export type MochaConstructorInterface = DeepPartial<MochaInterface>;
 
 const MOCHA_CONSTANTS = {
   DEFAULT_FILES_GLOB: '**/*.asrtd.js',
@@ -80,7 +83,7 @@ export class Mocha extends ValidatedBase implements MochaInterface {
    * @param {Partial<MochaInterface>} params
    * @param {boolean} [validate]
    */
-  constructor(params?: Partial<MochaInterface>, validate = true) {
+  constructor(params?: Partial<MochaConstructorInterface>, validate = true) {
     super();
 
     this.files = params?.files && !Array.isArray(params?.files) ? [params?.files] : params?.files || [MOCHA_CONSTANTS.DEFAULT_FILES_GLOB];
@@ -88,6 +91,7 @@ export class Mocha extends ValidatedBase implements MochaInterface {
     this.ignore = params?.ignore && !Array.isArray(params?.ignore) ? [params?.ignore] : params?.ignore || [];
     this.bail = params?.bail || false;
     this.ui = params?.ui || MOCHA_UI.BDD;
+    this.parallel = params?.parallel || false;
 
     if (validate) {
       this.validate();
@@ -105,6 +109,9 @@ export class Mocha extends ValidatedBase implements MochaInterface {
 
   @IsEnum(MOCHA_UI, { message: enumError(MOCHA_UI) })
   ui: MOCHA_UI;
+
+  @IsBoolean()
+  parallel: boolean;
 }
 
 // Ensure that this is up to date with what is in @asserted/runner

@@ -26,6 +26,7 @@ describe('routine config unit tests', () => {
         ignore: [],
         bail: false,
         ui: 'bdd',
+        parallel: false,
       },
       timeoutSec: 1,
     };
@@ -124,6 +125,7 @@ describe('routine config unit tests', () => {
         ignore: [],
         bail: false,
         ui: 'bdd',
+        parallel: false,
       },
       timeoutSec: 1,
     };
@@ -170,6 +172,7 @@ describe('routine config unit tests', () => {
         ignore: [],
         bail: false,
         ui: 'bdd',
+        parallel: false,
       },
       timeoutSec: 1,
     };
@@ -214,6 +217,7 @@ describe('routine config unit tests', () => {
         ignore: ['!foo', '!scratch.js'],
         bail: true,
         ui: 'exports',
+        parallel: false,
       },
       timeoutSec: 10,
     };
@@ -258,6 +262,7 @@ describe('routine config unit tests', () => {
         ignore: ['!foo', '!scratch.js'],
         bail: true,
         ui: 'exports',
+        parallel: false,
       },
       timeoutSec: 10,
     };

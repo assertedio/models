@@ -20,6 +20,7 @@ describe('createRun unit tests', () => {
         ignore: [],
         bail: false,
         ui: 'bdd',
+        parallel: false,
       },
     };
 
@@ -48,6 +49,7 @@ describe('createRun unit tests', () => {
         ignore: ['athing.js'],
         bail: true,
         ui: 'require',
+        parallel: false,
       },
     };
 

@@ -8,6 +8,7 @@ import {
   IntervalInterface,
   isDependencyVersion,
   Mocha,
+  MochaConstructorInterface,
   MochaInterface,
   RoutineConfig,
   RoutineConfigInterface,
@@ -27,8 +28,9 @@ export interface RoutineInterface extends Omit<RoutineConfigInterface, 'dependen
   dependencies: string;
 }
 
-export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'visibility'> {
+export interface RoutineConstructorInterface extends Omit<RoutineInterface, 'visibility' | 'mocha'> {
   visibility?: ROUTINE_VISIBILITY;
+  mocha?: MochaConstructorInterface;
 }
 
 /**
