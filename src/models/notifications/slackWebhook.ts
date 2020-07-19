@@ -22,7 +22,9 @@ export interface SlackWebhookNotificationConfigConstructorInterface
 
 export const isPossibleSlackWebhook = (input: string): boolean =>
   isString(input) &&
-  (input.startsWith('https://hooks.slack.com') || (input.startsWith('https://discord.com/api') && input.replace(/\/$/, '').endsWith('slack')));
+  (input.startsWith('https://hooks.slack.com') ||
+    (input.startsWith('https://discord.com/api') && input.replace(/\/$/, '').endsWith('slack')) ||
+    (input.startsWith('https://discordapp.com/api') && input.replace(/\/$/, '').endsWith('slack')));
 
 export const isSlackWebhookConfig = (input: any): input is SlackWebhookNotificationConfigInterface =>
   isObject(input) && (input as SlackWebhookNotificationConfigInterface).type === NOTIFICATION_TYPE.SLACK_WEBHOOK;
