@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Pagination } from '../../src/requests';
+import { Pagination } from '../../src/requests/pagination';
 
 describe('pagination unit tests', () => {
   it('create with defaults', () => {
