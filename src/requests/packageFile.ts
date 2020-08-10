@@ -14,6 +14,8 @@ export interface PackageFileInterface {
   path: string;
 }
 
+export type PackageFileConstructorInterface = Omit<PackageFileInterface, 'hash'>;
+
 const isOutsideDir = (filePath: string) => filePath.match(STARTS_RELATIVE_PATH);
 
 export const validFilePath = (filePath: any): boolean =>
@@ -42,7 +44,7 @@ export class PackageFile extends ValidatedBase implements PackageFileInterface {
    * @param {DebugRoutineInterface} params
    * @param {boolean} validate
    */
-  constructor(params: Omit<PackageFileInterface, 'hash'>, validate = true) {
+  constructor(params: PackageFileConstructorInterface, validate = true) {
     super();
 
     this.contents = params.contents;

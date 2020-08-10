@@ -23,3 +23,4 @@ export * from './build';
 export * from './buildResult';
 export * from './packageFile';
 export * from './packageTree';
+export * from './packageUpdate';
