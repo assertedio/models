@@ -1,6 +1,7 @@
-import { IsInstance, IsString, ValidateNested } from 'class-validator';
-
+import { IsInstance, IsString, Validate, ValidateNested } from 'class-validator';
+import normalize from 'normalize-path';
 import { ValidatedBase } from 'validated-base';
+import { FilePathValidator } from './packageFile';
 
 export interface PackageTreeFileInterface {
   path: string;
@@ -19,7 +20,7 @@ export class PackageTreeFile extends ValidatedBase implements PackageTreeFileInt
     super();
 
     this.hash = params.hash;
-    this.path = params.path;
+    this.path = normalize(params.path, false);
 
     if (validate) {
       this.validate();
@@ -29,7 +30,7 @@ export class PackageTreeFile extends ValidatedBase implements PackageTreeFileInt
   @IsString()
   hash: string;
 
-  @IsString()
+  @Validate(FilePathValidator)
   path: string;
 }
 
