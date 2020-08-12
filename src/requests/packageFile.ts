@@ -41,7 +41,7 @@ export class FilePathValidator implements ValidatorConstraintInterface {
  */
 export class PackageFile extends ValidatedBase implements PackageFileInterface {
   /**
-   * @param {DebugRoutineInterface} params
+   * @param {PackageFileConstructorInterface} params
    * @param {boolean} validate
    */
   constructor(params: PackageFileConstructorInterface, validate = true) {
