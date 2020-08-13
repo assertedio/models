@@ -25,3 +25,5 @@ export * from './packageFile';
 export * from './packageTree';
 export * from './packagePatch';
 export * from './packageFileUpdate';
+export * from './routinePackagePatch';
+export * from './routinePackagePatched';

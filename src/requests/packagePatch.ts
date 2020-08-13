@@ -4,11 +4,11 @@ import Err from 'err';
 import HTTP_STATUS from 'http-status';
 import { PackageFileUpdate, PackageFileUpdateConstructorInterface, PackageFileUpdateInterface } from './packageFileUpdate';
 
-interface PackagePatchInterface {
+export interface PackagePatchInterface {
   files: PackageFileUpdateInterface[];
 }
 
-interface PackagePatchConstructorInterface {
+export interface PackagePatchConstructorInterface {
   files: PackageFileUpdateConstructorInterface[];
 }
 
