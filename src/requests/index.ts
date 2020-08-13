@@ -24,3 +24,4 @@ export * from './buildResult';
 export * from './packageFile';
 export * from './packageTree';
 export * from './packagePatch';
+export * from './packageFileUpdate';
