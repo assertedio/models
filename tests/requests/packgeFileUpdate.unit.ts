@@ -9,12 +9,21 @@ describe('packageFileUpdate unit tests', () => {
         contents: 'some-contents',
         path: 'something/bar.js',
       })
-    ).to.eql({ contents: 'some-contents', hash: 'VufLW', path: 'something/bar.js' });
+    ).to.eql({ contents: 'some-contents', hash: 'v1-2kQuFP', path: 'something/bar.js' });
     expect(new PackageFileUpdate({ contents: null, path: 'something/bar.js' })).to.eql({
       contents: null,
       hash: null,
       path: 'something/bar.js',
     });
+  });
+
+  it('create empty file', () => {
+    expect(
+      new PackageFileUpdate({
+        contents: '',
+        path: 'something/bar.js',
+      })
+    ).to.eql({ contents: '', hash: 'v1-Z22lby3', path: 'something/bar.js' });
   });
 
   it('fails', () => {

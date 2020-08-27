@@ -72,6 +72,7 @@ export class PackageFile extends ValidatedBase implements PackageFileInterface {
    * @returns {string}
    */
   static getHash(contents: string): string {
-    return shorthash.unique(contents);
+    // This is just salted so that an empty file still generates a hash
+    return `v1-${shorthash.unique(`VufLW-${contents}`)}`;
   }
 }

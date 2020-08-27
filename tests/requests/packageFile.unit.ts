@@ -16,7 +16,7 @@ describe('packageFile unit tests', () => {
 
   it('create', () => {
     const packageFile = new PackageFile({ contents: 'some-contents', path: 'something/bar.js' });
-    expect(packageFile).to.eql({ contents: 'some-contents', hash: 'VufLW', path: 'something/bar.js' });
+    expect(packageFile).to.eql({ contents: 'some-contents', hash: 'v1-2kQuFP', path: 'something/bar.js' });
   });
 
   it('fails', () => {

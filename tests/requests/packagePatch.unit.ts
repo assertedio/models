@@ -17,7 +17,7 @@ describe('package patch unit tests', () => {
       files: [
         {
           contents: 'foo',
-          hash: 'ri9',
+          hash: 'v1-ZySRQ4',
           path: 'foo/bar.js',
         },
       ],
@@ -42,7 +42,7 @@ describe('package patch unit tests', () => {
       files: [
         {
           contents: 'foo',
-          hash: 'ri9',
+          hash: 'v1-ZySRQ4',
           path: 'foo/bar.js',
         },
         {

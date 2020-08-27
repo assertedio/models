@@ -1,4 +1,5 @@
 import normalize from 'normalize-path';
+import { isString } from 'lodash';
 import { IsOptional, IsString, Validate } from 'class-validator';
 import { ValidatedBase } from 'validated-base';
 import { FilePathValidator, PackageFile } from './packageFile';
@@ -23,7 +24,7 @@ export class PackageFileUpdate extends ValidatedBase implements PackageFileUpdat
     super();
 
     this.contents = params.contents;
-    this.hash = this.contents ? PackageFile.getHash(this.contents) : null;
+    this.hash = isString(this.contents) ? PackageFile.getHash(this.contents) : null;
     this.path = normalize(params.path, false);
 
     if (validate) {
