@@ -18,7 +18,7 @@
     "http-status": "^1.4.2",
     "libphonenumber-js": "^1.7.55",
     "lodash": "^4.17.19",
-    "luxon": "^1.24.1",
+    "luxon": "^2.5.2",
     "ms": "^2.1.2",
     "nanoid": "^3.1.10",
     "shorthash": "0.0.2",
